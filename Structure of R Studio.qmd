@@ -29,4 +29,10 @@ On the main page of R Studio, you'll see 4 main sections.
 
 4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder. Default is folder where your project is.
 
+First, let's try typing anything into Console. Input 1 + 1 and press enter. You'll see it's printing 2, the result of what you asked R to calculate.
+
+![](images/clipboard-2614705250.png){width="114"}
+
+However, Console is one-time-communicator. It can't remember anything you say or R executes, making you to retype everything to do same job. This gets annoying fast, especially if your code gets long. How can we make this easy? We'll figure it out in next the next section.
+
 ## Creating a script
