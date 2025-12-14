@@ -1,4 +1,311 @@
-# References {.unnumbered}
+# Vectors
 
-::: {#refs}
-:::
+Last chapter, we reviewed what variables are. Imagine we're storing heights of 50 students. Declaring 50 variables like "Height1", "Height2", ..., "Height50" takes forever. Instead, we can use "vector" to store multiple values in a single variable.
+
+Vector is a 1-dimensional sequence of "same type" of data. For example, vector with int can only store int values. Length of Vector is equal to number of values stored in the vector.
+
+## Vectors with Numbers
+
+### Ways to create vectors
+
+```{r}
+y <- c(2, 4, 6, 8, 10)
+y
+```
+
+Again, vector must be same data type. For example, if you create one with mix of int and float, all values will be float. Why? because all int can be float by adding ".0" but float cannot be int without losing data. Let's see an example.
+
+```{r}
+x <- c(1,3,5,7,9.2)
+x
+```
+
+Recall c() meant to "connect." This means you can connect multiple vectors into one as long as they match data type.
+
+```{r}
+z <- c(x, y)
+z
+```
+
+Question: What will happen if we flip the order of element? As you can see below, resulting order of elements in the vector also changes.
+
+```{r}
+z <- c(y, x)
+z
+```
+
+Now we learned how to create vectors with number. But what if we want to label something and need 1 to 100? Typing them manually will take some time. Instead, there's a short cut to create continuous numbers with ":" operator. There there two points to remember when using :.
+
+1.  It has fixed increment of 1.
+2.  It follows the order from the left to the right. Check the example below.
+
+```{r}
+1:10
+10:1
+0.2:3
+```
+
+What if you want to create vector with different increment? You can use seq() function. It has three main arguments - from, to, by. "from" is where the sequence starts, "to" is where it ends, and "by" is the increment.
+
+```{r}
+seq(1, 10)
+seq(1, 10, by=2)
+seq(length=5, from=1, by=2)
+```
+
+If you want to create vector with repeated values, you can use rep() function. It has two main arguments - "x" and "times". "x" is the value you want to repeat, and "times" is how many times you want to repeat it.
+
+```{r}
+rep(5, times=4)
+```
+
+### Calculations with Vectors
+
+-   Element wise operation Just like how we perform calculations with single numbers, we can do the same with vectors. One strong advantage of R is that it's one of rare programming languages that can perform "vectorized" calculations. This means you can perform calculations using same position of different vectors without complex logics. Let's perform example calculation using vectors we created.
+
+```{r}
+x <- seq(0, 40, by = 10)
+y <- c(1:5)
+
+x + y
+x * y
+```
+
+![](images/clipboard-2510842898.png){fig-align="center" width="234"}
+
+-   Recycling rule What if the length of vectors are different? In this case, R will recycle the shorter vector until it matches the length of longer vector. Check the example below.
+
+```{r}
+z <- c(rep(x, times=2), 50)
+z + y
+```
+
+As you can see, addition is performed even though length of two vectors didn't match. The warning sign is indicating that length's are not multiple of each other, so it shows what we mean by "recycle until it matches the length." If it's difficult to grasp, there's a visualization below.
+
+![](images/clipboard-3100995553.png){fig-align="center" width="234"}
+
+### Functions helpful for numeric vectors
+
+There are many functions that can be used with numeric vectors. Here are some of the most commonly used ones. While you might not end up not using them all, try them out and see which ones are useful for you!
+
++---------------+---------------------------------------------------------------+
+| Operation     | Discription                                                   |
++===============+===============================================================+
+| length(x)     | Return length of the vector                                   |
++---------------+---------------------------------------------------------------+
+| sum(x)        | Return sum of all elements in the vector                      |
++---------------+---------------------------------------------------------------+
+| mean(x)       | Return average of all elements                                |
++---------------+---------------------------------------------------------------+
+| median(x)     | Return median of all elements                                 |
++---------------+---------------------------------------------------------------+
+| var(x)        | Return variance of all elements                               |
++---------------+---------------------------------------------------------------+
+| sd(x)         | Return standard deviation of all elements                     |
++---------------+---------------------------------------------------------------+
+| max(x)\       | Return highest number in the vector\                          |
+| min(x)\       | Return lowest number in the vector\                           |
+| range(x)      | Return the range (highest and lowest) number                  |
++---------------+---------------------------------------------------------------+
+| rank(x)       | Return the "ranking" of each element from smallest to biggest |
++---------------+---------------------------------------------------------------+
+| sort(x)       | Reorganize vector from smallest to biggest elements           |
++---------------+---------------------------------------------------------------+
+| order(x)      | Return index of smallest to biggest element's location        |
++---------------+---------------------------------------------------------------+
+| which.max(x)\ | Return the highest number's index\                            |
+| which.min(x)  | Return the lowest number's index                              |
++---------------+---------------------------------------------------------------+
+| which(x)      | Return index of whatever element that satisfies the condition |
++---------------+---------------------------------------------------------------+
+
+rank/sort/order can be confusing, so here's the example.
+
+```{r}
+x <- c(11,14,12,13,15)
+x
+```
+
+```{r}
+# Rank returns the ranking of each element in entire vector
+rank(x)
+```
+
+```{r}
+# Order returns Where the element is located in the original vector if we sorted it
+order(x)
+```
+
+```{r}
+# Sort returns the vector sorted from smallest to biggest
+sort(x)
+```
+
+## Vectors with Boolean
+
+Just like numeric vectors, you can create vectors with Boolean values (TRUE/FALSE). You can use c() function to create them. You can use T/F instead too.
+
+```{r}
+booleanvec <- c(TRUE, FALSE, TRUE, TRUE, FALSE)
+booleanvec
+```
+
+Special point about the Boolean vectors is that you can use logical operators to create vectors. Let's say you want to know which students scored higher than 60 on their final.
+
+```{r}
+scores <- c(55, 70, 65, 40, 90)
+passed <- scores > 60
+passed
+```
+
+### Functions you should know for Boolean vectors
+
+While it's not literally a boolean logic, there are some functions that can be useful when working with Boolean vectors: any/all/if/else
+
+any() statement returns TRUE if at least one element in the vector is TRUE.
+
+```{r}
+any(passed)
+```
+
+all() statement returns TRUE only if all elements in the vector are TRUE.
+
+```{r}
+all(passed)
+```
+
+if and else statements are fundemental for all programming languages. They allow you to control the flow of your program based on conditions. However, we'll discuss about it briefly here since other contents are heavy as well. If you want to learn more about it, let me know anytime.
+
+if statement returns true when the condition is met. It's like a gateway before executing next code. "Do if condition is met? Then move to next line of code. If not, then skip to else statement (or end the if statement)."
+
+else statement is executed when the if condition is not met. It's like the alternative path when the if condition fails.
+
+Both if and else statements are wrapped around {}.
+
+Here's the example:
+
+```{r}
+Iftest <- c(1,3,5,7,9)
+
+if (any(Iftest > 5)) 
+  {
+  print("At least one element is greater than 5")
+} else 
+  {
+  print("No elements are greater than 5")
+}
+```
+
+For readability, R allows you to combine ifelse into a single line. It looks like this: ifelse(Condition, Value if TRUE, Value if FALSE)
+
+```{r}
+ifelse(any(Iftest > 5), "At least one element is greater than 5", "No elements are greater than 5")
+```
+
+## Vectors with Text
+
+Just like other two types, this is just vector with a sequence of text values. You can create them using c() function.
+
+```{r}
+names <- c("Banana", "Apple", "Carrot", "Grape", "Whatelse")
+names
+```
+
+Unlike numbers, you can't add or subtract texts. So there's other ways to handle manipulation of text vectors.
+
+### Functions helpful for text vectors
+
+First, we should check if all elements are text, as vector require everything to be same type. But in huge data set, it might be tough to manually check everything. So we have ".ascharacter()" function to convert everything into text.
+
+```{r}
+mixedvec <- c("Apple", 2, "Banana", 4.5, TRUE)
+mixedvec <- as.character(mixedvec)
+mixedvec
+```
+
+Try code by yourself. Did you notice that all inputs are as text when they were originally text, int, float, bool?
+
+Now, let's look at how we can combine and split text vectors like addition/substraction. Both cases, they follow same element wise operation and recycle rule like numeric vectors.
+
+For combining text vectors, we can use paste() function. If you want to add space between combined texts, use sep=" " argument. One point is that you can paste how many vectors you want, but you can call sep =" " one once per line. So if you want to have different seperators between multiple vectors, you'll need to call paste() multiple times. So it'll look like this:
+
+```{r}
+names <- c("Banana", "Apple", "Carrot", "Grape", "Whatelse")
+price <- c("1.00", "2.50", "0.75")
+combined <- paste(names, price, sep=": $") #Combine name and price with ": $" in between
+combined #Do you notice recycling rule here?
+```
+
+For spliting text vectors, we can use strsplit() function. When you split, you use split=" " argument to specify where to split.
+
+```{r}
+splitnames <- strsplit(combined, split=": ")
+splitnames #Name and price are seperated using ":" as the split point
+```
+
+There are many other functions that's helpful with handling vectors. However, due to it's amount, we'll mention only few that's commonly used.
+
++-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Opertiona                                           | Description                                                                                                                                                                                                                     |
++=====================================================+=================================================================================================================================================================================================================================+
+| nchar(x)                                            | Return character counts of each elements in the vector x. \*Literally all characters, including space, are counted!                                                                                                             |
++-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| substr(x, start, stop)                              | Return character counts of each element in the vector x, starting from 'start'th character to the 'stop'th character.                                                                                                           |
++-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| grep(target, x, ignore.case=T, fixed=T)             | Return the index of element in vector x that contains "target". ignore.case asks if you want grep() to be case sensitive (T as yes). fixed asks if you want to use Regex (We don't be discussing about this here. Keep it true) |
++-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| sub(target, replacement, x, ignore.case=T, fixed=T) | If any element in vector x contains "target," replace it to "replacement."                                                                                                                                                      |
++-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| toupper(x)\                                         | change all characters in the vector x into upper/lower case                                                                                                                                                                     |
+| tolower(x)                                          |                                                                                                                                                                                                                                 |
++-----------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## Other vectors with special data tpyes
+
+Earlier, we said there's a special data types. During data analysis, handling these becomes essential as we don't know how data that doesn't align with your dataset will influence the general trend (hence analysis result). So let's briefly look at how to create vectors with these special data types, especially Na and NaN.
+
+### Vectors with NA
+
+NA is used to represent missing values with undetermined data type. For example, if you're collecting final exam scores but completely missed one student's score, you can use NA to represent it.
+
+How we do process NA without manually checking all data? We can use is.na() and na.omit() functions. is.na() checks if there is NA values, and na.omit() removes all NA values from the vector.
+
+```{r}
+scores <- c(90, 85, NA, 70, 95, NA, 80)
+is.na(scores)  #It'll return TRUE if there's NA in the vector
+```
+
+```{r}
+scores <- na.omit(scores)  #It'll remove all NA
+scores
+```
+
+Look at the output of na.omit(). Second/Fourth line - attr() shows what type of work is by the code. Ignore them First line - Vector after removing NA values Third line - Attribute showing which index values were removed due to NA Fifth line - What's done by the code (removing NA values)
+
+However, using is.na() and na.omit() everytime can be time-consuming in big dataset. How can we "ignore" them without removing them? Many functions in R have "na.rm" argument. Setting na.rm=T will ignore NA values during calculation.
+
+```{r}
+scores <- c(90, 85, NA, 70, 95, NA, 80)
+mean(scores, na.rm=T)  #Calculate mean while ignoring NA values
+```
+
+### Vectors with NaN
+
+NaN is used to represent mathematically undefined values. For example, if you try to divide 0 by 0, the result is undefined even thought we know that data type is numbers. In this case, R will return NaN. Just like NA, we can use is.nan() function to check if there's NaN values in the vector. To know if vector actually contains NaN, you must use is.nan() because is.na() will return TRUE for both NA and NaN.
+
+### Index
+
+I mentioned "index" multiple times before, and you probably grasped somewhat sense of what it is. Index is a location of element in the vector. In R, index starts from 1 (not 0 like other programming languages). You can use index to call specific elements in the vector by indicating interested index in \[\]. Here's the example:
+
+```{r}
+x <- c(10, 20, 30, 40, 50)
+x[3]  #Call the 3rd element in the vector x
+```
+
+But one thing to be careful is that you cannot call two indicies at once. Try x\[3,5\] and see if it works.\
+Instead, you can use c() to connect multiple indices.
+
+```{r}
+x <- c(10, 20, 30, 40, 50)
+x[c(2,4)]  #Call 2nd and 4th elements in the vector x
+```
