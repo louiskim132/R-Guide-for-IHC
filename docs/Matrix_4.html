@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>matrix_4</title>
+<title>4&nbsp; Matrix – R Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,36 +58,173 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="Matrix_4_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Matrix_4_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="Matrix_4_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="Matrix_4_files/libs/quarto-html/popper.min.js"></script>
-<script src="Matrix_4_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="Matrix_4_files/libs/quarto-html/anchor.min.js"></script>
-<link href="Matrix_4_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Matrix_4_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Matrix_4_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="Matrix_4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Matrix_4_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Vectors_3.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-364982630eef5352dd1537128a8ed5cb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Matrix_4.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Matrix</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Guide</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to “Introduction to R”</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Structure_of_R_Studio_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Structure of R Studio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Variables_Calculations_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Types and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Vectors_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Vectors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Matrix_4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Matrix</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#creating-a-matrix" id="toc-creating-a-matrix" class="nav-link active" data-scroll-target="#creating-a-matrix"><span class="header-section-number">4.1</span> Creating a matrix</a></li>
+  <li><a href="#index-of-matrix" id="toc-index-of-matrix" class="nav-link" data-scroll-target="#index-of-matrix"><span class="header-section-number">4.2</span> Index of matrix</a></li>
+  <li><a href="#calculation-of-matrix" id="toc-calculation-of-matrix" class="nav-link" data-scroll-target="#calculation-of-matrix"><span class="header-section-number">4.3</span> Calculation of matrix</a></li>
+  <li><a href="#functions-regarding-matrix" id="toc-functions-regarding-matrix" class="nav-link" data-scroll-target="#functions-regarding-matrix"><span class="header-section-number">4.4</span> Functions regarding matrix</a></li>
+  <li><a href="#array" id="toc-array" class="nav-link" data-scroll-target="#array"><span class="header-section-number">5</span> Array</a>
+  <ul class="collapse">
+  <li><a href="#creating-an-array" id="toc-creating-an-array" class="nav-link" data-scroll-target="#creating-an-array"><span class="header-section-number">5.1</span> Creating an array</a></li>
+  <li><a href="#calculation-of-array" id="toc-calculation-of-array" class="nav-link" data-scroll-target="#calculation-of-array"><span class="header-section-number">5.2</span> Calculation of Array</a></li>
+  <li><a href="#advanced-caluclation" id="toc-advanced-caluclation" class="nav-link" data-scroll-target="#advanced-caluclation"><span class="header-section-number">5.3</span> Advanced caluclation</a>
+  <ul class="collapse">
+  <li><a href="#solving-equations-with-matrix" id="toc-solving-equations-with-matrix" class="nav-link" data-scroll-target="#solving-equations-with-matrix"><span class="header-section-number">5.3.1</span> Solving equations with matrix</a></li>
+  <li><a href="#eigenvalues-and-eigenvectors" id="toc-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-and-eigenvectors"><span class="header-section-number">5.3.2</span> Eigenvalues and Eigenvectors</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#summary-of-vector-matrix-and-array." id="toc-summary-of-vector-matrix-and-array." class="nav-link" data-scroll-target="#summary-of-vector-matrix-and-array."><span class="header-section-number">6</span> Summary of Vector, Matrix, and Array.</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Matrix</span></h1>
+</div>
 
 
 
-<section id="matrix" class="level1">
-<h1>Matrix</h1>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>Vector was a 1-dimensional data, meaning each vector can hold one type. For example, if we create vector of heights, all elements must be height numbers. However, what if we want need to hold details about the data? For example, height by gender?</p>
 <p>Matrix is a 2-dimensional data structure, holding rows and columns. Just like vector, matrix must hold one type of data.</p>
-<section id="creating-a-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="creating-a-matrix">Creating a matrix</h2>
+<section id="creating-a-matrix" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="creating-a-matrix"><span class="header-section-number">4.1</span> Creating a matrix</h2>
 <p>There’s two ways to declare matrix.</p>
 <ol type="1">
 <li>Dividing vector into rows and columns with matrix()</li>
@@ -164,8 +301,8 @@ c    1    2    3    4    5    6    7    8    9    10
 </div>
 </div>
 </section>
-<section id="index-of-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="index-of-matrix">Index of matrix</h2>
+<section id="index-of-matrix" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="index-of-matrix"><span class="header-section-number">4.2</span> Index of matrix</h2>
 <p>Just like vector, you can access specific elements of matrix using index. However, since matrix has two dimensions, you need to specify both row and column index.</p>
 <p>When you index, you use matrix[row, column] format.Emptying either means “all of them,” and you can also use range like how we created 1,2,3,4 with 1:4.</p>
 <div class="cell">
@@ -324,8 +461,8 @@ c    1    2    3    4    5    6    7    8    9    10
 </div>
 </div>
 </section>
-<section id="calculation-of-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="calculation-of-matrix">Calculation of matrix</h2>
+<section id="calculation-of-matrix" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="calculation-of-matrix"><span class="header-section-number">4.3</span> Calculation of matrix</h2>
 <p>Before we get into calculation of matrix, you should know the math behind matrix calculation. Please review concepts regarding matrix, adding/subtracting/multiplying matrices. Others are good to know but optional. Link is <a href="https://www.khanacademy.org/math/precalculus/x9e81a4f98389efdf:matrices" title="Khan Academy Matrix Review"><strong>here</strong></a></p>
 <p><img src="images/clipboard-2473964752.png" class="img-fluid"></p>
 <p>Now let’s try calculating matrix in R. First, creating two matrices with same dimension.</p>
@@ -392,8 +529,8 @@ c    1    2    3    4    5    6    7    8    9    10
 </div>
 <p>However, we should keep in mind that vector should be shorter than the number of elements in the matrix. If vector is longer, what are we adding leftover vector elements with?</p>
 </section>
-<section id="functions-regarding-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="functions-regarding-matrix">Functions regarding matrix</h2>
+<section id="functions-regarding-matrix" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="functions-regarding-matrix"><span class="header-section-number">4.4</span> Functions regarding matrix</h2>
 <ol type="1">
 <li>nrow(), ncol(), dim() How do we know size of unknown matrix? nrow() and ncol() returns number of rows and columns, while dim() returns both as vector. dim() returns column size first! Don’t get confused with [row, column] in indexing.</li>
 </ol>
@@ -492,12 +629,11 @@ c    1    2    3    4    5    6    7    8    9    10
 </div>
 </div>
 </section>
-</section>
-<section id="array" class="level1">
-<h1>Array</h1>
+<section id="array" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Array</h1>
 <p>Vector is 1-dimensional, matrix is 2-dimensional. What if we want to hold more than 2 dimensions? For example, what if we want to hold height and weight by gender? This is where array comes in. Array is multi-dimensional data structure, meaning it can hold 3 or more dimensions. However, like vector and matrix, array can only hold one type of data.</p>
-<section id="creating-an-array" class="level2">
-<h2 class="anchored" data-anchor-id="creating-an-array">Creating an array</h2>
+<section id="creating-an-array" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="creating-an-array"><span class="header-section-number">5.1</span> Creating an array</h2>
 <p>We can declare by matrix in a similar way to how we declared vectors. 1. Define matricies you want to stack 2. Use array() function to stack them * Remember, dimension should be identical to be able to stack them.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">3</span>)</span>
@@ -584,14 +720,14 @@ Row  C2 C3
 </div>
 </div>
 </section>
-<section id="calculation-of-array" class="level2">
-<h2 class="anchored" data-anchor-id="calculation-of-array">Calculation of Array</h2>
+<section id="calculation-of-array" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="calculation-of-array"><span class="header-section-number">5.2</span> Calculation of Array</h2>
 <p>Omitted. Everything is same as Matrix calculation.</p>
 </section>
-<section id="advanced-caluclation" class="level2">
-<h2 class="anchored" data-anchor-id="advanced-caluclation">Advanced caluclation</h2>
-<section id="solving-equations-with-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="solving-equations-with-matrix">Solving equations with matrix</h3>
+<section id="advanced-caluclation" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="advanced-caluclation"><span class="header-section-number">5.3</span> Advanced caluclation</h2>
+<section id="solving-equations-with-matrix" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="solving-equations-with-matrix"><span class="header-section-number">5.3.1</span> Solving equations with matrix</h3>
 <p>Matrix and Array can be used in a lot of places. Due to its compact representation of high dimnesional data, we often use matrix to represent equations with multiple dimension. For example,</p>
 <p>3x + 2y = 5 4x + 6y = 12</p>
 <p>can be written as [3, 2, 5]; [4, 6,12] (; is used to seperate rows). So, we condensed multiple equations into one 2x3 matrix. This also means that we can use matrix to solve complex equations.</p>
@@ -613,21 +749,22 @@ y  1.6</code></pre>
 </div>
 </div>
 </section>
-<section id="eigenvalues-and-eigenvectors" class="level3">
-<h3 class="anchored" data-anchor-id="eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</h3>
+<section id="eigenvalues-and-eigenvectors" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="eigenvalues-and-eigenvectors"><span class="header-section-number">5.3.2</span> Eigenvalues and Eigenvectors</h3>
 <p>This is core concept of linear algebra, which will help you understand more advanced machine learning algorithms. However, it’s difficult to understand without proper math background, so we’ll come back to this later. For now, watch this playlist to get introduction to linear algebra. I highly recommend this.</p>
 <p>Link: <a href="https://www.youtube.com/watch?v=fNk_zzaMoSs&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">Linear Algebra by 3Blue1Brown</a></p>
 </section>
 </section>
 </section>
-<section id="summary-of-vector-matrix-and-array." class="level1">
-<h1>Summary of Vector, Matrix, and Array.</h1>
+<section id="summary-of-vector-matrix-and-array." class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Summary of Vector, Matrix, and Array.</h1>
 <p>Throughout Chapter 3 and 4, we reviewed basic concepts of vector (1D), matrix (2D), and array (Multiple D). While we defined three different data structure, are they really different? Think about this. We declared matrix by combining vectors into two dimensions. Then, we declared 3D array by stacking matrices. However, way to higher dimension is just repeating same process: adding a new axis by combining existing structure. So, doesn’t that mean matrix is vector and array is also vector in the end? You’re right, it is.</p>
 <p>So array is often seen as ‘generalized vector’ or ‘generalized matrix.’ While vector is tied to 1D and matrix is tied to 2D, array can build as much as dimensions you want using vector. Next time, we’ll explore the list (like a shopping list or to-do list). You’ll be able to verify using code how vector to array are all same thing. Then, keep this in your mind and see you in the next chapter!</p>
+
+
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1027,6 +1164,15 @@ y  1.6</code></pre>
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Vectors_3.html" class="pagination-link" aria-label="Vectors">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Vectors</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

@@ -11,6 +11,7 @@ book:
     - Structure_of_R_Studio_1.qmd
     - Variables_Calculations_2.qmd
     - Vectors_3.qmd
+    - Matrix_4.qmd
 
 bibliography: references.bib
 
