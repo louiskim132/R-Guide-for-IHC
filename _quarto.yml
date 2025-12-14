@@ -8,9 +8,9 @@ book:
   date: "2025. 12. 13."
   chapters:
     - index.qmd
-    - Structure of R Studio.qmd
-    - Introduction to Data.qmd
-    - Vectors.qmd
+    - 1_Structure_of_R_Studio.qmd
+    - 2_Variables_Calculations.qmd
+    - 3_Vectors.qmd
 
 bibliography: references.bib
 
