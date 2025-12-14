@@ -1,3 +1,0 @@
-# Welcome to "Introduction to R" {.unnumbered}
-
-Here, you will learn how to use R for data analysis. Try practice questions, and feel free to contact me anything you have questions.
