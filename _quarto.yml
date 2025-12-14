@@ -8,9 +8,9 @@ book:
   date: "2025. 12. 13."
   chapters:
     - index.qmd
-    - 1_Structure_of_R_Studio.qmd
-    - 2_Variables_Calculations.qmd
-    - 3_Vectors.qmd
+    - Structure_of_R_Studio_1.qmd
+    - Variables_Calculations_2.qmd
+    - Vectors_3.qmd
 
 bibliography: references.bib
 

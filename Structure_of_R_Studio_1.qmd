@@ -46,7 +46,7 @@ Script is a file that saves your code so that you don’t have to rewrite same t
 Script and Quarto Document are most common files used to save the codes. Difference between to are what the default text is.
 
 | Type | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | Script (Talking to computer) | Plain texts are considered as code, and you need to use special characters to insert “comments.” It’s for purely performing code it’s written. |
 | Quarto Document (Talking to human) | Plain texts are considered as text, and you need to insert “Chunks” to tell R Studio ‘These are codes I want to run.’ You can export Quarto Doc as beautiful report, which Script can’t. |
 
@@ -61,6 +61,6 @@ Create Quarto Doc. You can use whatever title and Author name you want. Leave ot
 
 3 – When you click Run, you’ll see which part of doc you want to execute. If you click specific chunk and “Run Current Chunk,” only clicked chunk will be executed. This is one advantage of Quarto doc too.
 
-Now, save your quarto doc and Render. You’ll see that (Title).html file is created in your directory (1-\>2-\>3 marked in the picture). Congrats! You just created your first report using R. When you open the file, you’ll see how quarto doc became visually pretty and clear. 
+Now, save your quarto doc and Render. You’ll see that (Title).html file is created in your directory (1-\>2-\>3 marked in the picture). Congrats! You just created your first report using R. When you open the file, you’ll see how quarto doc became visually pretty and clear.
 
 ![](images/clipboard-4218154364.png)
