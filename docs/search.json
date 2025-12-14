@@ -10,186 +10,6 @@
     ]
   },
   {
-    "objectID": "intro.html",
-    "href": "intro.html",
-    "title": "1  Introduction",
-    "section": "",
-    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
-    ]
-  },
-  {
-    "objectID": "summary.html",
-    "href": "summary.html",
-    "title": "2  Summary",
-    "section": "",
-    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
-    ]
-  },
-  {
-    "objectID": "references.html",
-    "href": "references.html",
-    "title": "References",
-    "section": "",
-    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
-    "crumbs": [
-      "References"
-    ]
-  },
-  {
-    "objectID": "Structure of R Studio.html",
-    "href": "Structure of R Studio.html",
-    "title": "1  Structure of R Studio",
-    "section": "",
-    "text": "1.1 Creating a Project\nR is a programming language. R Studio is a UI that helps you write, run, and organize your R code. Let’s explore how R Studio looks and what each section does.\nWhen we write codes and save data, it’s important to keep everything organized so that R can remember where things were saved. To tell R Studio where to save and find your files, we use project. It’s like a home for your codes and data.\nLet’s make a new project.\nCongrats! You just made your first project in R. Now let’s start exploring what features are there in R Studio.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "Introduction.html",
-    "href": "Introduction.html",
-    "title": "Welcome to “Introduction to R”",
-    "section": "",
-    "text": "Here, you will learn how to use R for data analysis. Try practice questions, and feel free to contact me anything you have questions.",
-    "crumbs": [
-      "Welcome to \"Introduction to R\""
-    ]
-  },
-  {
-    "objectID": "Introduction to Data.html",
-    "href": "Introduction to Data.html",
-    "title": "3  Summary",
-    "section": "",
-    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Summary</span>"
-    ]
-  },
-  {
-    "objectID": "Structure of R Studio.html#creating-a-project",
-    "href": "Structure of R Studio.html#creating-a-project",
-    "title": "1  Structure of R Studio",
-    "section": "",
-    "text": "Click “File -&gt; New Project -&gt; New Directory -&gt; New Project”\nChoose location of folder you want to be, a good name, and click “Create Project”",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "Structure of R Studio.html#ui-of-r-studio",
-    "href": "Structure of R Studio.html#ui-of-r-studio",
-    "title": "1  Structure of R Studio",
-    "section": "1.2 UI of R Studio",
-    "text": "1.2 UI of R Studio\nOn the main page of R Studio, you’ll see 4 main sections.\n\n1 – Script Editor: This is where you write and save your code.\n2 – Console: It’s a communication window between you and the computer. You can give him commands to execute, and console will show you what it’s doing.\n3 – Environment: You’ll work with countless variables. This section shows what variables you’ve saved as you run your code.\n4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder. Default is folder where your project is.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "Structure of R Studio.html#creating-a-script",
-    "href": "Structure of R Studio.html#creating-a-script",
-    "title": "1  Structure of R Studio",
-    "section": "1.3 Creating a script",
-    "text": "1.3 Creating a script",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "1_Structure_of_R_Studio.html",
-    "href": "1_Structure_of_R_Studio.html",
-    "title": "1  Structure of R Studio",
-    "section": "",
-    "text": "1.1 Creating a Project\nR is a programming language. R Studio is a UI that helps you write, run, and organize your R code. Let’s explore how R Studio looks and what each section does.\nWhen we write codes and save data, it’s important to keep everything organized so that R can remember where things were saved. To tell R Studio where to save and find your files, we use project. It’s like a home for your codes and data.\nLet’s make a new project.\nCongrats! You just made your first project in R. Now let’s start exploring what features are there in R Studio.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "1_Structure_of_R_Studio.html#creating-a-project",
-    "href": "1_Structure_of_R_Studio.html#creating-a-project",
-    "title": "1  Structure of R Studio",
-    "section": "",
-    "text": "Click “File -&gt; New Project -&gt; New Directory -&gt; New Project”\nChoose location of folder you want to be, a good name, and click “Create Project”",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "1_Structure_of_R_Studio.html#ui-of-r-studio",
-    "href": "1_Structure_of_R_Studio.html#ui-of-r-studio",
-    "title": "1  Structure of R Studio",
-    "section": "1.2 UI of R Studio",
-    "text": "1.2 UI of R Studio\nOn the main page of R Studio, you’ll see 4 main sections.\n\n1 – Script Editor: This is where you write and save your code.\n2 – Console: It’s a communication window between you and the computer. You can give him commands to execute, and console will show you what it’s doing.\n3 – Environment: You’ll work with countless variables. This section shows what variables you’ve saved as you run your code.\n4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder. Default is folder where your project is.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "1_Structure_of_R_Studio.html#creating-a-script",
-    "href": "1_Structure_of_R_Studio.html#creating-a-script",
-    "title": "1  Structure of R Studio",
-    "section": "1.4 Creating a script",
-    "text": "1.4 Creating a script\nScript is a file that saves your code so that you don’t have to rewrite same thing every time. Let’s make a script. There are two ways to create a script.\n\nScript and Quarto Document are most common files used to save the codes. Difference between to are what the default text is.\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nScript (Talking to computer)\nPlain texts are considered as code, and you need to use special characters to insert “comments.” It’s for purely performing code it’s written.\n\n\nQuarto Document (Talking to human)\nPlain texts are considered as text, and you need to insert “Chunks” to tell R Studio ‘These are codes I want to run.’ You can export Quarto Doc as beautiful report, which Script can’t.\n\n\n\nThis year, we’ll use Quarto Doc as we need to create reports and share codes to others.\nCreate Quarto Doc. You can use whatever title and Author name you want. Leave other options as it is.\n\n1 – # in the doc indicates the title. The more # you put, the smaller the text size gets. # (biggest) -&gt; ####(Smallest)\n2 – Area that wrapped with {r} and is called “Chunk,” where codes you want to run goes. # in the chunks indicates comment, which will not get executed.\n3 – When you click Run, you’ll see which part of doc you want to execute. If you click specific chunk and “Run Current Chunk,” only clicked chunk will be executed. This is one advantage of Quarto doc too.\nNow, save your quarto doc and Render. You’ll see that (Title).html file is created in your directory (1-&gt;2-&gt;3 marked in the picture). Congrats! You just created your first report using R. When you open the file, you’ll see how quarto doc became visually pretty and clear.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "2_Variables_Calculations.html",
-    "href": "2_Variables_Calculations.html",
-    "title": "2  Data Types and Variables",
-    "section": "",
-    "text": "2.1 Data Types\nNow, let’s talk about how data are saved in R. R classifies data into four categories: Number, Text, Boolean, Special.",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data Types and Variables</span>"
-    ]
-  },
-  {
-    "objectID": "1_Structure_of_R_Studio.html#using-console",
-    "href": "1_Structure_of_R_Studio.html#using-console",
-    "title": "1  Structure of R Studio",
-    "section": "1.3 Using Console",
-    "text": "1.3 Using Console\nSo Console is where actual works are done. Let’s try using it. Input 1 + 1 and press enter. You’ll see it’s printing 2, the result of what you asked R to calculate.\n\nHowever, Console is one-time-communicator. It can’t remember anything you say or R executes, making you to retype everything to do same job. This gets annoying fast, especially if your code gets long. How can we make this easy? We’ll figure it out in next the next section.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
-    ]
-  },
-  {
-    "objectID": "2_Variables_Calculations.html#data-types",
-    "href": "2_Variables_Calculations.html#data-types",
-    "title": "2  Data Types and Variables",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nNumber\nAny numbers. They’re classified into two categories.\nInteger – Type of number WITHOUT decimals.\nE.g.) 1, 10, 100\n\nFloat – Type of number WITH decimals.\nE.g) 1.24, 2.00 (Not int because of “.00”!)\n\n\nText\nAnything you put into “ “, regardless of what’s inside.\nE.g) “Hi”, “121”\n\n\nBoolean\nA logic data. It’s either “True” or “False”\n\n\nSpecial\nValues that cannot be specified\nNull – Empty value without determined data type (Number/Text/Boolean)\nNA – Missing value. Known data type but nothing inside.\nNaN – Unable to mathematically define. E.g.) Saving “Hi” as int/float\n\ninf – Yes, infinite number. They’re under special characters!",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data Types and Variables</span>"
-    ]
-  },
-  {
-    "objectID": "2_Variables_Calculations.html#variables",
-    "href": "2_Variables_Calculations.html#variables",
-    "title": "2  Data Types and Variables",
-    "section": "2.2 Variables",
-    "text": "2.2 Variables\nNow we know that there are multiple types of data. But how do we tell R to remember them? That’s where variables come in! Variables are names that store data values.\nYou can declare a variable by using the assignment operator ‘&lt;-’ or ‘=’.\n\nTest1 &lt;- 3\nTest2 = 4\n\nOnce you declare the variable, you’ll see them in the Environment tab. Also, you’ll be able to call them by simply typing their names.\n\nTest1\n\n[1] 3\n\nTest2\n\n[1] 4\n\n\nIf it’s not working, it’s probably due to variable names. There’re specific rules in naming - First character must be dot(.) or letter. It cannot be number or special character. Second character and later can be anything - You cannot use other function’s name as variable name (sum, mean, etc. We’ll cover functions as we go on) - Variable names are case-sensitive. “test” and “Test” are different variables. - Avoid using spaces in variable names. Use dot(.) or underscore(_) instead. E.g.) my.variable, my_variable",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data Types and Variables</span>"
-    ]
-  },
-  {
-    "objectID": "Vectors_3.html",
-    "href": "Vectors_3.html",
-    "title": "3  Vectors",
-    "section": "",
-    "text": "3.1 Vectors with Numbers\nLast chapter, we reviewed what variables are. Imagine we’re storing heights of 50 students. Declaring 50 variables like “Height1”, “Height2”, …, “Height50” takes forever. Instead, we can use “vector” to store multiple values in a single variable.\nVector is a 1-dimensional sequence of “same type” of data. For example, vector with int can only store int values. Length of Vector is equal to number of values stored in the vector.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Vectors</span>"
-    ]
-  },
-  {
     "objectID": "Structure_of_R_Studio_1.html",
     "href": "Structure_of_R_Studio_1.html",
     "title": "1  Structure of R Studio",
@@ -287,6 +107,16 @@
     "text": "2.4 Logical Calculations\nSometimes you need more than simple calculations, such as “which number is bigger?” Return values of logical calculations are Boolean (True/False).\n\n\n\nType\nOperation\n\n\n\n\nComparison\n&lt;, &gt;, &lt;=, &gt;=\n\n\nEqual\n==\n\n\nNot Equal\n!=\n\n\nOr\n|\n\n\nAnd\n&",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data Types and Variables</span>"
+    ]
+  },
+  {
+    "objectID": "Vectors_3.html",
+    "href": "Vectors_3.html",
+    "title": "3  Vectors",
+    "section": "",
+    "text": "3.1 Vectors with Numbers\nLast chapter, we reviewed what variables are. Imagine we’re storing heights of 50 students. Declaring 50 variables like “Height1”, “Height2”, …, “Height50” takes forever. Instead, we can use “vector” to store multiple values in a single variable.\nVector is a 1-dimensional sequence of “same type” of data. For example, vector with int can only store int values. Length of Vector is equal to number of values stored in the vector.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Vectors</span>"
     ]
   },
   {
