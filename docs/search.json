@@ -44,7 +44,7 @@
     "href": "Structure of R Studio.html",
     "title": "1  Structure of R Studio",
     "section": "",
-    "text": "1.1 UI of R Studio\nR is a programming language. R Studio is a UI that helps you write, run, and organize your R code. Let’s explore how R Studio looks and what each section does.\nWhen you open R Studio, you’ll see 4 main sections.\n1 – Script Editor: This is where you write and save your code.\n2 – Console: It’s a communication window between you and the computer. You can check What/how computer is executing or give a one-time command. A script is something you can save and reuse. Console doesn’t have memory–All commands you make there will disappear when you close R Studio.\n3 – Environment: You’ll work with countless variables. This section shows what variables you’ve saved as you run your code.\n4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder.",
+    "text": "1.1 Creating a Project\nR is a programming language. R Studio is a UI that helps you write, run, and organize your R code. Let’s explore how R Studio looks and what each section does.\nWhen we write codes and save data, it’s important to keep everything organized so that R can remember where things were saved. To tell R Studio where to save and find your files, we use project. It’s like a home for your codes and data.\nLet’s make a new project.\nCongrats! You just made your first project in R. Now let’s start exploring what features are there in R Studio.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
     ]
@@ -67,6 +67,36 @@
     "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "Structure of R Studio.html#creating-a-project",
+    "href": "Structure of R Studio.html#creating-a-project",
+    "title": "1  Structure of R Studio",
+    "section": "",
+    "text": "Click “File -&gt; New Project -&gt; New Directory -&gt; New Project”\nChoose location of folder you want to be, a good name, and click “Create Project”",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
+    ]
+  },
+  {
+    "objectID": "Structure of R Studio.html#ui-of-r-studio",
+    "href": "Structure of R Studio.html#ui-of-r-studio",
+    "title": "1  Structure of R Studio",
+    "section": "1.2 UI of R Studio",
+    "text": "1.2 UI of R Studio\nOn the main page of R Studio, you’ll see 4 main sections.\n\n1 – Script Editor: This is where you write and save your code.\n2 – Console: It’s a communication window between you and the computer. You can give him commands to execute, and console will show you what it’s doing.\n3 – Environment: You’ll work with countless variables. This section shows what variables you’ve saved as you run your code.\n4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder. Default is folder where your project is.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
+    ]
+  },
+  {
+    "objectID": "Structure of R Studio.html#creating-a-script",
+    "href": "Structure of R Studio.html#creating-a-script",
+    "title": "1  Structure of R Studio",
+    "section": "1.3 Creating a script",
+    "text": "1.3 Creating a script",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Structure of R Studio</span>"
     ]
   }
 ]
