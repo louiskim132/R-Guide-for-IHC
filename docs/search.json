@@ -4,9 +4,9 @@
     "href": "index.html",
     "title": "R Guide",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2",
+    "text": "Welcome to “Introduction to R”\nHere, you will learn how to use R for data analysis. Try practice questions, and feel free to contact me anything you have questions.",
     "crumbs": [
-      "Preface"
+      "Welcome to \"Introduction to R\""
     ]
   },
   {
