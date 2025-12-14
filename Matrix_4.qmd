@@ -194,7 +194,9 @@ However, we should keep in mind that vector should be shorter than the number of
 
 ## Functions regarding matrix
 
-1.  nrow(), ncol(), dim() How do we know size of unknown matrix? nrow() and ncol() returns number of rows and columns, while dim() returns both as vector. dim() returns column size first! Don't get confused with \[row, column\] in indexing.
+###nrow(), ncol(), dim() 
+
+How do we know size of unknown matrix? nrow() and ncol() returns number of rows and columns, while dim() returns both as vector. dim() returns column size first! Don't get confused with \[row, column\] in indexing.
 
 ```{r}
 m <- matrix(1:12, nrow=3, ncol=4)
@@ -203,7 +205,9 @@ ncol(m)
 dim(m)
 ```
 
-2.  rownames(), colnames() Earlier, we saw how we can assign row names and column names by rownames() \<- c(names). However, can we do the opposite? Like, checking names of cols and rows instead of assigning? Yes! Instead of assigning through \<-, you can use rownames(matrix) or colnames(matrix) to check names of rows and columns.
+### rownames(), colnames() 
+
+Earlier, we saw how we can assign row names and column names by rownames() \<- c(names). However, can we do the opposite? Like, checking names of cols and rows instead of assigning? Yes! Instead of assigning through \<-, you can use rownames(matrix) or colnames(matrix) to check names of rows and columns.
 
 ```{r}
 colnames(m) 
@@ -212,14 +216,18 @@ rownames(m)
 
 Here, we get Null (empty). Why is that? Look at how m looks like and think about it!
 
-3.  t() Transpose matrix is matrix with switched rows and columns (for example, 2x3 becomes 3x2). In R, you can do this by t() function.
+### t() 
+
+Transpose matrix is matrix with switched rows and columns (for example, 2x3 becomes 3x2). In R, you can do this by t() function.
 
 ```{r}
 m
 t(m)
 ```
 
-4.  Moving between matrix and vector Sometimes, you may want to convert matrix into vector or vice versa. You can do this by as.vector() or c(). as.vector() unstrings matrix into single line (= vector). And do you remember how giving one input feature in indexing make matrix behave like vector? c() function does the same thing. If you do c(matrix) without telling what else to combine with, c() will combine matrix itself into one string, making it vector.
+###Moving between matrix and vector 
+
+Sometimes, you may want to convert matrix into vector or vice versa. You can do this by as.vector() or c(). as.vector() unstrings matrix into single line (= vector). And do you remember how giving one input feature in indexing make matrix behave like vector? c() function does the same thing. If you do c(matrix) without telling what else to combine with, c() will combine matrix itself into one string, making it vector.
 
 ```{r}
 Testmat <- matrix(1:9, nrow=3, ncol=3)
@@ -227,7 +235,9 @@ as.vector(Testmat)
 c(Testmat)
 ```
 
-5.  Apply() Often, we need to perform calculation throughout row or column of the matrix (e.g. finding average height by each person, finding total score by each student). Instead of writing all elements individually, we can use apply() function.
+### Apply() 
+
+Often, we need to perform calculation throughout row or column of the matrix (e.g. finding average height by each person, finding total score by each student). Instead of writing all elements individually, we can use apply() function.
 
 apply() has three main arguments (inputs). X (target), Margin (which direction do you want to apply the function? 1 is row, 2 is column), and Function (work you want to perform)
 

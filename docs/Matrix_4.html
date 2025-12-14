@@ -184,7 +184,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#creating-a-matrix" id="toc-creating-a-matrix" class="nav-link active" data-scroll-target="#creating-a-matrix"><span class="header-section-number">4.1</span> Creating a matrix</a></li>
   <li><a href="#index-of-matrix" id="toc-index-of-matrix" class="nav-link" data-scroll-target="#index-of-matrix"><span class="header-section-number">4.2</span> Index of matrix</a></li>
   <li><a href="#calculation-of-matrix" id="toc-calculation-of-matrix" class="nav-link" data-scroll-target="#calculation-of-matrix"><span class="header-section-number">4.3</span> Calculation of matrix</a></li>
-  <li><a href="#functions-regarding-matrix" id="toc-functions-regarding-matrix" class="nav-link" data-scroll-target="#functions-regarding-matrix"><span class="header-section-number">4.4</span> Functions regarding matrix</a></li>
+  <li><a href="#functions-regarding-matrix" id="toc-functions-regarding-matrix" class="nav-link" data-scroll-target="#functions-regarding-matrix"><span class="header-section-number">4.4</span> Functions regarding matrix</a>
+  <ul class="collapse">
+  <li><a href="#rownames-colnames" id="toc-rownames-colnames" class="nav-link" data-scroll-target="#rownames-colnames"><span class="header-section-number">4.4.1</span> rownames(), colnames()</a></li>
+  <li><a href="#t" id="toc-t" class="nav-link" data-scroll-target="#t"><span class="header-section-number">4.4.2</span> t()</a></li>
+  <li><a href="#apply" id="toc-apply" class="nav-link" data-scroll-target="#apply"><span class="header-section-number">4.4.3</span> Apply()</a></li>
+  </ul></li>
   <li><a href="#array" id="toc-array" class="nav-link" data-scroll-target="#array"><span class="header-section-number">5</span> Array</a>
   <ul class="collapse">
   <li><a href="#creating-an-array" id="toc-creating-an-array" class="nav-link" data-scroll-target="#creating-an-array"><span class="header-section-number">5.1</span> Creating an array</a></li>
@@ -531,9 +536,8 @@ c    1    2    3    4    5    6    7    8    9    10
 </section>
 <section id="functions-regarding-matrix" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="functions-regarding-matrix"><span class="header-section-number">4.4</span> Functions regarding matrix</h2>
-<ol type="1">
-<li>nrow(), ncol(), dim() How do we know size of unknown matrix? nrow() and ncol() returns number of rows and columns, while dim() returns both as vector. dim() returns column size first! Don’t get confused with [row, column] in indexing.</li>
-</ol>
+<p>###nrow(), ncol(), dim()</p>
+<p>How do we know size of unknown matrix? nrow() and ncol() returns number of rows and columns, while dim() returns both as vector. dim() returns column size first! Don’t get confused with [row, column] in indexing.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">nrow=</span><span class="dv">3</span>, <span class="at">ncol=</span><span class="dv">4</span>)</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -549,9 +553,9 @@ c    1    2    3    4    5    6    7    8    9    10
 <pre><code>[1] 3 4</code></pre>
 </div>
 </div>
-<ol start="2" type="1">
-<li>rownames(), colnames() Earlier, we saw how we can assign row names and column names by rownames() &lt;- c(names). However, can we do the opposite? Like, checking names of cols and rows instead of assigning? Yes! Instead of assigning through &lt;-, you can use rownames(matrix) or colnames(matrix) to check names of rows and columns.</li>
-</ol>
+<section id="rownames-colnames" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="rownames-colnames"><span class="header-section-number">4.4.1</span> rownames(), colnames()</h3>
+<p>Earlier, we saw how we can assign row names and column names by rownames() &lt;- c(names). However, can we do the opposite? Like, checking names of cols and rows instead of assigning? Yes! Instead of assigning through &lt;-, you can use rownames(matrix) or colnames(matrix) to check names of rows and columns.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(m) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -563,9 +567,10 @@ c    1    2    3    4    5    6    7    8    9    10
 </div>
 </div>
 <p>Here, we get Null (empty). Why is that? Look at how m looks like and think about it!</p>
-<ol start="3" type="1">
-<li>t() Transpose matrix is matrix with switched rows and columns (for example, 2x3 becomes 3x2). In R, you can do this by t() function.</li>
-</ol>
+</section>
+<section id="t" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="t"><span class="header-section-number">4.4.2</span> t()</h3>
+<p>Transpose matrix is matrix with switched rows and columns (for example, 2x3 becomes 3x2). In R, you can do this by t() function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -583,9 +588,8 @@ c    1    2    3    4    5    6    7    8    9    10
 [4,]   10   11   12</code></pre>
 </div>
 </div>
-<ol start="4" type="1">
-<li>Moving between matrix and vector Sometimes, you may want to convert matrix into vector or vice versa. You can do this by as.vector() or c(). as.vector() unstrings matrix into single line (= vector). And do you remember how giving one input feature in indexing make matrix behave like vector? c() function does the same thing. If you do c(matrix) without telling what else to combine with, c() will combine matrix itself into one string, making it vector.</li>
-</ol>
+<p>###Moving between matrix and vector</p>
+<p>Sometimes, you may want to convert matrix into vector or vice versa. You can do this by as.vector() or c(). as.vector() unstrings matrix into single line (= vector). And do you remember how giving one input feature in indexing make matrix behave like vector? c() function does the same thing. If you do c(matrix) without telling what else to combine with, c() will combine matrix itself into one string, making it vector.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>Testmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">nrow=</span><span class="dv">3</span>, <span class="at">ncol=</span><span class="dv">3</span>)</span>
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as.vector</span>(Testmat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -597,9 +601,10 @@ c    1    2    3    4    5    6    7    8    9    10
 <pre><code>[1] 1 2 3 4 5 6 7 8 9</code></pre>
 </div>
 </div>
-<ol start="5" type="1">
-<li>Apply() Often, we need to perform calculation throughout row or column of the matrix (e.g.&nbsp;finding average height by each person, finding total score by each student). Instead of writing all elements individually, we can use apply() function.</li>
-</ol>
+</section>
+<section id="apply" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="apply"><span class="header-section-number">4.4.3</span> Apply()</h3>
+<p>Often, we need to perform calculation throughout row or column of the matrix (e.g.&nbsp;finding average height by each person, finding total score by each student). Instead of writing all elements individually, we can use apply() function.</p>
 <p>apply() has three main arguments (inputs). X (target), Margin (which direction do you want to apply the function? 1 is row, 2 is column), and Function (work you want to perform)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>Scores <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">85</span>, <span class="dv">88</span>,</span>
@@ -628,6 +633,7 @@ c    1    2    3    4    5    6    7    8    9    10
 84.33333 88.00000 86.00000 </code></pre>
 </div>
 </div>
+</section>
 </section>
 <section id="array" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Array</h1>
