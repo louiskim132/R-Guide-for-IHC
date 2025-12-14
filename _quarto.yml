@@ -7,6 +7,7 @@ book:
   author: "Jaewon Kim"
   date: "2025. 12. 13."
   chapters:
+    - index.qmd
     - Introduction.qmd
     - Structure of R Studio.qmd
     - Introduction to Data.qmd

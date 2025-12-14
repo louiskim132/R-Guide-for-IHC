@@ -4,9 +4,9 @@
     "href": "index.html",
     "title": "R Guide",
     "section": "",
-    "text": "Welcome to “Introduction to R”\nHere, you will learn how to use R for data analysis. Try practice questions, and feel free to contact me anything you have questions.",
+    "text": "#Index\nNothing.",
     "crumbs": [
-      "Welcome to \"Introduction to R\""
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>index.html</span>"
     ]
   },
   {
@@ -37,6 +37,36 @@
     "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "Structure of R Studio.html",
+    "href": "Structure of R Studio.html",
+    "title": "2  Structure of R Studio",
+    "section": "",
+    "text": "2.1 UI of R Studio\nR is a programming language. R Studio is a UI that helps you write, run, and organize your R code. Let’s explore how R Studio looks and what each section does.\nWhen you open R Studio, you’ll see 4 main sections.\n1 – Script Editor: This is where you write and save your code.\n2 – Console: It’s a communication window between you and the computer. You can check What/how computer is executing or give a one-time command. A script is something you can save and reuse. Console doesn’t have memory–All commands you make there will disappear when you close R Studio.\n3 – Environment: You’ll work with countless variables. This section shows what variables you’ve saved as you run your code.\n4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Structure of R Studio</span>"
+    ]
+  },
+  {
+    "objectID": "Introduction.html",
+    "href": "Introduction.html",
+    "title": "Welcome to “Introduction to R”",
+    "section": "",
+    "text": "Here, you will learn how to use R for data analysis. Try practice questions, and feel free to contact me anything you have questions.",
+    "crumbs": [
+      "Welcome to \"Introduction to R\""
+    ]
+  },
+  {
+    "objectID": "Introduction to Data.html",
+    "href": "Introduction to Data.html",
+    "title": "3  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Summary</span>"
     ]
   }
 ]
