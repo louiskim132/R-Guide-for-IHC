@@ -29,10 +29,38 @@ On the main page of R Studio, you'll see 4 main sections.
 
 4 – Directories: Sometimes you need to load data or files for your code. This section shows which files are in your working folder. Default is folder where your project is.
 
-First, let's try typing anything into Console. Input 1 + 1 and press enter. You'll see it's printing 2, the result of what you asked R to calculate.
+## Using Console
+
+So Console is where actual works are done. Let's try using it. Input 1 + 1 and press enter. You'll see it's printing 2, the result of what you asked R to calculate.
 
 ![](images/clipboard-2614705250.png){width="114"}
 
 However, Console is one-time-communicator. It can't remember anything you say or R executes, making you to retype everything to do same job. This gets annoying fast, especially if your code gets long. How can we make this easy? We'll figure it out in next the next section.
 
 ## Creating a script
+
+Script is a file that saves your code so that you don’t have to rewrite same thing every time. Let's make a script. There are two ways to create a script.
+
+![](images/clipboard-1178227382.png)
+
+Script and Quarto Document are most common files used to save the codes. Difference between to are what the default text is.
+
+| Type | Description |
+|------------------------------------|------------------------------------|
+| Script (Talking to computer) | Plain texts are considered as code, and you need to use special characters to insert “comments.” It’s for purely performing code it’s written. |
+| Quarto Document (Talking to human) | Plain texts are considered as text, and you need to insert “Chunks” to tell R Studio ‘These are codes I want to run.’ You can export Quarto Doc as beautiful report, which Script can’t. |
+
+This year, we'll use Quarto Doc as we need to create reports and share codes to others.\
+Create Quarto Doc. You can use whatever title and Author name you want. Leave other options as it is.
+
+![](images/clipboard-3419999838.png)
+
+1 – \# in the doc indicates the title. The more \# you put, the smaller the text size gets. \# (biggest) -\> ####(Smallest)
+
+2 – Area that wrapped with `{r} and` is called “Chunk,” where codes you want to run goes. \# in the chunks indicates comment, which will not get executed.
+
+3 – When you click Run, you’ll see which part of doc you want to execute. If you click specific chunk and “Run Current Chunk,” only clicked chunk will be executed. This is one advantage of Quarto doc too.
+
+Now, save your quarto doc and Render. You’ll see that (Title).html file is created in your directory (1-\>2-\>3 marked in the picture). Congrats! You just created your first report using R. When you open the file, you’ll see how quarto doc became visually pretty and clear. 
+
+![](images/clipboard-4218154364.png)
