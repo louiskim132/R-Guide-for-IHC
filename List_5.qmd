@@ -1,0 +1,362 @@
+# List
+
+## Object and Class
+
+So far we looked at vector, matrix, and array. However, one limitation was that all elements in them need to be same data type. Revisit "Information" matrix where we stored patient's visit date, blood pressure, and patient ID. All elements were character type ("text") despite of bp/ID being number because "Date" was in text format.
+
+But why is that really the case? Why can we declare vectors with text, numbers, or logic, but not two at the same time?
+
+To answer this, we need to understand what object and type are.
+
+### What is Object?
+
+Single component we decide to store was called variable. Then how about some kind of produces like vectors? Single unit of whatever data that R can recall, like vectors, matrix, and functions, are called "Objects."
+
+In stored data's perspective, Objects are divded into two types. "Atomic" and "Generic (or List)" List, we'll talk about it later.
+
+Atomic object is what we've been reviewing: A vector, data we can store with single data type. Some examples are vectored made out of logical, integer, character, float (double), complex, etc.
+
+#### Characteristics of Object
+
+All object has two intrinsic characteristics: Type and Length.
+
+Type is literally type of data we discussed in Chapter 2. Nothing more to say. Throughout previous chapters, we talked about how to declare the vectors. However, we never talked about how to check data type of random vector. We use function called typeof() for that.
+
+```{r}
+a <- c(T, F, T, T); typeof(a)
+b <- c(1.2, 0.3, 3.5, 2.3); typeof(b)
+```
+
+Length is another characteristic of object. It tells how many elements are in the object. For example, vector with 4 elements will have length of 4. We can check length of object with length() function.
+
+```{r}
+length(a)
+```
+
+Intrinsic characteristics are intrinsic because they can't be changed once object is created. For example, if we create a vector with character type, we can't change it to numeric type unless we manually code it to be so.
+
+**But Question here:**
+
+```{r}
+a <- c(1, 2, 3, 4)
+b <- matrix(c(1:4), nrow = 2, ncol = 2)
+a
+b
+```
+
+Consider two following data. Both have same length (4), and same data tpye (int). There intrinsic characteristics are same, but they look different (one is 1D vector, another is 2D matrix). How do R distinguish different objects with identical intrinsic characteristics?
+
+### Class
+
+Class solves the question. Class is an "atrribute" that you can assign to the object to tell R how to treat the object.
+
+For example, vector "a" and matrix "b" both have same length (4) and same data type (int). However, R treats them differently because their class is different. Vector "a" is stored with class "numeric" while matrix "b" has class "matrix." We can check class of objects by class().
+
+```{r}
+class(a) # This was vector
+class(b) # This was matrix
+```
+
+### Attributes
+
+Another question is, "Okay, now we know that it's the class that differentiate vector and matrix. But, how do R know the matrix is 2x2?, not 4x1?"
+
+When we declare objects, R saves all the accessory information (people call it meta data. It's anything besides intrinsic characteristics, like class) as "Attributes." You can check all attributes using attributes() function. Let's try it.
+
+```{r}
+attributes(a)
+attributes(b)
+```
+
+As you can see, vector "a" has no attributes, meaning that it's just a simple 1D structure. However, matrix "b" has dimension of 2,2 which means 2x2. This dimension attribute ($dim) tells R that this object is 2D structure with 2 rows and 2 columns.
+
+#### Editing attributes
+
+Earlier, we said that intrinsic characteristics can't be changed once object is created. However, attributes can be changed after creation. Let's try changing dimension attribute of vector "a" to make it 2x2 matrix. We use attr() function to edit them.
+
+```{r}
+a
+attr(a, "dim") 
+# Like rownames(), function(target, detail) displays detail of the target. Here, we're asking to display the dim (dimension) attribute of a. Since a is simple vector, it'll be NULL (nothing).
+
+attr(a, "dim") <- c(2, 2) # Like assigning rownames, now "<-" assigns (2,2) to dim attribute of a.
+a # Now a is 2x2 matrix!
+class(a) # And class of a is now matrix!
+```
+
+There are many attributes, such as dimnames() (name of each dimension), names() (name of each element in 1D structure), etc. You can check all attributes using attributes() function. You can look them up and play with it!
+
+## Summary & List
+
+So what was the answer to the question at the beginning of "Object and Class," what was the point of whole section about them? 
+
+Consider that intrinsic characteristics are saved and doesn't change when objects are declared. This also means that different type of data are saved and recalled through different pathway. For example, integer vector are stored where only integer exists. In the same way, method that vector is loaded for calculation is also something only integer can understand. Therefore, vector/matrix/array can hold only single data type. 
+
+However, sometimes we need to save multiple data type like patient information vector (visiting date in character, vital signs in numeric). This is where "Generic (because it's not atomic)" object, or "List" comes in. List is special object that can hold multiple data type at the same time. Each element in list can be different data type, and even different structure (vector, matrix, array, another list, etc)!
+
+Each element in the list is called "Component."
+
+## Creating a List
+
+Just like atomic objects, list are declared through list() function in two ways: unnamed list and named list.
+
+- Unnamed list: list(Compoenent1, Component2, Component3))
+- Named list: list(Name1 = Component1, Name2 = Component2, Name3 = Component3)
+
+Let's try an example. 
+
+```{r}
+my_list <- list(Name = c("Patient1", "Patient2", "Patient3"), #Component 1
+                Age =  c(30, 45, 28), #Component 2
+                Diabetic = c(F, T, F), #Component 3
+                Visit.Date = matrix(c("2023-12-1",
+                                     "2024-2-16",
+                                     "2025-3-20"),
+                                     nrow = 3, byrow = TRUE) #Component 4
+)
+
+print(my_list)
+```        
+
+Now you see all Character, Numeric, Logical, and even Matrix are stored in single object. Here, we have each components named like "Name," but it will show up as [[1]], [[2]], etc., if they're unnamed.
+
+One important thing to remember while creating a list is that component's name isn't automatically assigned like how creating vector using cbind() named columns whether you name them or not.
+
+```{r}
+var1 = c(3,5)
+var2 = c(7,9)
+
+cbind(var1, var2) # Columns are named var1 and var2 automatically
+```
+
+```{r}
+list(var1, var2)
+```
+
+So like the my_list, you must manually assign names to list, like variable1 = var1.
+
+## Indexing List
+
+Unlike vectors, List use different notation for index: listname[[index]]. Check the exmaple below:
+
+```{r}
+class(my_list[1])
+```
+```{r}
+class(my_list[[1]])
+```
+
+One is list, and another is character. What's the difference? To remember the difference, think of level of information you need to call. 
+
+- Single bracket [ ]: Index of one level deeper (like calling component in vector X). So In list, [] will call entire "Component" itself. For example, my_list[i] will print entire i-th component. However, this is still a list object because list had two factors: Name and value.
+
+```{r}
+my_list[c(1, 2)] # Calls entire first and second component
+```
+
+- Double bracket [[ ]]: Index of two level deeper. So In list, [[]] will call specific "element" inside the component. For example, my_list[[i]] will return contents in i-th component. This time, this is vector since it only prints out values without name. Check the example, can you spot the difference?
+
+```{r}
+my_list[[1]] # Calls elements inside first component (Patient1, Patient2, Patient3)
+```
+```{r}
+my_list[1]
+```
+
+Important thing you must remember is that [] recalls component as list (list with 1 component), while [[]] recalls component as vector. So, for example, my_list[1][2] won't work since my_list[1] has only first element (2nd element of my_list[1] is non-existent). However, my_list[[1]][2] will work since my_list[[1]] is vector with 3 elements.
+
+```{r}
+my_list[1][2] # As you can see, it prints out NULL.
+```
+```{r}
+my_list[[1]][2] # Calls 2nd element in first component (Patient2
+```
+
+
+Like vectors, you can also use name to call specific component/element. A lot of times, people use its alternatives, $, to call component by name. It's easier to type. There output is same!
+
+```{r}
+my_list[["Age"]]
+my_list$Age
+```
+
+Also, like vectors, you can recall elements in component by adding another index.
+
+```{r}
+my_list$Name[2:3] # Calls 2nd and 3rd element in "Name" component
+```
+
+One special point about indexing an list in R is that you can call component by portion of name as long as it's unique. Let's try it.
+
+```{r}
+my_list$Visit
+```
+
+Even though name of that component was "Visit.Date," R was able to recall it because no other component started with "Visit." However, be careful when you have multiple components with similar names.
+
+
+## Editing List
+
+Let's say you created a list. However, what if you need to change information to update record? Let's look at how we can do it.
+
+### Adding Component
+You can add component to list by simply adding a new component to the list.
+
+```{r}
+my_list$Height
+```
+
+Right now, my_lit doesn't have "height component" that it returns NULL. Let's add it.
+
+```{r}
+my_list$Height <- c(170, 180, 160) # Adding Height component
+my_list
+```
+
+Wow! By adding Height component, now we see that list is extended.However, think about this: what will happen if we add componenet to way far back of the last element?
+
+```{r}
+my_list[[7]] <- c("A+", "B", "O-") # Adding Blood Type component at 6th index. Our Last component was [[5]]
+my_list[5:7]
+```
+As you can see, we skipped 6th component slot and added bloodtype to 7th. R will automatically fill skipped componenet in the list with NULL.
+
+
+### Editing Component
+
+In the same way with adding the component, we can edit elements within the component by overwriting existing component (assigning new content to desired index).
+
+```{r}
+my_list$Height <- c(4,5,6) # Changing Height into 4, 5, 6
+my_list$Height
+
+my_list[[5]] <- c(150, 160, 170) # You can also edit using number index
+my_list$Height
+```
+
+Do you remember how we could recall partial list (component as list) using []? In the same way, you can edit multiple components of list using []. However, remember that assignment (new edits) must be list, since list[] acts as a list, not vector.
+
+```{r}
+my_list[1:2]
+my_list[1:2] <- list(Name = c("NewPatient1", "NewPatient2", "NewPatient3"),
+                             Age = c(35, 50, 40)) # Editing Name and Age component at once
+my_list[1:2]
+```
+Now, name and age of patients are changed at once!
+
+One thing to be careful is that recycling rule applies in the list too. So if I try to add a component with different length, R will recycle the values.
+
+```{r}
+my_list[9:11] <- list(c("Text"), 12) # Adding Weight component with length
+my_list[9:11] # Now, you'll see "Text" twice because of recycling
+```
+
+
+### Removing Component
+
+Recall how skipping component resulted in Null, empty. We can use this to remove component from the list! Simpy assign Null to the component you want to remove. It's like editing a list, but with empty component. 
+
+```{r}
+my_list[8:11] <- NULL # Removing my_list[9:11] we just added. But think, why [8:11], not[9:11]?
+my_list[[7]] <- NULL # Removing blood type component
+```
+Now, try calling blood type by my_list[[7]]. It will return error since it doesn't exist anymore.
+
+
+### Vector to list, list to Vector
+
+Recall how we could change data type among vectors, like number to character? In the same way, we can convert vector to list, and list to vector.
+
+```{r}
+Test_Vector <- c(10, 20, 30, 40)
+Test_List <- as.list(Test_Vector) # Converting vector to list
+Test_List # List to vector will be as.vector()
+```
+
+Also, we can connect different lists using c() like vectors.
+
+```{r}
+Another_List <- list("Text1", "Text2")
+Combined_List <- c(Test_List, Another_List)
+Combined_List
+```
+
+One thing to be careful is the hierarchy of list. When you use c(), you're putting two vectors next to each other (equally). This results a list with single layer (component1, componenet2, etc, like example above). However, if you create a list by combining other lists, combined list will be compoenent of new list, creating multiple layers. 
+
+```{r}
+Combined_List2 <- list(Sublist1 = Test_List, Sublist2 = Another_List)
+Combined_List2
+```
+
+Now, you'll see that both Test_list and Another_List became components under name of Sublist1, and Sublist2, respectively (2 layered list). Then, could we transform multi-layered list into vector? Yes, we can use unlist() function for that.
+
+```{r}
+unlist(Combined_List2)
+```
+
+## Functions with List
+
+Many functions we learned can be applied to list. However, apply() doesn't work on list because list is a generic object with different components, while apply() requires same data type as it perform same work throughout the object. 
+
+### lapply()
+
+lapply works by apply(list, function). Let's look at the example.
+
+```{r}
+Sample1 <- list(A = c(1,2,3), B = c(4,5,6), C = c(7,8,9))
+Sample1
+```
+
+If we want to find mean of each component, using mean() requires us to calculate through three lines of code (mean() per component). Using, lapply does the same in single line.
+
+```{r}
+lapply(Sample1, mean)
+```
+
+Here, remember that lapply() applies function to each componenet and return the result in identical structure to the input (so list in this case). 
+
+### sapply()
+
+Many times, we want the calculation to return in simplified structure like vector so that we don't have to index list every time (which is more complex and time consuming). sapply() does the same thing with lapply(), but return the result in vector or matrix.
+
+```{r}
+sapply(Sample1, mean)
+sapply(Sample1, range)
+```
+
+Now, instead of multi components from lapply ($A, $B, $C), we have single vector with three elements. This is easier to use in many cases. If result requires multiple rows/columns, like range(), output will be matrix.
+
+### mapply()
+
+So lapply() and sapply() apply function to single list. But what if we have multiple lists and want to apply function to them at once? mapply() is the answer. mapply() works by mapply(function, list1, list2, ...). Let's look at example.
+
+```{r}
+mList <- list(A = c(1,2,3), B = c(4,5,6), C = c(7,8,9))
+mList2 <- list(D = c(10, 11, 12, 13), E = c(14, 15), F = c(16, 17, 18))
+
+mapply(c, mList, mList2) # Perform c() of each component in mList and mList2
+```
+
+As you can see, each component in mList and mList2 are combined using c(). Two points to notice here:
+1. mapply() is order sensitive. If you put mList2 first, mList2 will be at the front of the result.
+2. When combining components with different names, names of first list are prioritized (Here, six components are combined into three components. Since A, B, C are from first list, they're kept as names).
+3. mapply() performs dimension reduction
+
+What do we mean by #3? Look at the output below:
+
+```{r}
+mList3 <- list(G = c(10, 11, 12), H = c(13, 14, 15), I = c(16, 17, 18))
+mapply(c, mList, mList3)
+```
+
+Here, we have a single matrix instead of list with three components. Why is this? Review the length of each component. 
+
+- mList and mList2: Since mList and mList2's component pairs (A/D, B/E, C/F) had different lengths, mapply() is required to print output as seperate components: a list. 
+
+- mList and mList3: However, in mList and mList3, all componenets (A/G, B/H, C/I) had same length (3). Therefore, mapply() was able to combine them into single matrix instead of list with three components, reducing the dimension.
+
+Like this, mapply() will try to be useful and print most simplified structure possible. 
+
+## Closing
+
+List, which combines multiple data types into single object, is absolute must-know concept in R as many real world data mixes data types (like title and values). Also, this concept of list will be foundation of the highlight of data structure, a dataframe (we'll cover this in next chapter). Then, see you in next chapter!

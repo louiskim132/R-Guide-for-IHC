@@ -12,6 +12,7 @@ book:
     - Variables_Calculations_2.qmd
     - Vectors_3.qmd
     - Matrix_4.qmd
+    - List_5.qmd
 
 bibliography: references.bib
 
