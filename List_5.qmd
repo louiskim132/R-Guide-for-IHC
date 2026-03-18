@@ -360,3 +360,5 @@ Like this, mapply() will try to be useful and print most simplified structure po
 ## Closing
 
 List, which combines multiple data types into single object, is absolute must-know concept in R as many real world data mixes data types (like title and values). Also, this concept of list will be foundation of the highlight of data structure, a dataframe (we'll cover this in next chapter). Then, see you in next chapter!
+
+And if you read this far, email me. I'll unlock next chapters.

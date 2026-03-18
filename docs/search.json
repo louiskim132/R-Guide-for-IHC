@@ -314,9 +314,19 @@
     "href": "List_5.html#closing",
     "title": "5  List",
     "section": "5.7 Closing",
-    "text": "5.7 Closing\nList, which combines multiple data types into single object, is absolute must-know concept in R as many real world data mixes data types (like title and values). Also, this concept of list will be foundation of the highlight of data structure, a dataframe (we’ll cover this in next chapter). Then, see you in next chapter!",
+    "text": "5.7 Closing\nList, which combines multiple data types into single object, is absolute must-know concept in R as many real world data mixes data types (like title and values). Also, this concept of list will be foundation of the highlight of data structure, a dataframe (we’ll cover this in next chapter). Then, see you in next chapter!\nAnd if you read this far, email me. I’ll unlock next chapters.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>List</span>"
+    ]
+  },
+  {
+    "objectID": "DataFrame_6.html",
+    "href": "DataFrame_6.html",
+    "title": "6  Data Frame",
+    "section": "",
+    "text": "6.1 Factors and observation\nSo far we reviewed many types of object, from vector to list. In real world analysis, you’ll need to work with square shaped data. For example, if you want to find best fit line, you must have pairs of x and y values. Something like you can represent in a table form.\nMatrix was good starting point because it lets you use two dimensions. However, we had a issue with matrix that we can use only one type of data. As solution, we introduced a list that lets you mix different data types. But list is still not enough because we can’t easily check if data across multiple components match in numbers to have clean number of (x, y) pairs.\nSo what’s the solution? Can we have two dimension data structure that allows us to store multiple data tye? That’s where dataframe becomes useful. Dataframe, annotated as df, is a absolute highlight gem treasure in data analysis. It builds top of the list (so technically df is still a list) and adds solid 2D structure so that we can perform sophiscated calculations.\nThen, let’s explore how R creates perfect (x,y) pairs for df.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Data Frame</span>"
     ]
   }
 ]
