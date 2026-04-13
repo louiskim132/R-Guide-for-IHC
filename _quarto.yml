@@ -14,7 +14,7 @@ book:
     - Matrix_4.qmd
     - List_5.qmd
     - Data Frame_6.qmd
-    # - Editing Data Frame
+    # - Editing Data Frame_7.qmd
 
 bibliography: references.bib
 
