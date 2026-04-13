@@ -1,0 +1,4 @@
+Name Scores
+A 25
+B 31
+C 92
