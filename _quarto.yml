@@ -13,8 +13,8 @@ book:
     - Vectors_3.qmd
     - Matrix_4.qmd
     - List_5.qmd
-    - Data Frame_6.qmd
-    # - Editing Data Frame_7.qmd
+    - DataFrame_6.qmd
+    - Editing Data Frame_7.qmd
 
 bibliography: references.bib
 
