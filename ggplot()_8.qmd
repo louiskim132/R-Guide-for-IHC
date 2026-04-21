@@ -1,0 +1,129 @@
+# Vizualizing Data with ggplot2
+
+Last chapter, we learned how to organize, clean, and manipulate tidy data. In this chapter, we will use another package in tidyverse, ggplot2 package, to learn how to vizualize data.
+
+First, let's load ggplot2 package. Just like dplyr, we need to call for tidyverse.
+
+```{r}
+library(tidyverse)
+```
+
+# Components in ggplot2()
+
+ggplot is like a grammer, in a sense that you stack multiple layers to produce a figure.
+
+ggplot() itself tells R, "here's an empty canvas." But, you must define each components to come up with one figure. What variables are we using? What values are we plotting? What type of figure are we using?
+
+There are multiple layers of component that defines those:
+
+![](images/clipboard-490074227.png)
+
+Three main (mandatory) components are:
+
+1.  Data \| data = : This is component where you state the data frame you will use to plot
+
+    ![](images/clipboard-3428735300.png)
+
+2.  Aesthetics \| aes(x=,y=,color=, ...) : This layer defines visual components of the plot. These includes axis, color and size of data points, and more.
+
+    ![](images/clipboard-1582824611.png)
+
+3.  Geometry \| geom_x() where x can be multiple modes : Defines what method you will use to visualize, like line graph, bar graph, etc,.
+
+    ![](images/clipboard-600113242.png)
+
+Others are accessory components, as they help readability of the graph but not mandatory.
+
+## Three Mandatory Components
+
+Now, let's start drawing our first ggplot() using mpg dataset we used last time.
+
+```{r}
+ggplot(data = mpg) + 
+  aes(x = displ, y = hwy) +
+  geom_point() 
+```
+
+First, let's understand the graphic.
+
+Take a look at the downward trend of the dots. In this dataset, displ represents the car's engine displacement (engine size), and hwy represents its highway fuel efficiency.
+
+Notice that they are inversely proportional. Does this make sense? Yes! As engine size increases on the X-axis, the engine requires more fuel per cycle to run. This burns more energy, resulting in significantly lower fuel efficiency (MPG) on the Y-axis.
+
+Second, let's look at how this graph is built.
+
+Remember how we're stacking different layers of functions to create one figure? We use "+" to connect different layers.
+
+Then, Let's break down the three layers of our code:
+
+Layer 1: The Canvas (ggplot(data = mpg))
+
+This is our base sheet. We are telling R to initialize the chart and specifically use the raw mpg dataframe as our starting material.
+
+Layer 2: The Blueprint (aes(x = displ, y = hwy))
+
+This is our aesthetic sheet. We haven't drawn any shapes yet, but we are telling R to draw the gridlines: map engine size to the X-axis, and highway efficiency to the Y-axis.
+
+Layer 3: The Paint (geom_point())
+
+This is our geometry sheet. Now that the data and gridlines are set, we finally tell R to pick up the "dot" paintbrush and stamp the physical shapes onto the canvas.
+
+Like this, ggplot() combines layers of component (ggplot(), geom(), etc) that contains details (data =, x =, etc).
+
+# mapping Argument
+
+When you run a stack of layers, R reads your code from top to bottom, but it doesn't actually draw anything until it reaches the very end. For our previous example, R reads the canvas ggplot(), reads the gridlines aes(), reads the paintbrush geom_point(), and then executes everything at once. Because of the way R reads the code, there is IMPORTANT point to remember.
+
+Trap: it can hold only single layer of same-type.
+
+Let's demonstrate the trap by adding second type of plot.
+
+```{r}
+ggplot(data = mpg) + 
+
+# First plot 
+  aes(x = displ, y = hwy) +
+  geom_point() +
+
+# Second plot
+  aes(x = displ, y = cty) +
+  geom_line()
+```
+
+Since geom_point() uses first aes() (hwy) and geom_line() uses second aes() (cty), you would expect that code to give two distinct graphs. However, when you run the code, you recognize both dot and line uses cty as y values. Where did first aes() (hwy) go?
+
+This happens because R updates master snapshot as it reads from top to bottom, and execute the everything at once it finishes reading the code. So, even R sees first aes(), second aes() overrides it (this is what it means by ggplot() only holds single layer of identical type). By the time R reads all code, we're left with second aes() (cty), geom_point(), and geom_line() that both graph uses same x&y values.
+
+Then, how do we prevent this issue? We use argument called mapping.
+
+Mapping, is a bridge that connects visuals to the data. So while aes() is a visualization layer, "mapping = aes()" allows visual layer to be a detail of data layers.
+
+Connecting data and visual means we don't have to leave aes() as seperate layer. Instead, we could use it like a detail of other layers. Let's look at the example below.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_line(mapping = aes(x = displ, y = cty))
+```
+
+Different to plot we saw earlier, where both geom_point() and geom_line() uses aes(x=displ, y=xty), each plot uses different y values as we intended. We can compare what ggplot() ends up with at the end of the code, we can understand why this happened.
+
+1.  aes() as seperate layer \
+    geom() #1 : geom_point() using aes() layer\
+    geom() #2 : geom_line() using aes() layer\
+    aes() : aes(x = displ, y = cty) \
+    Result : both geom() draws using aes(x=displ, y = cty)
+
+2.  using mapping = aes() \
+    geom() #1 : geom_point() using mapping = aes(x = displ, y = hwy)\
+    geom() #2 : geom_line() using mapping = aes(x = displ, y = cty)\
+    Result : each geom() have unique aes()
+
+By making aes() a detail rather than seperate layer(), now we can plot multiple geom() using multiple dataset. 
+
+## Global versus Local mapping
+If we can make aes() as argument within geom(), can we also do the same within ggplot()? Answer is yes. Let's look at the example below. 
+
+```{r}
+
+```

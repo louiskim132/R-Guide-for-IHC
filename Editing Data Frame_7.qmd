@@ -105,36 +105,27 @@ Let's look at the figures below in case explanations were not clear. Vizualizati
 
 ![](images/clipboard-2507444601.png)
 
-Some might question, why do we need dplyr? For instance, summarize() does same thing that mean() function does. Can't we just use what R have? That is true, technically you can do everything that dplyr using basic R functions. However, there are some tricky situations. Remember how indexing df sometimes gives us df while other times it gives us list/vectors ([] vs [[]])? Basic R funcitions' input and output formats are different case by case, causing issues in analysis (because dimension might change and two different data might be incompetible for regression). However, dlpyr input and ouput structure of data stable and consistent. 
+Some might question, why do we need dplyr? For instance, summarize() does same thing that mean() function does. Can't we just use what R have? That is true, technically you can do everything that dplyr using basic R functions. However, there are some tricky situations. Remember how indexing df sometimes gives us df while other times it gives us list/vectors ( \[\] vs \[\[\]\] )? Basic R funcitions' input and output formats are different case by case, causing issues in analysis (because dimension might change and two different data might be incompetible for regression). However, dlpyr input and ouput structure of data stable and consistent.
 
 # Loading Example Dataset
+
 In R, and dlpyr, there are multiple example dataset available for us to practice coding and analysis. one of them is called 'mpg,' data collected by U.S EPA from 1998 to 2008 regarding vehicle type and their fuel efficiency. To practice dlpyr functions, let's first load mpg data.
 
 ```{r}
 mpg
 ```
 
-Each column consist following data:
--manufacturer  : maker of the car
--model         : name of the car
--displ         : engine displacement
--year          : year of the model
--cyl           : number of engine cylinder
--trans         : type of car transmission
--drv           : driving system. f = forward, r = rear, 4 = four wheel drive
--cty           : fuel efficiency in city
--hwy           : fuel efficiency in highway
--fl            : type of fuel
--class         : type of car (compact, suv, etc)
+Each column consist following data: -manufacturer : maker of the car -model : name of the car -displ : engine displacement -year : year of the model -cyl : number of engine cylinder -trans : type of car transmission -drv : driving system. f = forward, r = rear, 4 = four wheel drive -cty : fuel efficiency in city -hwy : fuel efficiency in highway -fl : type of fuel -class : type of car (compact, suv, etc)
 
+# Selecting Rows
 
-#Selecting Rows
 ## filter()
-First, let's try out extracting rows that meets your column condition. 
 
-You use filter() by 
+First, let's try out extracting rows that meets your column condition.
 
-```{}
+You use filter() by
+
+```         
 filter(dataframe, condition)
 ```
 
@@ -143,9 +134,9 @@ filter(mpg, manufacturer == "dodge")
 filter(mpg, year > 2001)
 ```
 
-What if we have multiple conditions? We just add more conditions, like 
+What if we have multiple conditions? We just add more conditions, like
 
-```{}
+```         
 filter(datafram, condition 1, condition2, etc)
 ```
 
@@ -154,23 +145,24 @@ filter(mpg, manufacturer == "dodge", year > 2001)
 filter(mpg, year > 2001 | cty >= 30) #What does this mean? Review operator if you don't remember!
 ```
 
-One thing to remember is that operator's priority does matter here. Again, anything in () calculates first, and & (and) executes before | (or). So, (Condition1 | Condition2) & Condition3 will filter in order of "data that meets condition3 among data that satisfies condition1 or condition2," while Condition1 | Condition2 & Condition3 will filter in order of "data that satisfies (condition2 and condition3) or condition 1" They are different.
+One thing to remember is that operator's priority does matter here. Again, anything in () calculates first, and & (and) executes before \| (or). So, (Condition1 \| Condition2) & Condition3 will filter in order of "data that meets condition3 among data that satisfies condition1 or condition2," while Condition1 \| Condition2 & Condition3 will filter in order of "data that satisfies (condition2 and condition3) or condition 1" They are different.
 
 ```{r}
 filter(mpg, (model=="audi" | cty >= 20) & year == 2001)
 filter(mpg, model=="audi" | cty >= 20 & year == 2001)
 ```
 
-Check the result. Do you see how in the second sentence, all Audi cars are returned because our logic is "made by Audi" or "cty and year condition are met," while first sentence didn't return all Audi because the logic is (audi or cty >= 20) "AND" model year is 2001?
+Check the result. Do you see how in the second sentence, all Audi cars are returned because our logic is "made by Audi" or "cty and year condition are met," while first sentence didn't return all Audi because the logic is (audi or cty \>= 20) "AND" model year is 2001?
 
 ## slice()
+
 slice() was filtering rows of location you want. We use it by
 
-```{}
+```         
 slice(dataframe, location1, location2, etc)
 ```
 
-Again, one thing to keep in mind that positive number like 1 or 2 select 1st and 2nd row, while negative number like -1 select all but 1st row. 
+Again, one thing to keep in mind that positive number like 1 or 2 select 1st and 2nd row, while negative number like -1 select all but 1st row.
 
 To easily understand slice(), let's first extract all Audi cars.
 
@@ -179,7 +171,7 @@ audicars <- filter(mpg, manufacturer == "audi")
 head(audicars)
 ```
 
-Now, how would you extract 1~3rd row and 5~7th rows? What if you want everything but 1~3rd rows and 5~7th rows?
+Now, how would you extract 1\~3rd row and 5\~7th rows? What if you want everything but 1\~3rd rows and 5\~7th rows?
 
 ```{r}
 slice(audicars, 1:3, 5:7)
@@ -188,26 +180,29 @@ slice(audicars, -(1:3), -(5:7))
 
 ### Useful variations
 
-1. slice_random()
-There are useful feature in slice(). When we talked about evaluating ML models, we needed some fresh/random testing set. But how can we select rows randomly? we have it!
+1.  slice_random()
 
-```{}
+    There are useful feature in slice(). When we talked about evaluating ML models, we needed some fresh/random testing set. But how can we select rows randomly? we have it!
+
+```         
 slice_random(dataframe, n = 5)      #This command extracts 5 rows randomly from dataframe!
 slice_random(dataframe, prop = 0.6) #This command extracts 60% of rows randomly form dataframe!
 ```
 
-2. slice_head() (and tail())
-What if you want to extract first or last 5 rows? You can use slice(df, 1:5), but what if dataframe's size is unknown or so big? Instead of using slice(df, 99999999994:99999999999), we have head() and tail() like how we previewed data!
+2.  slice_head() (and tail())
 
-```{}
+    What if you want to extract first or last 5 rows? You can use slice(df, 1:5), but what if dataframe's size is unknown or so big? Instead of using slice(df, 99999999994:99999999999), we have head() and tail() like how we previewed data!
+
+```         
 slice_head(dataframe, n= 5) 
 slice_tail(dataframe, prop = 0.4)
 ```
 
-3. slice_max() (and min())
-How about if you want to see a row with max/min value of specific value? 
+3.  slice_max() (and min())
 
-```{}
+    How about if you want to see a row with max/min value of specific value?
+
+```         
 slice_min(dataframe, column, n = 2, with_ties = F) #with_ties dictates whether to print all tying rows.
 ```
 
@@ -217,19 +212,19 @@ slice_max(audicars, cty, n = 3, with_ties = F)
 
 #If we don't have with_ties = F, it's not really top 3 anymore. Is it?
 slice_max(audicars, cty, n = 3, with_ties = T)
-``` 
+```
 
 # Selecting Columns
+
 ## select()
 
-Format is same as filter(). However, one thing to be careful is to state column names without "". Normally column names are character that we have to use "", but in dplyr, column and row names themselves are variable. 
+Format is same as filter(). However, one thing to be careful is to state column names without "". Normally column names are character that we have to use "", but in dplyr, column and row names themselves are variable.
 
 ```{r}
 select(audicars, model, year, cty) #Here, we extract selected columns only
 ```
 
-One interesting thing in select is that now col names are variables! Meaning, we can use : operator. 
-For example, column names were ordered in manufacturer, model, displ, etc., order. Also, this means that we can use both numeric indexing and varaible name to state which column we want to select.
+One interesting thing in select is that now col names are variables! Meaning, we can use : operator. For example, column names were ordered in manufacturer, model, displ, etc., order. Also, this means that we can use both numeric indexing and varaible name to state which column we want to select.
 
 ```{r}
 audicars
@@ -248,7 +243,9 @@ select(audicars, cty, year)
 Do you see how order of output columns changed?
 
 # Adding Columns
+
 ## mutate()
+
 mutate() is creating new column at the end of the dataframe using existing column. For example, let's extract fuel efficiency of cars
 
 ```{r}
@@ -258,41 +255,40 @@ fueldata
 
 now, if we want to calculate average of two and save it into same data frame, we can use mutate() using following manner
 
-```{}
+```         
 mutate(dataframe, new variable (column name) = equation)
 ```
+
 ```{r}
 mutate(fueldata, avg = (cty + hwy)/2)
 ```
 
-If you want to only keep new column and disregard all existing columns, you can use transmute() instead. 
+If you want to only keep new column and disregard all existing columns, you can use transmute() instead.
 
 ```{r}
 transmute(fueldata, mean = (cty + hwy)/2) 
 ```
 
-#Summarizing Data
-##summarize()
-summarize() shows statistical overview of all values in column into single row. Some common stats were:
--n()        : number of entires
--sum()      : sum of all entires
--mean()     : average of all entires
--median()   : center of all entires
--sd()       : standard deviation
--var()      : variance
--max()/min(): maximum and minimum value
+# Summarizing Data
 
-In summarize(), format is same as others. 
-```{}
+## summarize()
+
+summarize() shows statistical overview of all values in column into single row. Some common stats were: -n() : number of entires -sum() : sum of all entires -mean() : average of all entires -median() : center of all entires -sd() : standard deviation -var() : variance -max()/min(): maximum and minimum value
+
+In summarize(), format is same as others.
+
+```         
 summarize(dataframe, name1 = equation1, name2 = equation2, ...)
 ```
 
 ```{r}
 summarize(mpg, avg = mean(cty), med = median(cty), std = sd(cty))
 ```
+
 Now you see the statistics of average city fuel efficiency of all cars registered in the mpg data frame!
 
 ## group_by()
+
 While summarize() shows overview of entire dataset, there is one limitation: it summarize everything. What if we want summary by marker? Like, what if we want to see average cty of Audi and Sonata serpeately instead of all cars? This is when group_by() becomes useful.
 
 group_by() puts data into each brackets. What does that mean?
@@ -308,8 +304,7 @@ If you compare perModel, grouped data, with mpg (raw dataset), there is no diffe
 summarize(perMaker, avg = mean(cty), med = median(cty), std = sd(cty))
 ```
 
-Now, compare the difference with summarize(mpg, same arguments). Do you see the difference?
-Remember, group_by() is grouping data, nothing special. This means you can combine group_by() with other dplyr functions like mutate(), select(), and more! 
+Now, compare the difference with summarize(mpg, same arguments). Do you see the difference? Remember, group_by() is grouping data, nothing special. This means you can combine group_by() with other dplyr functions like mutate(), select(), and more!
 
 ```{r}
 perMaker1 <- mutate(perMaker, rank = min_rank(desc(cty)))
@@ -323,11 +318,13 @@ summarize(ungroup(perMaker), avg = mean(cty))
 ```
 
 # Pipline Operator
+
 So far, we looked at what each functions do. However, what if we need to use multiple?
 
-Let's say we want to do following: Find average cty per model, and display models with average cty > 20. 
+Let's say we want to do following: Find average cty per model, and display models with average cty \> 20.
 
 To do this, we need to go through multiple steps.
+
 ```{r}
 # 1. Grouping cars by model
 perModel <- group_by(mpg, model)
@@ -342,15 +339,16 @@ ctysatisfied
 ```
 
 Or, we could do this in one line
+
 ```{r}
 filter(summarize(group_by(mpg, model), count = n(), avg = mean(cty)), avg > 20)
 ```
 
 In the first method, we had to save multiple variables and data frames to get to the conclusion. It seems fine right now, but if we work with large data sets with hundreds of variables saved, remembering which is which every time will be headache.
 
-In the second method, we could do it in one line, but we will get easily lost or make mistake repeating () and putting functions in the function which is in another function, and so on. 
+In the second method, we could do it in one line, but we will get easily lost or make mistake repeating () and putting functions in the function which is in another function, and so on.
 
-Pipeline operator, %>%, exist to resolve both cases: It allows us to perform multiple functions without losing readability or creating countless dummy variables. Think %>% as "sub category," or layer. For example, if we have A %>% B %>% C, it means "Perform B using data from (%>%) A", and "Perform C using data from B." If that was confusing, think like %>% means "Pass result to next calculation without making new variable."
+Pipeline operator, %\>%, exist to resolve both cases: It allows us to perform multiple functions without losing readability or creating countless dummy variables. Think %\>% as "sub category," or layer. For example, if we have A %\>% B %\>% C, it means "Perform B using data from (%\>%) A", and "Perform C using data from B." If that was confusing, think like %\>% means "Pass result to next calculation without making new variable."
 
 ```{r}
 mpg %>%
@@ -359,12 +357,10 @@ mpg %>%
   filter(avg > 20)
 ```
 
-Here, do you notice how group_by(model) is performed using data from mpg (mpg %>% group_by(model))? 
-One thing to remember is how our grammer changed. Earlier, we had to state "group_by(mpg, model)" to tell 
+Here, do you notice how group_by(model) is performed using data from mpg (mpg %\>% group_by(model))? One thing to remember is how our grammer changed. Earlier, we had to state "group_by(mpg, model)" to tell "group data by model using mpg data"
 
-"group data by model using mpg data"
-
-Now, we only state "group_by(model)" to do the same because "mpg %>%" establishes what data group_by(model) is using. In conclusion, %>% makes multi step calculation easy!
+Now, we only state "group_by(model)" to do the same because "mpg %\>%" defines what data group_by(model) is using. In conclusion, %\>% makes multi step calculation easy!
 
 # Conclusion
+
 Today, we reviewed why we want tidy data for data analysis, and how we preprocess (manipulate) data using dlpyr package. Next time, we will learn how to vizualize data!
