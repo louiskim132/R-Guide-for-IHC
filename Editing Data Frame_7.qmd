@@ -1,4 +1,4 @@
-# Editing Data Frame_7
+# 7 Editing Data Frame
 
 In data analysis, you always must pre-process the data. This is to make sure that outliers won't influence quality of your analysis, and to check general statistics/summary of data for detailed analysis pipeline.
 
