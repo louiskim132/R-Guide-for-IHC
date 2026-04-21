@@ -12,9 +12,9 @@ So what's the solution? How do we keep perfect two dimensional (m x n) data stru
 
 ![](images/clipboard-2096889765.png)
 
-# Categorial Variables and Factors
+## Categorial Variables and Factors
 
-## Factors and Levels
+### Factors and Levels
 
 Before we get into exploring components in df, we first need to understand how data are stored into each cells. Let's say we have people are voting on the survey: What is your blood type? 1)A 2)B 3)O 4)AB
 
@@ -53,7 +53,7 @@ factoredresult
 
 Clean!
 
-## Ordered Levels
+### Ordered Levels
 
 Sometimes, you might have a ordered levels. For example, a data set where levels are "very bad", "bad" "normal", "good", "very good"
 
@@ -86,7 +86,7 @@ orderedsat
 orderedsat > "bad" #Checking which data has satisfaction with normal or higher
 ```
 
-## Editing Level orders
+### Editing Level orders
 
 While assigning factor() and levels are good, table and graph will print levels in input order. For example, if we say levels = c(2,4,3,1), then table will have column ordered in 2,4,3,1.
 
@@ -107,7 +107,7 @@ table(factoredresult2)
 
 Now, do you see how levels are listed in O A B AB, instead of A B O AB?
 
-# Creating a data frame
+## Creating a data frame
 
 We know what df is, and that column is feature while rows are individuals. Then, let's make one!
 
@@ -151,7 +151,7 @@ Do you see how 2x2 matrix is added to df? Earlier we said column in df are each 
 
 Remember, data frame and matrices are unpacked.
 
-# Indexing Data Frame
+## Indexing Data Frame
 
 Recall that data frame is still a list. So, indexing goes same way as list does.
 
@@ -164,7 +164,7 @@ tests[[1]] ## $name and [[1]] are same thing because 1st column is name
 tests$name[1:3]
 ```
 
-One detail to remember here is the difference between indexing using [[]] and []. tests[] recalls the column of data (tests df) we're looking at. This means that [1] extracts first column of 'data frame,' which is a portion of 'data frame.' So, [] returns data frame. However, [[]] recalls 'content only' of data. This means that [[1]] extracts feature (list/vector) stored in first column of data frame, which returns list/vector but not data frame. Do you see how one is still list (data frame) while another becomes vector (char)? 
+One detail to remember here is the difference between indexing using \[\[\]\] and \[\]. tests\[\] recalls the column of data (tests df) we're looking at. This means that \[1\] extracts first column of 'data frame,' which is a portion of 'data frame.' So, \[\] returns data frame. However, \[\[\]\] recalls 'content only' of data. This means that \[\[1\]\] extracts feature (list/vector) stored in first column of data frame, which returns list/vector but not data frame. Do you see how one is still list (data frame) while another becomes vector (char)?
 
 ```{r}
 a <- tests[1]
@@ -177,7 +177,6 @@ b <- tests[[1]]
 attributes(b)
 typeof(b)
 ```
-
 
 Also, list had similar structure to matrix, where number of rows of all features are identical. Because of this characteristic, you can index or perform operations on data frame just like how we treat matrix.
 
@@ -196,7 +195,7 @@ tests[order(tests$height, decreasing = T), ]
 tests[order(tests$height, tests$COVID19), ] #What do you think order(A, B) does? 
 ```
 
-Last, if you been running codes with me, you probably felt you're getting tired with repeating object name over and over, like tests[order(tests$height, tests$COVID19), ]. You had to state df tests 3 times to filter the data. Now, we have alternative option, subset(). 
+Last, if you been running codes with me, you probably felt you're getting tired with repeating object name over and over, like tests\[order(tests$height, tests$COVID19), \]. You had to state df tests 3 times to filter the data. Now, we have alternative option, subset().
 
 subset() allows you to omit the object name, and use feature name directly.
 
@@ -205,16 +204,19 @@ subset(tests, height > 2)
 subset(tests, height > 2, c(1:2))
 ```
 
-# Functions in data frame
+## Functions in data frame
+
 Nothing new. Since it has characteristic of both list and matrix, all functions you use in list and matrix can be applied to data frames too. Review them!
 
-# Reading, Editing, Saving Data Frame
+## Reading, Editing, Saving Data Frame
+
 Since we know how to work with data frame, let's talk about now we load the table or data frame, edit them, and rewrite them from your computer.
 
-## Working with Text Files
-First, let's create example text file format df. Open your notepad, and copy paste following. Save the file as "Test_txt" in the directory your project is in. 
+### Working with Text Files
 
-```{}
+First, let's create example text file format df. Open your notepad, and copy paste following. Save the file as "Test_txt" in the directory your project is in.
+
+```         
 Name Scores
 A 25
 B 31
@@ -248,22 +250,23 @@ testfile2 <- read.table("Test_txt.txt", header = F)
 testfile2
 ```
 
-Do you see how Name and Score are counted as column names when header is true, but counted as data when header is false? Instead, header = F assigned random names to fill out the missing column names. 
+Do you see how Name and Score are counted as column names when header is true, but counted as data when header is false? Instead, header = F assigned random names to fill out the missing column names.
 
 Now, open our txt file and add row names. So it would look like following.
 
-```{}
+```         
 Name Scores
 1 A 25
 2 B 31
 3 C 92
 ```
 
-Now, run the code in previous cell again with header = T. Then, run another with header = F. Now you'll run into error and data table doesn't load. Why is that? (Hint: Where does row names fits if row names are not headers?) So it's always important to check if data has headers! 
+Now, run the code in previous cell again with header = T. Then, run another with header = F. Now you'll run into error and data table doesn't load. Why is that? (Hint: Where does row names fits if row names are not headers?) So it's always important to check if data has headers!
 
 Typically in data analysis, you want to remove row names from raw data. It's because R (or other program languages) automatically assignes row names as it loads the data. So if we manually assign index for each row, you might run into headers issue (like you just saw). Or, because R automatically assign index/rowname, R will think manually assigned index must be actual data and ruin your data set even before any analysis.
 
-## Working with CSV data
+### Working with CSV data
+
 Well we reviewed how to load the data tables, but most of data are normally in excel files. Especially, a csv file (comma-seperated values), meaning each cells are seperated using comma.
 
 In the same way, let's create sample csv file first. Open your excel, write same content as data table above, and save it as csv file in your working directory. Now, again, you should see it in your "files" tab, bottom right of R Studio, if it saved correctly. Let's try to load this csv. We use read.csv() for that.
@@ -298,16 +301,17 @@ write.csv(edited_csv, file = "Revised_CSV2", row.names = F)
 
 If you open CSV2, we don't have row names saved and R will re assign it when we load CSV file again!
 
-We use same method for writing table. 
+We use same method for writing table.
 
-```{}
+```         
 write.table(saving data, file name, row.name = F)
 ```
 
-## Saving Multiple Objects
-We reviewed how to save csv. But what if we have 100 data structures to save? Repeating write.csv 100 times will be both tiring and time consuming. For this situations, we have functions that exports/imports all objects created in current environment (variables/objects saved from codes you run so far). Let's say you made vector X, list Y, and data frame Z. Then, we can export them into single file using follow command. 
+### Saving Multiple Objects
 
-```{}
+We reviewed how to save csv. But what if we have 100 data structures to save? Repeating write.csv 100 times will be both tiring and time consuming. For this situations, we have functions that exports/imports all objects created in current environment (variables/objects saved from codes you run so far). Let's say you made vector X, list Y, and data frame Z. Then, we can export them into single file using follow command.
+
+```         
 #I didn't do it here, but make objects and try it yourself!
 Let's pretend you made X, Y, Z.
 
@@ -317,5 +321,6 @@ Then, you'll see that file called (File name.RData) is created. You can load it 
 load("File name.RData") 
 ```
 
-# Summary
+## Summary
+
 Now, we learned how to create data frame, a structured data format that has perfectly matching dimension. Each features have same number of variables saved, allowing us to perform data analysis while being able to track which row was who. Next Chapter, we'll explore how we use package called 'dplyr' to edit data frames more conveniently. See you soon!

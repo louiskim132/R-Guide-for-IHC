@@ -190,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Editing Data Frame_7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">7 Editing Data Frame</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Editing Data Frame</span></span></a>
   </div>
 </li>
     </ul>
@@ -212,17 +212,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#t" id="toc-t" class="nav-link" data-scroll-target="#t"><span class="header-section-number">4.4.2</span> t()</a></li>
   <li><a href="#apply" id="toc-apply" class="nav-link" data-scroll-target="#apply"><span class="header-section-number">4.4.3</span> Apply()</a></li>
   </ul></li>
-  <li><a href="#array" id="toc-array" class="nav-link" data-scroll-target="#array"><span class="header-section-number">5</span> Array</a>
+  <li><a href="#array" id="toc-array" class="nav-link" data-scroll-target="#array"><span class="header-section-number">4.5</span> Array</a>
   <ul class="collapse">
-  <li><a href="#creating-an-array" id="toc-creating-an-array" class="nav-link" data-scroll-target="#creating-an-array"><span class="header-section-number">5.1</span> Creating an array</a></li>
-  <li><a href="#calculation-of-array" id="toc-calculation-of-array" class="nav-link" data-scroll-target="#calculation-of-array"><span class="header-section-number">5.2</span> Calculation of Array</a></li>
-  <li><a href="#advanced-caluclation" id="toc-advanced-caluclation" class="nav-link" data-scroll-target="#advanced-caluclation"><span class="header-section-number">5.3</span> Advanced caluclation</a>
-  <ul class="collapse">
-  <li><a href="#solving-equations-with-matrix" id="toc-solving-equations-with-matrix" class="nav-link" data-scroll-target="#solving-equations-with-matrix"><span class="header-section-number">5.3.1</span> Solving equations with matrix</a></li>
-  <li><a href="#eigenvalues-and-eigenvectors" id="toc-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-and-eigenvectors"><span class="header-section-number">5.3.2</span> Eigenvalues and Eigenvectors</a></li>
+  <li><a href="#creating-an-array" id="toc-creating-an-array" class="nav-link" data-scroll-target="#creating-an-array"><span class="header-section-number">4.5.1</span> Creating an array</a></li>
+  <li><a href="#calculation-of-array" id="toc-calculation-of-array" class="nav-link" data-scroll-target="#calculation-of-array"><span class="header-section-number">4.5.2</span> Calculation of Array</a></li>
+  <li><a href="#advanced-caluclation" id="toc-advanced-caluclation" class="nav-link" data-scroll-target="#advanced-caluclation"><span class="header-section-number">4.5.3</span> Advanced caluclation</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#summary-of-vector-matrix-and-array." id="toc-summary-of-vector-matrix-and-array." class="nav-link" data-scroll-target="#summary-of-vector-matrix-and-array."><span class="header-section-number">6</span> Summary of Vector, Matrix, and Array.</a></li>
+  <li><a href="#summary-of-vector-matrix-and-array." id="toc-summary-of-vector-matrix-and-array." class="nav-link" data-scroll-target="#summary-of-vector-matrix-and-array."><span class="header-section-number">4.6</span> Summary of Vector, Matrix, and Array.</a></li>
   </ul>
 </nav>
     </div>
@@ -657,11 +653,11 @@ c    1    2    3    4    5    6    7    8    9    10
 </div>
 </section>
 </section>
-<section id="array" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Array</h1>
+<section id="array" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="array"><span class="header-section-number">4.5</span> Array</h2>
 <p>Vector is 1-dimensional, matrix is 2-dimensional. What if we want to hold more than 2 dimensions? For example, what if we want to hold height and weight by gender? This is where array comes in. Array is multi-dimensional data structure, meaning it can hold 3 or more dimensions. However, like vector and matrix, array can only hold one type of data.</p>
-<section id="creating-an-array" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="creating-an-array"><span class="header-section-number">5.1</span> Creating an array</h2>
+<section id="creating-an-array" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="creating-an-array"><span class="header-section-number">4.5.1</span> Creating an array</h3>
 <p>We can declare by matrix in a similar way to how we declared vectors. 1. Define matricies you want to stack 2. Use array() function to stack them * Remember, dimension should be identical to be able to stack them.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>mat1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">nrow=</span><span class="dv">2</span>, <span class="at">ncol=</span><span class="dv">3</span>)</span>
@@ -748,14 +744,14 @@ Row  C2 C3
 </div>
 </div>
 </section>
-<section id="calculation-of-array" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="calculation-of-array"><span class="header-section-number">5.2</span> Calculation of Array</h2>
+<section id="calculation-of-array" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="calculation-of-array"><span class="header-section-number">4.5.2</span> Calculation of Array</h3>
 <p>Omitted. Everything is same as Matrix calculation.</p>
 </section>
-<section id="advanced-caluclation" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="advanced-caluclation"><span class="header-section-number">5.3</span> Advanced caluclation</h2>
-<section id="solving-equations-with-matrix" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="solving-equations-with-matrix"><span class="header-section-number">5.3.1</span> Solving equations with matrix</h3>
+<section id="advanced-caluclation" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="advanced-caluclation"><span class="header-section-number">4.5.3</span> Advanced caluclation</h3>
+<section id="solving-equations-with-matrix" class="level4" data-number="4.5.3.1">
+<h4 data-number="4.5.3.1" class="anchored" data-anchor-id="solving-equations-with-matrix"><span class="header-section-number">4.5.3.1</span> Solving equations with matrix</h4>
 <p>Matrix and Array can be used in a lot of places. Due to its compact representation of high dimnesional data, we often use matrix to represent equations with multiple dimension. For example,</p>
 <p>3x + 2y = 5 4x + 6y = 12</p>
 <p>can be written as [3, 2, 5]; [4, 6,12] (; is used to seperate rows). So, we condensed multiple equations into one 2x3 matrix. This also means that we can use matrix to solve complex equations.</p>
@@ -777,15 +773,15 @@ y  1.6</code></pre>
 </div>
 </div>
 </section>
-<section id="eigenvalues-and-eigenvectors" class="level3" data-number="5.3.2">
-<h3 data-number="5.3.2" class="anchored" data-anchor-id="eigenvalues-and-eigenvectors"><span class="header-section-number">5.3.2</span> Eigenvalues and Eigenvectors</h3>
+<section id="eigenvalues-and-eigenvectors" class="level4" data-number="4.5.3.2">
+<h4 data-number="4.5.3.2" class="anchored" data-anchor-id="eigenvalues-and-eigenvectors"><span class="header-section-number">4.5.3.2</span> Eigenvalues and Eigenvectors</h4>
 <p>This is core concept of linear algebra, which will help you understand more advanced machine learning algorithms. However, it’s difficult to understand without proper math background, so we’ll come back to this later. For now, watch this playlist to get introduction to linear algebra. I highly recommend this.</p>
 <p>Link: <a href="https://www.youtube.com/watch?v=fNk_zzaMoSs&amp;list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">Linear Algebra by 3Blue1Brown</a></p>
 </section>
 </section>
 </section>
-<section id="summary-of-vector-matrix-and-array." class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Summary of Vector, Matrix, and Array.</h1>
+<section id="summary-of-vector-matrix-and-array." class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="summary-of-vector-matrix-and-array."><span class="header-section-number">4.6</span> Summary of Vector, Matrix, and Array.</h2>
 <p>Throughout Chapter 3 and 4, we reviewed basic concepts of vector (1D), matrix (2D), and array (Multiple D). While we defined three different data structure, are they really different? Think about this. We declared matrix by combining vectors into two dimensions. Then, we declared 3D array by stacking matrices. However, way to higher dimension is just repeating same process: adding a new axis by combining existing structure. So, doesn’t that mean matrix is vector and array is also vector in the end? You’re right, it is.</p>
 <p>So array is often seen as ‘generalized vector’ or ‘generalized matrix.’ While vector is tied to 1D and matrix is tied to 2D, array can build as much as dimensions you want using vector. Next time, we’ll explore the list (like a shopping list or to-do list). You’ll be able to verify using code how vector to array are all same thing. Then, keep this in your mind and see you in the next chapter!</p>
 

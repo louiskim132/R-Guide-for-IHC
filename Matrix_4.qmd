@@ -194,7 +194,7 @@ However, we should keep in mind that vector should be shorter than the number of
 
 ## Functions regarding matrix
 
-###nrow(), ncol(), dim() 
+###nrow(), ncol(), dim()
 
 How do we know size of unknown matrix? nrow() and ncol() returns number of rows and columns, while dim() returns both as vector. dim() returns column size first! Don't get confused with \[row, column\] in indexing.
 
@@ -205,7 +205,7 @@ ncol(m)
 dim(m)
 ```
 
-### rownames(), colnames() 
+### rownames(), colnames()
 
 Earlier, we saw how we can assign row names and column names by rownames() \<- c(names). However, can we do the opposite? Like, checking names of cols and rows instead of assigning? Yes! Instead of assigning through \<-, you can use rownames(matrix) or colnames(matrix) to check names of rows and columns.
 
@@ -216,7 +216,7 @@ rownames(m)
 
 Here, we get Null (empty). Why is that? Look at how m looks like and think about it!
 
-### t() 
+### t()
 
 Transpose matrix is matrix with switched rows and columns (for example, 2x3 becomes 3x2). In R, you can do this by t() function.
 
@@ -225,7 +225,7 @@ m
 t(m)
 ```
 
-###Moving between matrix and vector 
+###Moving between matrix and vector
 
 Sometimes, you may want to convert matrix into vector or vice versa. You can do this by as.vector() or c(). as.vector() unstrings matrix into single line (= vector). And do you remember how giving one input feature in indexing make matrix behave like vector? c() function does the same thing. If you do c(matrix) without telling what else to combine with, c() will combine matrix itself into one string, making it vector.
 
@@ -235,7 +235,7 @@ as.vector(Testmat)
 c(Testmat)
 ```
 
-### Apply() 
+### Apply()
 
 Often, we need to perform calculation throughout row or column of the matrix (e.g. finding average height by each person, finding total score by each student). Instead of writing all elements individually, we can use apply() function.
 
@@ -257,11 +257,11 @@ exam_avg <- apply(Scores, 2, mean) # Find mean (function) of matrix (Scores) by 
 exam_avg
 ```
 
-# Array
+## Array
 
 Vector is 1-dimensional, matrix is 2-dimensional. What if we want to hold more than 2 dimensions? For example, what if we want to hold height and weight by gender? This is where array comes in. Array is multi-dimensional data structure, meaning it can hold 3 or more dimensions. However, like vector and matrix, array can only hold one type of data.
 
-## Creating an array
+### Creating an array
 
 We can declare by matrix in a similar way to how we declared vectors. 1. Define matricies you want to stack 2. Use array() function to stack them \* Remember, dimension should be identical to be able to stack them.
 
@@ -307,13 +307,13 @@ We asked them to display first row, 2nd-3rd column, all layers: 3D data. However
 arr[1, 2:3, 1:2, drop = FALSE] 
 ```
 
-## Calculation of Array
+### Calculation of Array
 
 Omitted. Everything is same as Matrix calculation.
 
-## Advanced caluclation
+### Advanced caluclation
 
-### Solving equations with matrix
+#### Solving equations with matrix
 
 Matrix and Array can be used in a lot of places. Due to its compact representation of high dimnesional data, we often use matrix to represent equations with multiple dimension. For example,
 
@@ -337,14 +337,14 @@ solution <- solve(A, B)
 solution
 ```
 
-### Eigenvalues and Eigenvectors
+#### Eigenvalues and Eigenvectors
 
 This is core concept of linear algebra, which will help you understand more advanced machine learning algorithms. However, it's difficult to understand without proper math background, so we'll come back to this later. For now, watch this playlist to get introduction to linear algebra. I highly recommend this.
 
 Link: [Linear Algebra by 3Blue1Brown](https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)
 
-# Summary of Vector, Matrix, and Array. 
+## Summary of Vector, Matrix, and Array.
 
-Throughout Chapter 3 and 4, we reviewed basic concepts of vector (1D), matrix (2D), and array (Multiple D). While we defined three different data structure, are they really different? Think about this. We declared matrix by combining vectors into two dimensions. Then, we declared 3D array by stacking matrices. However, way to higher dimension is just repeating same process: adding a new axis by combining existing structure. So, doesn't that mean matrix is vector and array is also vector in the end? You're right, it is. 
+Throughout Chapter 3 and 4, we reviewed basic concepts of vector (1D), matrix (2D), and array (Multiple D). While we defined three different data structure, are they really different? Think about this. We declared matrix by combining vectors into two dimensions. Then, we declared 3D array by stacking matrices. However, way to higher dimension is just repeating same process: adding a new axis by combining existing structure. So, doesn't that mean matrix is vector and array is also vector in the end? You're right, it is.
 
-So array is often seen as 'generalized vector' or 'generalized matrix.' While vector is tied to 1D and matrix is tied to 2D, array can build as much as dimensions you want using vector. Next time, we'll explore the list (like a shopping list or to-do list). You'll be able to verify using code how vector to array are all same thing. Then, keep this in your mind and see you in the next chapter! 
+So array is often seen as 'generalized vector' or 'generalized matrix.' While vector is tied to 1D and matrix is tied to 2D, array can build as much as dimensions you want using vector. Next time, we'll explore the list (like a shopping list or to-do list). You'll be able to verify using code how vector to array are all same thing. Then, keep this in your mind and see you in the next chapter!

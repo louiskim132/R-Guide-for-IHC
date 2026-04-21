@@ -8,7 +8,7 @@ First, let's load ggplot2 package. Just like dplyr, we need to call for tidyvers
 library(tidyverse)
 ```
 
-# Components in ggplot2()
+## Components in ggplot2()
 
 ggplot is like a grammer, in a sense that you stack multiple layers to produce a figure.
 
@@ -34,7 +34,7 @@ Three main (mandatory) components are:
 
 Others are accessory components, as they help readability of the graph but not mandatory.
 
-## Three Mandatory Components
+### Three Mandatory Components
 
 Now, let's start drawing our first ggplot() using mpg dataset we used last time.
 
@@ -70,7 +70,7 @@ This is our geometry sheet. Now that the data and gridlines are set, we finally 
 
 Like this, ggplot() combines layers of component (ggplot(), geom(), etc) that contains details (data =, x =, etc).
 
-# mapping Argument
+## mapping Argument
 
 When you run a stack of layers, R reads your code from top to bottom, but it doesn't actually draw anything until it reaches the very end. For our previous example, R reads the canvas ggplot(), reads the gridlines aes(), reads the paintbrush geom_point(), and then executes everything at once. Because of the way R reads the code, there is IMPORTANT point to remember.
 
@@ -108,22 +108,50 @@ ggplot(data = mpg) +
 
 Different to plot we saw earlier, where both geom_point() and geom_line() uses aes(x=displ, y=xty), each plot uses different y values as we intended. We can compare what ggplot() ends up with at the end of the code, we can understand why this happened.
 
-1.  aes() as seperate layer \
+1.  aes() as seperate layer\
     geom() #1 : geom_point() using aes() layer\
     geom() #2 : geom_line() using aes() layer\
-    aes() : aes(x = displ, y = cty) \
+    aes() : aes(x = displ, y = cty)\
     Result : both geom() draws using aes(x=displ, y = cty)
 
-2.  using mapping = aes() \
+2.  using mapping = aes()\
     geom() #1 : geom_point() using mapping = aes(x = displ, y = hwy)\
     geom() #2 : geom_line() using mapping = aes(x = displ, y = cty)\
     Result : each geom() have unique aes()
 
-By making aes() a detail rather than seperate layer(), now we can plot multiple geom() using multiple dataset. 
+By making aes() a detail rather than seperate layer(), now we can plot multiple geom() using multiple dataset.
 
-## Global versus Local mapping
-If we can make aes() as argument within geom(), can we also do the same within ggplot()? Answer is yes. Let's look at the example below. 
+### Global versus Local mapping
+
+If we can make aes() as argument within geom(), can we also do the same within ggplot()? Answer is yes. Let's look at the example below.
 
 ```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point()
 ```
+
+Compare two plots. Don't they look the same?
+
+ggplot() is a global layer, while other layers are local layers. It means that any argument in ggplot() becomes a default for entire code. Now let's review the second ggplot() again. In ggplot(), aes(x=displ, y=hwy) sets global default aes() for everything else. So even though geom_point() didn't have aes() that defines x and y values, it looks back at ggplot() and use global aes() to draw graph.
+
+On the other hand, in first ggplot(), there is no global aes() decalred. However, geom_point() has its own local aes() that it still can draw graph.
+
+What if we have both global and local mapping?
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = cty)) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_line()
+```
+
+Here, we get different plots again. But it does make sense, let's look at line by line.
+
+First line, we set global aes() with y values of "cty". In the second line, geom_point() has its own aes() with "y = hwy." Therefore, geom_point() use its local mapping. In the third line, geom_line() doesn't have any aes(). Now, it checks back at global mapping ad use aes() with "y = cty." Therefore, we get one with hwy as y value (geom_point with local aes) and another with cty as y value (geom_line with global aes).
+
+One point of common confusion: global doesn't mean "universial law." It's just default. layers will prioritize local mapping if they have their own. Only when they lack settings they need, global mapping will be used.
+
+## aes()
+Now, let's look at details about aesthetic layer. As aes() defines visuals like shape, color, etc., there are many arguemt

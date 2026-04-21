@@ -1,4 +1,4 @@
-# 7 Editing Data Frame
+# Editing Data Frame
 
 In data analysis, you always must pre-process the data. This is to make sure that outliers won't influence quality of your analysis, and to check general statistics/summary of data for detailed analysis pipeline.
 
@@ -55,7 +55,7 @@ If we review 3 cases again, - Case1: We can calculate patient volume by counting
 
 So untidy data might look for compact and organized, it's tidy data that actually allows us a statistical operations. One huge advantage of tidy data is that structure is formalized (one feature per column, one value per cell) that we can perform same operations throughout different column without customizing different calculation method every time. If we want to find average for each column, we can apply mean() to all numeric columns! That's something we can't do with untidy data.
 
-# tidyverse package
+## tidyverse package
 
 Again, package is like an extension that allows you to perform commands in simple manner. tidyverse is a package that contains professional and organized methods to load, analyze, and visualize tidy data.
 
@@ -73,7 +73,7 @@ Take a look at 'Attaching core tidyverse packages.' "tidyverse" is package for h
 
 -   Side note: Since we loaded tidyverse, all packages within tidyverse are also loaded. This means that we don't need to run library(dplyr) again.
 
-# What does dplyr do?
+## What does dplyr do?
 
 I've been mentioning that dplyr allows you to edit df, but how does it actually do it? There are 5 methods:
 
@@ -107,7 +107,7 @@ Let's look at the figures below in case explanations were not clear. Vizualizati
 
 Some might question, why do we need dplyr? For instance, summarize() does same thing that mean() function does. Can't we just use what R have? That is true, technically you can do everything that dplyr using basic R functions. However, there are some tricky situations. Remember how indexing df sometimes gives us df while other times it gives us list/vectors ( \[\] vs \[\[\]\] )? Basic R funcitions' input and output formats are different case by case, causing issues in analysis (because dimension might change and two different data might be incompetible for regression). However, dlpyr input and ouput structure of data stable and consistent.
 
-# Loading Example Dataset
+## Loading Example Dataset
 
 In R, and dlpyr, there are multiple example dataset available for us to practice coding and analysis. one of them is called 'mpg,' data collected by U.S EPA from 1998 to 2008 regarding vehicle type and their fuel efficiency. To practice dlpyr functions, let's first load mpg data.
 
@@ -117,9 +117,9 @@ mpg
 
 Each column consist following data: -manufacturer : maker of the car -model : name of the car -displ : engine displacement -year : year of the model -cyl : number of engine cylinder -trans : type of car transmission -drv : driving system. f = forward, r = rear, 4 = four wheel drive -cty : fuel efficiency in city -hwy : fuel efficiency in highway -fl : type of fuel -class : type of car (compact, suv, etc)
 
-# Selecting Rows
+## Selecting Rows
 
-## filter()
+### filter()
 
 First, let's try out extracting rows that meets your column condition.
 
@@ -154,7 +154,7 @@ filter(mpg, model=="audi" | cty >= 20 & year == 2001)
 
 Check the result. Do you see how in the second sentence, all Audi cars are returned because our logic is "made by Audi" or "cty and year condition are met," while first sentence didn't return all Audi because the logic is (audi or cty \>= 20) "AND" model year is 2001?
 
-## slice()
+### slice()
 
 slice() was filtering rows of location you want. We use it by
 
@@ -178,7 +178,7 @@ slice(audicars, 1:3, 5:7)
 slice(audicars, -(1:3), -(5:7))
 ```
 
-### Useful variations
+#### Useful variations
 
 1.  slice_random()
 
@@ -214,9 +214,9 @@ slice_max(audicars, cty, n = 3, with_ties = F)
 slice_max(audicars, cty, n = 3, with_ties = T)
 ```
 
-# Selecting Columns
+## Selecting Columns
 
-## select()
+### select()
 
 Format is same as filter(). However, one thing to be careful is to state column names without "". Normally column names are character that we have to use "", but in dplyr, column and row names themselves are variable.
 
@@ -242,9 +242,9 @@ select(audicars, cty, year)
 
 Do you see how order of output columns changed?
 
-# Adding Columns
+## Adding Columns
 
-## mutate()
+### mutate()
 
 mutate() is creating new column at the end of the dataframe using existing column. For example, let's extract fuel efficiency of cars
 
@@ -269,9 +269,9 @@ If you want to only keep new column and disregard all existing columns, you can 
 transmute(fueldata, mean = (cty + hwy)/2) 
 ```
 
-# Summarizing Data
+## Summarizing Data
 
-## summarize()
+### summarize()
 
 summarize() shows statistical overview of all values in column into single row. Some common stats were: -n() : number of entires -sum() : sum of all entires -mean() : average of all entires -median() : center of all entires -sd() : standard deviation -var() : variance -max()/min(): maximum and minimum value
 
@@ -287,7 +287,7 @@ summarize(mpg, avg = mean(cty), med = median(cty), std = sd(cty))
 
 Now you see the statistics of average city fuel efficiency of all cars registered in the mpg data frame!
 
-## group_by()
+### group_by()
 
 While summarize() shows overview of entire dataset, there is one limitation: it summarize everything. What if we want summary by marker? Like, what if we want to see average cty of Audi and Sonata serpeately instead of all cars? This is when group_by() becomes useful.
 
@@ -317,7 +317,7 @@ In any case you want to ungroup your grouping, you can use ungroup().
 summarize(ungroup(perMaker), avg = mean(cty))
 ```
 
-# Pipline Operator
+## Pipline Operator
 
 So far, we looked at what each functions do. However, what if we need to use multiple?
 
@@ -361,6 +361,6 @@ Here, do you notice how group_by(model) is performed using data from mpg (mpg %\
 
 Now, we only state "group_by(model)" to do the same because "mpg %\>%" defines what data group_by(model) is using. In conclusion, %\>% makes multi step calculation easy!
 
-# Conclusion
+## Summary
 
 Today, we reviewed why we want tidy data for data analysis, and how we preprocess (manipulate) data using dlpyr package. Next time, we will learn how to vizualize data!

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; 7 Editing Data Frame – R Guide</title>
+<title>7&nbsp; Editing Data Frame – R Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Editing Data Frame_7.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">7 Editing Data Frame</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Editing Data Frame_7.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Editing Data Frame</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -189,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Editing Data Frame_7.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">7 Editing Data Frame</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Editing Data Frame</span></span></a>
   </div>
 </li>
     </ul>
@@ -203,32 +203,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#tidy-data-organized-data" id="toc-tidy-data-organized-data" class="nav-link active" data-scroll-target="#tidy-data-organized-data"><span class="header-section-number">7.1</span> tidy data (Organized Data)</a></li>
-  <li><a href="#tidyverse-package" id="toc-tidyverse-package" class="nav-link" data-scroll-target="#tidyverse-package"><span class="header-section-number">8</span> tidyverse package</a></li>
-  <li><a href="#what-does-dplyr-do" id="toc-what-does-dplyr-do" class="nav-link" data-scroll-target="#what-does-dplyr-do"><span class="header-section-number">9</span> What does dplyr do?</a></li>
-  <li><a href="#loading-example-dataset" id="toc-loading-example-dataset" class="nav-link" data-scroll-target="#loading-example-dataset"><span class="header-section-number">10</span> Loading Example Dataset</a></li>
-  <li><a href="#selecting-rows" id="toc-selecting-rows" class="nav-link" data-scroll-target="#selecting-rows"><span class="header-section-number">11</span> Selecting Rows</a>
+  <li><a href="#tidyverse-package" id="toc-tidyverse-package" class="nav-link" data-scroll-target="#tidyverse-package"><span class="header-section-number">7.2</span> tidyverse package</a></li>
+  <li><a href="#what-does-dplyr-do" id="toc-what-does-dplyr-do" class="nav-link" data-scroll-target="#what-does-dplyr-do"><span class="header-section-number">7.3</span> What does dplyr do?</a></li>
+  <li><a href="#loading-example-dataset" id="toc-loading-example-dataset" class="nav-link" data-scroll-target="#loading-example-dataset"><span class="header-section-number">7.4</span> Loading Example Dataset</a></li>
+  <li><a href="#selecting-rows" id="toc-selecting-rows" class="nav-link" data-scroll-target="#selecting-rows"><span class="header-section-number">7.5</span> Selecting Rows</a>
   <ul class="collapse">
-  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter"><span class="header-section-number">11.1</span> filter()</a></li>
-  <li><a href="#slice" id="toc-slice" class="nav-link" data-scroll-target="#slice"><span class="header-section-number">11.2</span> slice()</a>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter"><span class="header-section-number">7.5.1</span> filter()</a></li>
+  <li><a href="#slice" id="toc-slice" class="nav-link" data-scroll-target="#slice"><span class="header-section-number">7.5.2</span> slice()</a></li>
+  </ul></li>
+  <li><a href="#selecting-columns" id="toc-selecting-columns" class="nav-link" data-scroll-target="#selecting-columns"><span class="header-section-number">7.6</span> Selecting Columns</a>
   <ul class="collapse">
-  <li><a href="#useful-variations" id="toc-useful-variations" class="nav-link" data-scroll-target="#useful-variations"><span class="header-section-number">11.2.1</span> Useful variations</a></li>
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><span class="header-section-number">7.6.1</span> select()</a></li>
   </ul></li>
-  </ul></li>
-  <li><a href="#selecting-columns" id="toc-selecting-columns" class="nav-link" data-scroll-target="#selecting-columns"><span class="header-section-number">12</span> Selecting Columns</a>
+  <li><a href="#adding-columns" id="toc-adding-columns" class="nav-link" data-scroll-target="#adding-columns"><span class="header-section-number">7.7</span> Adding Columns</a>
   <ul class="collapse">
-  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><span class="header-section-number">12.1</span> select()</a></li>
+  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><span class="header-section-number">7.7.1</span> mutate()</a></li>
   </ul></li>
-  <li><a href="#adding-columns" id="toc-adding-columns" class="nav-link" data-scroll-target="#adding-columns"><span class="header-section-number">13</span> Adding Columns</a>
+  <li><a href="#summarizing-data" id="toc-summarizing-data" class="nav-link" data-scroll-target="#summarizing-data"><span class="header-section-number">7.8</span> Summarizing Data</a>
   <ul class="collapse">
-  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate"><span class="header-section-number">13.1</span> mutate()</a></li>
+  <li><a href="#summarize" id="toc-summarize" class="nav-link" data-scroll-target="#summarize"><span class="header-section-number">7.8.1</span> summarize()</a></li>
+  <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by"><span class="header-section-number">7.8.2</span> group_by()</a></li>
   </ul></li>
-  <li><a href="#summarizing-data" id="toc-summarizing-data" class="nav-link" data-scroll-target="#summarizing-data"><span class="header-section-number">14</span> Summarizing Data</a>
-  <ul class="collapse">
-  <li><a href="#summarize" id="toc-summarize" class="nav-link" data-scroll-target="#summarize"><span class="header-section-number">14.1</span> summarize()</a></li>
-  <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by"><span class="header-section-number">14.2</span> group_by()</a></li>
-  </ul></li>
-  <li><a href="#pipline-operator" id="toc-pipline-operator" class="nav-link" data-scroll-target="#pipline-operator"><span class="header-section-number">15</span> Pipline Operator</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">16</span> Conclusion</a></li>
+  <li><a href="#pipline-operator" id="toc-pipline-operator" class="nav-link" data-scroll-target="#pipline-operator"><span class="header-section-number">7.9</span> Pipline Operator</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">7.10</span> Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -237,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">7 Editing Data Frame</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Editing Data Frame</span></h1>
 </div>
 
 
@@ -312,8 +309,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If we review 3 cases again, - Case1: We can calculate patient volume by counting columns - Case2: We can draw a line graph using Month column as x axis,and SBP/DBP columns as y axis - Case3: We can pick any cell in bp columns and will get clean bp measurement only</p>
 <p>So untidy data might look for compact and organized, it’s tidy data that actually allows us a statistical operations. One huge advantage of tidy data is that structure is formalized (one feature per column, one value per cell) that we can perform same operations throughout different column without customizing different calculation method every time. If we want to find average for each column, we can apply mean() to all numeric columns! That’s something we can’t do with untidy data.</p>
 </section>
-<section id="tidyverse-package" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> tidyverse package</h1>
+<section id="tidyverse-package" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="tidyverse-package"><span class="header-section-number">7.2</span> tidyverse package</h2>
 <p>Again, package is like an extension that allows you to perform commands in simple manner. tidyverse is a package that contains professional and organized methods to load, analyze, and visualize tidy data.</p>
 <p>First, let’s install tidyverse. In the Console, type “install.packages(”tidyverse”)“. If it gives you error, then we can install it directly through Packages panel.</p>
 <p><img src="images/clipboard-258048294.png" class="img-fluid" width="291"></p>
@@ -338,8 +335,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Side note: Since we loaded tidyverse, all packages within tidyverse are also loaded. This means that we don’t need to run library(dplyr) again.</li>
 </ul>
 </section>
-<section id="what-does-dplyr-do" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> What does dplyr do?</h1>
+<section id="what-does-dplyr-do" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="what-does-dplyr-do"><span class="header-section-number">7.3</span> What does dplyr do?</h2>
 <p>I’ve been mentioning that dplyr allows you to edit df, but how does it actually do it? There are 5 methods:</p>
 <ol type="1">
 <li>Selecting Rows</li>
@@ -379,8 +376,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="images/clipboard-2507444601.png" class="img-fluid"></p>
 <p>Some might question, why do we need dplyr? For instance, summarize() does same thing that mean() function does. Can’t we just use what R have? That is true, technically you can do everything that dplyr using basic R functions. However, there are some tricky situations. Remember how indexing df sometimes gives us df while other times it gives us list/vectors ( [] vs [[]] )? Basic R funcitions’ input and output formats are different case by case, causing issues in analysis (because dimension might change and two different data might be incompetible for regression). However, dlpyr input and ouput structure of data stable and consistent.</p>
 </section>
-<section id="loading-example-dataset" class="level1" data-number="10">
-<h1 data-number="10"><span class="header-section-number">10</span> Loading Example Dataset</h1>
+<section id="loading-example-dataset" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="loading-example-dataset"><span class="header-section-number">7.4</span> Loading Example Dataset</h2>
 <p>In R, and dlpyr, there are multiple example dataset available for us to practice coding and analysis. one of them is called ‘mpg,’ data collected by U.S EPA from 1998 to 2008 regarding vehicle type and their fuel efficiency. To practice dlpyr functions, let’s first load mpg data.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mpg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -403,10 +400,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Each column consist following data: -manufacturer : maker of the car -model : name of the car -displ : engine displacement -year : year of the model -cyl : number of engine cylinder -trans : type of car transmission -drv : driving system. f = forward, r = rear, 4 = four wheel drive -cty : fuel efficiency in city -hwy : fuel efficiency in highway -fl : type of fuel -class : type of car (compact, suv, etc)</p>
 </section>
-<section id="selecting-rows" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> Selecting Rows</h1>
-<section id="filter" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="filter"><span class="header-section-number">11.1</span> filter()</h2>
+<section id="selecting-rows" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="selecting-rows"><span class="header-section-number">7.5</span> Selecting Rows</h2>
+<section id="filter" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="filter"><span class="header-section-number">7.5.1</span> filter()</h3>
 <p>First, let’s try out extracting rows that meets your column condition.</p>
 <p>You use filter() by</p>
 <pre><code>filter(dataframe, condition)</code></pre>
@@ -503,8 +500,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Check the result. Do you see how in the second sentence, all Audi cars are returned because our logic is “made by Audi” or “cty and year condition are met,” while first sentence didn’t return all Audi because the logic is (audi or cty &gt;= 20) “AND” model year is 2001?</p>
 </section>
-<section id="slice" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="slice"><span class="header-section-number">11.2</span> slice()</h2>
+<section id="slice" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="slice"><span class="header-section-number">7.5.2</span> slice()</h3>
 <p>slice() was filtering rows of location you want. We use it by</p>
 <pre><code>slice(dataframe, location1, location2, etc)</code></pre>
 <p>Again, one thing to keep in mind that positive number like 1 or 2 select 1st and 2nd row, while negative number like -1 select all but 1st row.</p>
@@ -557,8 +554,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 12 audi         a6 quattro   4.2  2008     8 auto… 4        16    23 p     mids…</code></pre>
 </div>
 </div>
-<section id="useful-variations" class="level3" data-number="11.2.1">
-<h3 data-number="11.2.1" class="anchored" data-anchor-id="useful-variations"><span class="header-section-number">11.2.1</span> Useful variations</h3>
+<section id="useful-variations" class="level4" data-number="7.5.2.1">
+<h4 data-number="7.5.2.1" class="anchored" data-anchor-id="useful-variations"><span class="header-section-number">7.5.2.1</span> Useful variations</h4>
 <ol type="1">
 <li><p>slice_random()</p>
 <p>There are useful feature in slice(). When we talked about evaluating ML models, we needed some fresh/random testing set. But how can we select rows randomly? we have it!</p></li>
@@ -602,10 +599,10 @@ slice_tail(dataframe, prop = 0.4)</code></pre>
 </section>
 </section>
 </section>
-<section id="selecting-columns" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> Selecting Columns</h1>
-<section id="select" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="select"><span class="header-section-number">12.1</span> select()</h2>
+<section id="selecting-columns" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="selecting-columns"><span class="header-section-number">7.6</span> Selecting Columns</h2>
+<section id="select" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="select"><span class="header-section-number">7.6.1</span> select()</h3>
 <p>Format is same as filter(). However, one thing to be careful is to state column names without ““. Normally column names are character that we have to use”“, but in dplyr, column and row names themselves are variable.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(audicars, model, year, cty) <span class="co">#Here, we extract selected columns only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -762,10 +759,10 @@ slice_tail(dataframe, prop = 0.4)</code></pre>
 <p>Do you see how order of output columns changed?</p>
 </section>
 </section>
-<section id="adding-columns" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> Adding Columns</h1>
-<section id="mutate" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="mutate"><span class="header-section-number">13.1</span> mutate()</h2>
+<section id="adding-columns" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="adding-columns"><span class="header-section-number">7.7</span> Adding Columns</h2>
+<section id="mutate" class="level3" data-number="7.7.1">
+<h3 data-number="7.7.1" class="anchored" data-anchor-id="mutate"><span class="header-section-number">7.7.1</span> mutate()</h3>
 <p>mutate() is creating new column at the end of the dataframe using existing column. For example, let’s extract fuel efficiency of cars</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>fueldata <span class="ot">&lt;-</span> <span class="fu">select</span>(mpg, cty, hwy)</span>
@@ -830,10 +827,10 @@ slice_tail(dataframe, prop = 0.4)</code></pre>
 </div>
 </section>
 </section>
-<section id="summarizing-data" class="level1" data-number="14">
-<h1 data-number="14"><span class="header-section-number">14</span> Summarizing Data</h1>
-<section id="summarize" class="level2" data-number="14.1">
-<h2 data-number="14.1" class="anchored" data-anchor-id="summarize"><span class="header-section-number">14.1</span> summarize()</h2>
+<section id="summarizing-data" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="summarizing-data"><span class="header-section-number">7.8</span> Summarizing Data</h2>
+<section id="summarize" class="level3" data-number="7.8.1">
+<h3 data-number="7.8.1" class="anchored" data-anchor-id="summarize"><span class="header-section-number">7.8.1</span> summarize()</h3>
 <p>summarize() shows statistical overview of all values in column into single row. Some common stats were: -n() : number of entires -sum() : sum of all entires -mean() : average of all entires -median() : center of all entires -sd() : standard deviation -var() : variance -max()/min(): maximum and minimum value</p>
 <p>In summarize(), format is same as others.</p>
 <pre><code>summarize(dataframe, name1 = equation1, name2 = equation2, ...)</code></pre>
@@ -848,8 +845,8 @@ slice_tail(dataframe, prop = 0.4)</code></pre>
 </div>
 <p>Now you see the statistics of average city fuel efficiency of all cars registered in the mpg data frame!</p>
 </section>
-<section id="group_by" class="level2" data-number="14.2">
-<h2 data-number="14.2" class="anchored" data-anchor-id="group_by"><span class="header-section-number">14.2</span> group_by()</h2>
+<section id="group_by" class="level3" data-number="7.8.2">
+<h3 data-number="7.8.2" class="anchored" data-anchor-id="group_by"><span class="header-section-number">7.8.2</span> group_by()</h3>
 <p>While summarize() shows overview of entire dataset, there is one limitation: it summarize everything. What if we want summary by marker? Like, what if we want to see average cty of Audi and Sonata serpeately instead of all cars? This is when group_by() becomes useful.</p>
 <p>group_by() puts data into each brackets. What does that mean?</p>
 <div class="cell">
@@ -931,8 +928,8 @@ slice_tail(dataframe, prop = 0.4)</code></pre>
 </div>
 </section>
 </section>
-<section id="pipline-operator" class="level1" data-number="15">
-<h1 data-number="15"><span class="header-section-number">15</span> Pipline Operator</h1>
+<section id="pipline-operator" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="pipline-operator"><span class="header-section-number">7.9</span> Pipline Operator</h2>
 <p>So far, we looked at what each functions do. However, what if we need to use multiple?</p>
 <p>Let’s say we want to do following: Find average cty per model, and display models with average cty &gt; 20.</p>
 <p>To do this, we need to go through multiple steps.</p>
@@ -994,8 +991,8 @@ slice_tail(dataframe, prop = 0.4)</code></pre>
 <p>Here, do you notice how group_by(model) is performed using data from mpg (mpg %&gt;% group_by(model))? One thing to remember is how our grammer changed. Earlier, we had to state “group_by(mpg, model)” to tell “group data by model using mpg data”</p>
 <p>Now, we only state “group_by(model)” to do the same because “mpg %&gt;%” defines what data group_by(model) is using. In conclusion, %&gt;% makes multi step calculation easy!</p>
 </section>
-<section id="conclusion" class="level1" data-number="16">
-<h1 data-number="16"><span class="header-section-number">16</span> Conclusion</h1>
+<section id="summary" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">7.10</span> Summary</h2>
 <p>Today, we reviewed why we want tidy data for data analysis, and how we preprocess (manipulate) data using dlpyr package. Next time, we will learn how to vizualize data!</p>
 
 
