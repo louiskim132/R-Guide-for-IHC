@@ -15,7 +15,7 @@ book:
     - List_5.qmd
     - DataFrame_6.qmd
     - Editing Data Frame_7.qmd
-  # - ggplot_8.qmd
+    - ggplot_8.qmd
 
 bibliography: references.bib
 
