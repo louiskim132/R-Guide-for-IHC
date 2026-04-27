@@ -16,6 +16,7 @@ book:
     - DataFrame_6.qmd
     - Editing Data Frame_7.qmd
     - ggplot()_8.qmd
+    - Dimension Reduction_9.qmd
 
 bibliography: references.bib
 

@@ -810,7 +810,7 @@ p5 <- ggplot() +
 p5
 ```
 
-For readers, axis titles are not clear. So, let's rename them. 
+For readers, axis titles are not clear. So, let's rename them.
 
 ```{r}
 p6 <- p5 + 
@@ -838,9 +838,9 @@ p7
 
 Do you see how now major breaks (grid line with labels) are every 20, while minor breaks (gridline without label) are by 10?
 
-### trans 
+### trans
 
-Let's skip limits since we already talked about it. For trans, it's operations that changes axis. Right now they're plain numbers. However, you can use (trans = "log10") to change break's label in logmathic scale. This becomes useful when all data points are so skewed (e.g., most of data are < 10^6 while some are > 10^6) that all data looks clustered. 
+Let's skip limits since we already talked about it. For trans, it's operations that changes axis. Right now they're plain numbers. However, you can use (trans = "log10") to change break's label in logmathic scale. This becomes useful when all data points are so skewed (e.g., most of data are \< 10\^6 while some are \> 10\^6) that all data looks clustered.
 
 ### position
 
@@ -880,9 +880,9 @@ ggplot(mpg) +
   theme_bw()
 ```
 
-## Colors 
+## Colors
 
-Last, in case you wonder how to change scale of colors within aes(). We can manually set colors in case we don't like default setting of ggplot() using RColorBrewer prackage. 
+Last, in case you wonder how to change scale of colors within aes(). We can manually set colors in case we don't like default setting of ggplot() using RColorBrewer prackage.
 
 ```{r}
 RColorBrewer::display.brewer.all()
@@ -890,7 +890,7 @@ RColorBrewer::display.brewer.all()
 RColorBrewer::brewer.pal.info
 ```
 
-If you want to use one of them, you can set it using scale_color_brewer() layer (continuous) or scale_fill_brewer() (categorical). Be careful, they're case sensitive. 
+If you want to use one of them, you can set it using scale_color_brewer() layer (continuous) or scale_fill_brewer() (categorical). Be careful, they're case sensitive.
 
 ```{r}
 p5 + scale_fill_brewer(palette = "Set1")
@@ -906,6 +906,6 @@ ggplot(mpg, aes(cty, hwy, color = displ)) +
 
 ## Summary
 
-Today, we reviewed a lot on how to visualize the data into figures. If you want to save your figure, you can run the cell, right click, and hit "save as~"
+Today, we reviewed a lot on how to visualize the data into figures. If you want to save your figure, you can run the cell, right click, and hit "save as\~"
 
-Good job on following through Chapter 1 ~ 8. From next chapter, we will start applying conceptual data analysis methods we talked about in the meetings. 
+Good job on following through Chapter 1 \~ 8. From next chapter, we will start applying conceptual data analysis methods we talked about in the meetings. Once you're done with Chapter 8, please email me so that I can upload Chapter 9 and afterwards.
