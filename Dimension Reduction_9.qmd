@@ -103,6 +103,103 @@ For example, in "Zk= 2x + 3y," 2 and 3 are weight, where as x and y are features
 
 If we calculate Zk coordinate for all data points, we can calculate variance of points on the PC, which is (sum of square of Zk values) / (N - 1). Algorithm test all possible combinations of weight until it finds the highest variance value. Now, we know how PCA reduce dimension!
 
+### Pre-Processing data for PCA
+
+#### Standarization of PCA
+
+Standardization is where you make data's average to 0, and standard deviation to 1. If we visualize it:
+
+![](images/clipboard-99093830.png){width="701"}
+
+Here, you see that original data (left figure)'s x value averages around 120 and y value average at 37.5. After standardizing it, both x and y value average sits on zero even though spread (general location of points) looks the same.
+
+But why do we need to do such thing? As we saw how PC is calculated, varaiance is based on the absolute distance. For example, a1c (average glucose level) and annual income range in San Diego are measured as follows:
+
+0\~5.6% - normal \| 5.7\~6.4% - pre diabetic \| 6.5+ diabetic\
+\~30k - 20th percentile \| 68-103k - 50th percentile \| 248k - 95th percentile
+
+In this case, 2 unit (2%) movement from 5.5% to 7.5% in a1c has significantly different meaning and diagnosis. However, 2unit (2usd) difference in income is like nothing (\< 0.002%). Even though they are same 2 unit difference, depends on the range of the feature, they contain completely different context.
+
+However, PCA cannot tell how big 2 unit is for each feature. Instead, it only sees that the difference is 2 unit. That said, let's imagine the data set. People's a1c value will change in 0.1% increment, where as their income range will differ by thousands. If we meant to perform PCA using a1c and income values, what will happen? because income difference is so much larger than a1c differences, PC will form based on income values even thought same amount of difference has significantly more meaning on a1c.
+
+To reduce dimension while preserving meanings of all features, we must organize every single feature in the same range: 1 unit difference in a1c should have same meaning in 1 unit difference in income. And to achieve this, standardization is needed. In the standardized world, 1 unit will have same weight for all features while keeping the nature of spread/data set's shape (standard deviation = 1).
+
+![](images/clipboard-1931163539.png){fig-align="center"}
+
+So how do we standardize the data set? we have scale() function that standardize data for us.
+
+```{r}
+s.vitals <- vitals %>%
+  mutate(across(where(is.numeric), scale)) %>% #can you explain what's happening in this line?
+  mutate(across(where(is.numeric), as.numeric)) #We double check all standarized data stays as numbers!
+
+s.vitals
+
+ggplot(s.vitals, aes(Systolic_BP)) + 
+  geom_bar()
+```
+
+#### Sknewness in PCA
+
+Skewness in data means if the distribution shape looks like a symmetrical curve, centering at zero, or if peak/median values are at extreme of the curve.
+
+![](images/clipboard-1054055644.png){fig-align="center" width="610"}
+
+Why is skewed data dangerous for PCA? So far, we talked about centering mean at the center and standardizing data so that PCA can measure different features with difference averages in single way: distance from the center. However, if data is skewed - let's say significantly negatively skewed, now we runs into a problem.
+
+![](images/clipboard-2190623854.png){fig-align="center" width="382"}
+
+When we standardize a skewed data, average will be zero. But, standardization keeps the 'shape' of the data set, meaning all points will be still way far right side of the origin. Remember how PCA is maximizing 'variance' by measuring distance from center to the data point? Standardized data with symmetrical distribution will be spreading around (0,0). However, skewed data will spread around right or left side or the origin because value's shape is preserved. Now, variance (square of distance from origin) will be artificially high because they are away from the center. Image above are figure of two standardized data set. Can you notice how top figure's data is around zero that variance from center will be small for points around the center, but heavily skewed data are mostly away from the center that variance is expected to be high?
+
+This issue reveals important assumption of PCA: All data points are symmetrically distributed, around the origin.
+
+Now, how do we know if data is skewed? We use statistical package called "e1071" that calculates skewness for us. Function called skewness() calculates it.
+
+```{r}
+# Install the statistics package if you don't have it
+# install.packages("e1071")
+library(e1071)
+
+# Generate a clean Skewness Report for the entire clinic
+skewness_report <- vitals %>%
+  # 1. Only look at the numeric columns (ignore Patient IDs, text, etc.)
+  select(where(is.numeric)) %>%
+  
+  # 2. Calculate the exact skewness score for every column
+  summarise(across(everything(), ~skewness(., na.rm = TRUE))) %>%
+  
+  # 3. Smash the wide results into a clean, readable vertical list!
+  pivot_longer(cols = everything(), 
+               names_to = "Clinical_Variable", 
+               values_to = "Skewness_Score") %>%
+               
+  # 4. Sort the list so the worst offenders are at the top
+  arrange(desc(abs(Skewness_Score)))
+
+# Print the report
+print(skewness_report)
+```
+
+Between -0.5 and 0.5: The data is fairly symmetrical. Leave it alone.
+
+Between -1.0 and -0.5 (or 0.5 and 1.0): The data is moderately skewed. PCA can usually tolerate this without a transformation.
+
+Greater than 1.0 (or less than -1.0): The data is highly skewed. You must transform this variable before running PCA.
+
+That said, it looks like our data is okay and no need for further pre-processing! If it is skewed, how do we resolve this issue? Two ways:
+
+1. If data are all positive values, we can apply logistical transformation to squish data into symmetrical distribution. You can do this through R, mutating with log(length of whatever + 1). Review concepts on logistic functions!
+
+2. (safer, more general way) Use YeoJohnson transformation. This is a machine learning algorithm that test multiple exponential transformations and find best setting for you. This method use caret package we saw before. 
+
+```{}
+predict(preProcess(target, method = "YeoJohnson", target)
+
+# preProcess(target data, transformation data) is a setting rulebook, which method of transformation you're applying.
+# predict(rule, target data) function is what executes transformation
+```
+
+
 ### Running PCA
 
 Executing PCA is done by function called prcomp() in stat package. You need to select
@@ -112,7 +209,7 @@ prcomp(analyzing data)
 ```
 
 ```{r}
-result <- prcomp(vitals[, c("Systolic_BP", "Diastolic_BP")]) # Running PCA using last 2 vital signs
+result <- prcomp(s.vitals[, c("Systolic_BP", "Diastolic_BP")]) # Running PCA using last 2 vital signs
 
 result
 ```
@@ -162,7 +259,7 @@ Avg_SBP <- result$center[1]
 Avg_DBP <- result$center[2]
 
 
-p <- ggplot(vitals, aes(Systolic_BP, Diastolic_BP)) +
+p <- ggplot(s.vitals, aes(Systolic_BP, Diastolic_BP)) +
   geom_point() + #plotting data points
   geom_abline(slope = Load_DBP / Load_SBP, 
           intercept = Avg_DBP - Avg_SBP * (Load_DBP / Load_SBP), color ="blue") + #plotting PC1 line.
@@ -202,7 +299,7 @@ As result, every time we add new PC, it will be orthogonal to all other PCs.
 Now, let's perform PCA using all values in the data frame.
 
 ```{r}
-vital_pcr <- vitals %>% 
+vital_pcr <- s.vitals %>% 
   select(-Patient_ID, -Diabetes_Status) %>% #We perform PCA on numbers, not letters or ID (not clinic data)
   prcomp()
 
@@ -250,13 +347,13 @@ IMPORTANT: To use this method, you must standardize the data set, which we will 
 
 To perform parallel analysis, we use package called psych. Install it in your console.
 
-```{}
+```         
 install.packages("psych", repos = "http://cran.rstudio.com/")
 ```
 
 Then, you can generate scree plot from performing PCA of randomly-generated values that has same number of features/entries with our vital data frame.
 
-```{}       
+```         
 fa.parallel() is the function we use.
 
 fa.parallel(our actual data frame, mode, number of random entries we need, main (if you want title for result plot))
@@ -264,13 +361,13 @@ fa.parallel(our actual data frame, mode, number of random entries we need, main 
 
 Before we run the code, don't forget to load the package!
 
-```{} 
+```         
 library(psych)
 
 #fa = "PC" tells code that we're doing parallel analysis for PCA
 #we need to feed raw data set that we run pcr, not the pcr result. Don't but vital_pcr!
 
-vital_data <- vitals %>% 
+vital_data <- s.vitals %>% 
   select(-Patient_ID, -Diabetes_Status)
 
 pa_result <- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")
@@ -290,7 +387,7 @@ So, let's remove those overlapping features and try again.
 ```{r}
 library(psych)
 
-clean_vitals <- vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastolic_BP", "Resp_Rate", "SpO2")]
+clean_vitals <- s.vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastolic_BP", "Resp_Rate", "SpO2")]
 pa_result <- fa.parallel(clean_vitals, fa = "pc", main = "Parallel Analysis of Raw Vitals")
 ```
 
@@ -300,30 +397,29 @@ pa_result <- fa.parallel(clean_vitals, fa = "pc", main = "Parallel Analysis of R
 
 -   PC Resampled data: scree plot of PCA using values from original data set but randomly mixed
 
-Both PC simulated/resampled data establish baseline noise (zero statistical significance) level. Any PC that has meaningful separation of data points will have higher explained variance than variance explained by baseline noise. In the plot above, code concluded that PC1 alone is good enough dimension reduction for further analysis (number of components =  1 ).
+Both PC simulated/resampled data establish baseline noise (zero statistical significance) level. Any PC that has meaningful separation of data points will have higher explained variance than variance explained by baseline noise. In the plot above, code concluded that PC1 alone is good enough dimension reduction for further analysis (number of components = 1 ).
 
-Limitation: Sometimes, these random baseline noise underestimate of real components when data set contains overwhelmingly dominant pattern. This imbalanced data cause smaller (but clinically important) signals to be discarded as noise. 
+Limitation: Sometimes, these random baseline noise underestimate of real components when data set contains overwhelmingly dominant pattern. This imbalanced data cause smaller (but clinically important) signals to be discarded as noise.
 
-For example, if clinic overflows with fever patients, you will see high variance in a lot of vital signs, like body temperature.This huge variance makes small change in SpO2, which is still clinically significant, appears PCs with small variance captured. As result, important information looks like a random noise. 
-
+For example, if clinic overflows with fever patients, you will see high variance in a lot of vital signs, like body temperature.This huge variance makes small change in SpO2, which is still clinically significant, appears PCs with small variance captured. As result, important information looks like a random noise.
 
 5.  Resampling PCA
 
-Resampling in here is different to resampled data you saw in #4. Resampled data is mixing data randomly (e.g., exchanging values in [row1, column1] with [row1, column3]). Resampling data means you're extracting subset/portion of data to perform analysis. For example, executing PCA with 60% raw data and remaining 40% on validating the precision/accuracy of the result. 
+Resampling in here is different to resampled data you saw in #4. Resampled data is mixing data randomly (e.g., exchanging values in \[row1, column1\] with \[row1, column3\]). Resampling data means you're extracting subset/portion of data to perform analysis. For example, executing PCA with 60% raw data and remaining 40% on validating the precision/accuracy of the result.
 
 So we understand that resampling split data to run PCA. But, how do we test the result with reamining data? This process is called reconstruction. Think this like derivation and integral! (where all result ends with "+C")
 
-1) When we reduce dimension we will get a PC score per PC axis. For example, original (1,2) -> PC +1.3 (like taking derivative of a function). This part will be done by using only portion of the  data.
+1)  When we reduce dimension we will get a PC score per PC axis. For example, original (1,2) -\> PC +1.3 (like taking derivative of a function). This part will be done by using only portion of the data.
 
-2) We calculate PC scores using remaining data which weren't used for PC weight/loadings calculation. (Testing phase)
+2)  We calculate PC scores using remaining data which weren't used for PC weight/loadings calculation. (Testing phase)
 
-3) Then, we try to backtrack/guess what the original location of testing points using the PC data. For example, because (1,2) become PC score of 1.3, when we see one of the testing point's PC score is 1.3, we guess that that point was originally at (1,2)!
+3)  Then, we try to backtrack/guess what the original location of testing points using the PC data. For example, because (1,2) become PC score of 1.3, when we see one of the testing point's PC score is 1.3, we guess that that point was originally at (1,2)!
 
-4) But because reduced dimension always lose some information, guessing original data will have error (like +C in integral). For example, we guess calculated PC score of 1.3 is originally located at (1,2). But, it was actually at (1,3) checking at origianl coordinate of testing set!
+4)  But because reduced dimension always lose some information, guessing original data will have error (like +C in integral). For example, we guess calculated PC score of 1.3 is originally located at (1,2). But, it was actually at (1,3) checking at origianl coordinate of testing set!
 
-5) Based on how 'off' the guessed location is from original data, we can calculate magnitude of error. Now we repeat the step 1~4 using 0 (complete random guess) ~ feature of original data set (no dimension reduced), calculting error for each number of PCs used. The lower the error is, more accurate and stable the model is. 
+5)  Based on how 'off' the guessed location is from original data, we can calculate magnitude of error. Now we repeat the step 1\~4 using 0 (complete random guess) \~ feature of original data set (no dimension reduced), calculting error for each number of PCs used. The lower the error is, more accurate and stable the model is.
 
-Let's look at how it's performed using missMDA package, which helps us with resampling testings. 
+Let's look at how it's performed using missMDA package, which helps us with resampling testings.
 
 ```{r}
 #1. Install package that helps us dividing data sets and running cross validation (resampling)
@@ -356,7 +452,7 @@ plot(x = x_values,
      main = "Cross-Validation: Finding the Optimal Cutoff")
 ```
 
-Now, you see that using 2PC is best dimension reduction that reflects nature of original data structure.  
+Now, you see that using 2PC is best dimension reduction that reflects nature of original data structure.
 
 Question to think: using 6 PCs, where no dimension reduction is used, error is high. You might think if there is no dimension reduction, there is no information loss, so that error should be low. Why error is high? Contact me if you cannot think of why!
 
@@ -364,9 +460,9 @@ Question to think: using 6 PCs, where no dimension reduction is used, error is h
 
 We discussed what loading is. Then, can you guess what loading plot is? Yes, it's a plot that shows loadings of each feature. We do draw loading plot because looking and comparing 'which feature influence seperation on the xth PC' becomes difficult as number of features increase (the more numbers there are, the longer/difficult it becomes!)
 
-There are few ways to do this. 
+There are few ways to do this.
 
-1. First is a long ggplot() way, by extracting and plotting like we did in chapter8 (try it yourself)
+1.  First is a long ggplot() way, by extracting and plotting like we did in chapter8 (try it yourself)
 
 ```{r}
 #1. Let's seperate loading values. 
@@ -403,8 +499,9 @@ p2
 p3
 ```
 
-But, repeating same code over and over takes time and tiring. This is because you need to pick one column per axis, which force you to write ggplot() per column. To resolve this issue, we can do something called 
-```{}
+But, repeating same code over and over takes time and tiring. This is because you need to pick one column per axis, which force you to write ggplot() per column. To resolve this issue, we can do something called
+
+```         
 pivot_longer()
 ```
 
@@ -429,7 +526,7 @@ loading %>% #Pass loading data pivot_loner()
 
 While checking loadings per PC helps us with understanding how each feature influence each PC, it is difficult to understand "So what's feature's influence on overall/full PCA plot" There are few ways to do it.
 
-1. First way is ggplot(). There is a separate package called ggfortify, which allow us to build ggplot() for PCA result. We use autoplot() to visualize the result, and change what varaible we want to plot by using the arguments. Google for plotting different features!
+1.  First way is ggplot(). There is a separate package called ggfortify, which allow us to build ggplot() for PCA result. We use autoplot() to visualize the result, and change what varaible we want to plot by using the arguments. Google for plotting different features!
 
 ```{r}
 library(ggfortify) 
@@ -440,13 +537,12 @@ autoplot(vital_pcr, loadings = TRUE, loadings.label = TRUE, loadings.label.size 
 # loadings.label = true (label which arrow is which feature)
 ```
 
-Now, instead of reading multiple loading plots separately and say "higher age pushes points to the left side of PC1, and upper side of PC2," we can look at PCA plot and recognize how each features change point's location on PCA directly.  
+Now, instead of reading multiple loading plots separately and say "higher age pushes points to the left side of PC1, and upper side of PC2," we can look at PCA plot and recognize how each features change point's location on PCA directly.
+
+### 
 
 ## Conclusion
 
-Today, we looked at how we reduce dimension through PCA. Remember,
-1) Standarize data set to remove population skewness
-2) Decide how many PCs do you need to use
-3) Run PCA.
+Today, we looked at how we reduce dimension through PCA. Remember, 1) Check for any skewness, 2) Standardize data set to remove population skewness 3) Decide how many PCs do you need to use 4) Run PCA.
 
 Next chapter, we will look at how to cluster them!
