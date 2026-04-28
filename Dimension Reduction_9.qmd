@@ -288,6 +288,8 @@ Heywood case means two or more features have 100% or higher multicollinearity. T
 So, let's remove those overlapping features and try again.
 
 ```{r}
+library(psych)
+
 clean_vitals <- vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastolic_BP", "Resp_Rate", "SpO2")]
 pa_result <- fa.parallel(clean_vitals, fa = "pc", main = "Parallel Analysis of Raw Vitals")
 ```
