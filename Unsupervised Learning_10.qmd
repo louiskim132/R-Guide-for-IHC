@@ -1,0 +1,34 @@
+# Unsupervised Learning
+
+In this chapter, let's see how we can label data points when we don't have clear answer for model to test out their performance. As we discussed during the meeting, unsupervised learning group similar points by "how close/similar they are" on the space. If we have points like (1,1), (1,2), and (1, 100), and two types of data, we can say first two points are probably same type of data points while last one is different kind, since first two are way more closer than where third point is. Since we reviewed what clustering is, and how each models work during the meeting, we will only focus on how to code it. Please let me know if you would like more background/conceptual explanation to be uploaded. 
+
+First, let's read vitals csv to work with!
+
+```{r}
+library(dplyr)
+library(tidyverse)
+
+vitals <- read.csv("Vitals.csv") %>%
+  select(-1)
+
+
+head(vitals)
+```
+
+## Clustering
+
+### K-means Clustering
+
+First, let's perform 2D PCA so that we can visualize clustering result in a way we can visually understand. 
+
+```{r}
+# Extracting Numeric values only -> Standardizing it -> run PCA
+pca_vitals <- vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastolic_BP", "Resp_Rate", "SpO2")] %>%
+  mutate(across(where(is.numeric), scale)) %>%
+  mutate(across(where(is.numeric), as.numeric)) %>%
+  prcomp()
+
+summary(pca_vitals)
+```
+
+d

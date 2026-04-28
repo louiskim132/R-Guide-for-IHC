@@ -817,20 +817,21 @@ So, to reflect variance of all points accurately, we need to standardize the loc
 </section>
 <section id="running-pca" class="level3" data-number="9.2.3">
 <h3 data-number="9.2.3" class="anchored" data-anchor-id="running-pca"><span class="header-section-number">9.2.3</span> Running PCA</h3>
+<p>*Note: Here, we will use non-standardized data just for demonstration purpose. When you walk through the code, use standardized data and see if you can come up with explanation that we discuss in this chapter!</p>
 <p>Executing PCA is done by function called prcomp() in stat package. You need to select</p>
 <pre><code>prcomp(analyzing data)</code></pre>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(s.vitals[, <span class="fu">c</span>(<span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>)]) <span class="co"># Running PCA using last 2 vital signs</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(vitals[, <span class="fu">c</span>(<span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>)]) <span class="co"># Running PCA using last 2 vital signs</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Standard deviations (1, .., p=2):
-[1] 1.1804049 0.7788737
+[1] 14.462526  8.564503
 
 Rotation (n x k) = (2 x 2):
                    PC1        PC2
-Systolic_BP  0.7071068  0.7071068
-Diastolic_BP 0.7071068 -0.7071068</code></pre>
+Systolic_BP  0.9014644  0.4328533
+Diastolic_BP 0.4328533 -0.9014644</code></pre>
 </div>
 </div>
 <p>In the result, you see two tabs. Standard deviation is squared root of (sum of variance squared), where it shows how well each data points are separated when you plot all data into each PC. For example, if you plot all points on PC1, standard deviation is 2.14, while using PC2 gives std of 0.106.</p>
@@ -840,10 +841,10 @@ Diastolic_BP 0.7071068 -0.7071068</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Importance of components:
-                          PC1    PC2
-Standard deviation     1.1804 0.7789
-Proportion of Variance 0.6967 0.3033
-Cumulative Proportion  0.6967 1.0000</code></pre>
+                           PC1    PC2
+Standard deviation     14.4625 8.5645
+Proportion of Variance  0.7404 0.2596
+Cumulative Proportion   0.7404 1.0000</code></pre>
 </div>
 </div>
 <p>Proportion of variance is how much each PC explain the variance. As you can see, in PCx, number x is labeled in a order of explained variance (PC that captures the most becomes first PC). Cumulative proportion is total variance explained using All PCs starting from PC1 to xth. Since we started with 2 axis, PC2 will give us 100% explained variance.</p>
@@ -851,8 +852,8 @@ Cumulative Proportion  0.6967 1.0000</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>center</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Systolic_BP  Diastolic_BP 
--1.269471e-16 -1.111611e-16 </code></pre>
+<pre><code> Systolic_BP Diastolic_BP 
+      119.67        77.53 </code></pre>
 </div>
 </div>
 <p>Let’s revisit the equation we talked about earlier and see if result aligns with our explanation (PC1 capturing variance well).</p>
@@ -872,7 +873,7 @@ Cumulative Proportion  0.6967 1.0000</code></pre>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>Avg_DBP <span class="ot">&lt;-</span> result<span class="sc">$</span>center[<span class="dv">2</span>]</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(s.vitals, <span class="fu">aes</span>(Systolic_BP, Diastolic_BP)) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(vitals, <span class="fu">aes</span>(Systolic_BP, Diastolic_BP)) <span class="sc">+</span></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="co">#plotting data points</span></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> Load_DBP <span class="sc">/</span> Load_SBP, </span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">intercept =</span> Avg_DBP <span class="sc">-</span> Avg_SBP <span class="sc">*</span> (Load_DBP <span class="sc">/</span> Load_SBP), <span class="at">color =</span><span class="st">"blue"</span>) <span class="sc">+</span> <span class="co">#plotting PC1 line.</span></span>
@@ -905,10 +906,10 @@ Cumulative Proportion  0.6967 1.0000</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Importance of components:
-                          PC1    PC2
-Standard deviation     1.1804 0.7789
-Proportion of Variance 0.6967 0.3033
-Cumulative Proportion  0.6967 1.0000</code></pre>
+                           PC1    PC2
+Standard deviation     14.4625 8.5645
+Proportion of Variance  0.7404 0.2596
+Cumulative Proportion   0.7404 1.0000</code></pre>
 </div>
 </div>
 <p>It says PC1 explains about 74% of variance. Then, where are 26% of missing spread? Look at our visualized PCs in the figure above. If you compress all points onto PC1 (blue line), think about what happens to points that are stacked in (perpendicular to PC1) direction: They will be on the exact same spot on the PC1. This means that if we use only PC1, we cannot explain any variance that are spread perpendicular to PC1!</p>
@@ -916,21 +917,21 @@ Cumulative Proportion  0.6967 1.0000</code></pre>
 <p>As result, every time we add new PC, it will be orthogonal to all other PCs.</p>
 <p>Now, let’s perform PCA using all values in the data frame.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vital_pcr <span class="ot">&lt;-</span> s.vitals <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vital_pcr <span class="ot">&lt;-</span> vitals <span class="sc">%&gt;%</span> </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Patient_ID, <span class="sc">-</span>Diabetes_Status) <span class="sc">%&gt;%</span> <span class="co">#We perform PCA on numbers, not letters or ID (not clinic data)</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(vital_pcr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Importance of components:
-                          PC1    PC2    PC3    PC4     PC5    PC6     PC7
-Standard deviation     1.7164 1.5669 1.1169 1.0100 0.94831 0.8764 0.79683
-Proportion of Variance 0.2946 0.2455 0.1247 0.1020 0.08993 0.0768 0.06349
-Cumulative Proportion  0.2946 0.5401 0.6649 0.7669 0.85682 0.9336 0.99711
-                           PC8     PC9     PC10
-Standard deviation     0.15237 0.07512 0.002155
-Proportion of Variance 0.00232 0.00056 0.000000
-Cumulative Proportion  0.99944 1.00000 1.000000</code></pre>
+                           PC1     PC2     PC3    PC4     PC5     PC6     PC7
+Standard deviation     19.5610 19.0226 14.0945 8.9321 2.99623 2.08373 1.53297
+Proportion of Variance  0.3683  0.3483  0.1912 0.0768 0.00864 0.00418 0.00226
+Cumulative Proportion   0.3683  0.7167  0.9079 0.9847 0.99337 0.99755 0.99982
+                           PC8     PC9    PC10
+Standard deviation     0.43630 0.02134 0.01314
+Proportion of Variance 0.00018 0.00000 0.00000
+Cumulative Proportion  1.00000 1.00000 1.00000</code></pre>
 </div>
 </div>
 </section>
@@ -992,7 +993,7 @@ fa.parallel(our actual data frame, mode, number of random entries we need, main 
 #fa = "PC" tells code that we're doing parallel analysis for PCA
 #we need to feed raw data set that we run pcr, not the pcr result. Don't but vital_pcr!
 
-vital_data &lt;- s.vitals %&gt;% 
+vital_data &lt;- vitals %&gt;% 
   select(-Patient_ID, -Diabetes_Status)
 
 pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</code></pre>
@@ -1012,7 +1013,7 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 
     %+%, alpha</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>clean_vitals <span class="ot">&lt;-</span> s.vitals[, <span class="fu">c</span>(<span class="st">"Age"</span>, <span class="st">"Temp_C"</span>, <span class="st">"Heart_Rate"</span>, <span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>, <span class="st">"Resp_Rate"</span>, <span class="st">"SpO2"</span>)]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>clean_vitals <span class="ot">&lt;-</span> vitals[, <span class="fu">c</span>(<span class="st">"Age"</span>, <span class="st">"Temp_C"</span>, <span class="st">"Heart_Rate"</span>, <span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>, <span class="st">"Resp_Rate"</span>, <span class="st">"SpO2"</span>)]</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pa_result <span class="ot">&lt;-</span> <span class="fu">fa.parallel</span>(clean_vitals, <span class="at">fa =</span> <span class="st">"pc"</span>, <span class="at">main =</span> <span class="st">"Parallel Analysis of Raw Vitals"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -1305,28 +1306,28 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">"variable"</span>)                 </span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>loading</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            variable         PC1         PC2          PC3         PC4
-1                Age -0.01436273 -0.06626848  0.495919070  0.64020517
-2             Temp_C  0.01160355  0.05837317  0.474139603 -0.59885218
-3         Heart_Rate -0.48155618 -0.33692562 -0.064861871 -0.11279269
-4  Pulse_Machine_BPM -0.47173479 -0.34924696 -0.047255088 -0.10675621
-5        Systolic_BP -0.36918912  0.35760155 -0.088664674 -0.25416647
-6       Diastolic_BP -0.39206819  0.28924831  0.057958250  0.33098326
-7                MAP -0.45529183  0.37649088 -0.001460774  0.11122899
-8          Resp_Rate -0.11169679  0.21237370  0.391071843 -0.08088223
-9               SpO2  0.02928922  0.16117231 -0.598834215  0.09414531
-10       Shock_Index -0.18597379 -0.57649008  0.007313502  0.07393674
-            PC5         PC6
-1   0.398461010  0.22142947
-2   0.545335671  0.17821405
-3  -0.004362952  0.08515058
-4   0.047653918  0.04704383
-5   0.082662350 -0.05640717
-6   0.033411463 -0.14480148
-7   0.063512050 -0.12963637
-8  -0.648751518  0.59997510
-9   0.324965825  0.69970804
-10 -0.055528440  0.13866761</code></pre>
+<pre><code>            variable           PC1           PC2          PC3          PC4
+1                Age -0.3236863010  0.9361901311 -0.084249562 -0.105983485
+2             Temp_C -0.0003356208  0.0009366694 -0.001975027 -0.005652870
+3         Heart_Rate  0.4670868614  0.1961732193  0.477627572  0.033767990
+4  Pulse_Machine_BPM  0.4630652068  0.2188213971  0.501068703  0.017514856
+5        Systolic_BP  0.5172484705  0.0618204320 -0.482165023 -0.650585843
+6       Diastolic_BP  0.2675689068  0.1410245424 -0.350258589  0.706542812
+7                MAP  0.3508646118  0.1146822356 -0.393838345  0.254382136
+8          Resp_Rate  0.0192148295  0.0092466844 -0.052545900  0.002680935
+9               SpO2  0.0035140865 -0.0152134667 -0.024913779 -0.009569748
+10       Shock_Index  0.0009537038  0.0013311862  0.006750500  0.003843825
+            PC5          PC6
+1  -0.005762431 -0.015056545
+2   0.009600738  0.029395799
+3   0.132753631 -0.197155830
+4  -0.105180313  0.161923270
+5  -0.030369325  0.022269051
+6  -0.028145509  0.006687559
+7  -0.028488688  0.012973984
+8   0.970417772 -0.116795998
+9  -0.164162830 -0.958886957
+10  0.001427475 -0.002271849</code></pre>
 </div>
 </div>
 <div class="cell">

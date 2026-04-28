@@ -188,19 +188,20 @@ Greater than 1.0 (or less than -1.0): The data is highly skewed. You must transf
 
 That said, it looks like our data is okay and no need for further pre-processing! If it is skewed, how do we resolve this issue? Two ways:
 
-1. If data are all positive values, we can apply logistical transformation to squish data into symmetrical distribution. You can do this through R, mutating with log(length of whatever + 1). Review concepts on logistic functions!
+1.  If data are all positive values, we can apply logistical transformation to squish data into symmetrical distribution. You can do this through R, mutating with log(length of whatever + 1). Review concepts on logistic functions!
 
-2. (safer, more general way) Use YeoJohnson transformation. This is a machine learning algorithm that test multiple exponential transformations and find best setting for you. This method use caret package we saw before. 
+2.  (safer, more general way) Use YeoJohnson transformation. This is a machine learning algorithm that test multiple exponential transformations and find best setting for you. This method use caret package we saw before.
 
-```{}
+```         
 predict(preProcess(target, method = "YeoJohnson", target)
 
 # preProcess(target data, transformation data) is a setting rulebook, which method of transformation you're applying.
 # predict(rule, target data) function is what executes transformation
 ```
 
-
 ### Running PCA
+
+\*Note: Here, we will use non-standardized data just for demonstration purpose. When you walk through the code, use standardized data and see if you can come up with explanation that we discuss in this chapter!
 
 Executing PCA is done by function called prcomp() in stat package. You need to select
 
@@ -209,7 +210,7 @@ prcomp(analyzing data)
 ```
 
 ```{r}
-result <- prcomp(s.vitals[, c("Systolic_BP", "Diastolic_BP")]) # Running PCA using last 2 vital signs
+result <- prcomp(vitals[, c("Systolic_BP", "Diastolic_BP")]) # Running PCA using last 2 vital signs
 
 result
 ```
@@ -259,7 +260,7 @@ Avg_SBP <- result$center[1]
 Avg_DBP <- result$center[2]
 
 
-p <- ggplot(s.vitals, aes(Systolic_BP, Diastolic_BP)) +
+p <- ggplot(vitals, aes(Systolic_BP, Diastolic_BP)) +
   geom_point() + #plotting data points
   geom_abline(slope = Load_DBP / Load_SBP, 
           intercept = Avg_DBP - Avg_SBP * (Load_DBP / Load_SBP), color ="blue") + #plotting PC1 line.
@@ -299,7 +300,7 @@ As result, every time we add new PC, it will be orthogonal to all other PCs.
 Now, let's perform PCA using all values in the data frame.
 
 ```{r}
-vital_pcr <- s.vitals %>% 
+vital_pcr <- vitals %>% 
   select(-Patient_ID, -Diabetes_Status) %>% #We perform PCA on numbers, not letters or ID (not clinic data)
   prcomp()
 
@@ -367,7 +368,7 @@ library(psych)
 #fa = "PC" tells code that we're doing parallel analysis for PCA
 #we need to feed raw data set that we run pcr, not the pcr result. Don't but vital_pcr!
 
-vital_data <- s.vitals %>% 
+vital_data <- vitals %>% 
   select(-Patient_ID, -Diabetes_Status)
 
 pa_result <- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")
@@ -387,7 +388,7 @@ So, let's remove those overlapping features and try again.
 ```{r}
 library(psych)
 
-clean_vitals <- s.vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastolic_BP", "Resp_Rate", "SpO2")]
+clean_vitals <- vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastolic_BP", "Resp_Rate", "SpO2")]
 pa_result <- fa.parallel(clean_vitals, fa = "pc", main = "Parallel Analysis of Raw Vitals")
 ```
 

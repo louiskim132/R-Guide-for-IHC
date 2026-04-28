@@ -17,6 +17,7 @@ book:
     - Editing Data Frame_7.qmd
     - ggplot()_8.qmd
     - Dimension Reduction_9.qmd
+    #- Unsupervised Learning_10.qmd
 
 bibliography: references.bib
 
