@@ -104,6 +104,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="site_libs/plotly-binding-4.12.0/plotly.js"></script>
+
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link href="site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -251,7 +269,6 @@ window.Quarto = {
   <li><a href="#running-pca" id="toc-running-pca" class="nav-link" data-scroll-target="#running-pca"><span class="header-section-number">9.2.3</span> Running PCA</a></li>
   <li><a href="#scree-plot" id="toc-scree-plot" class="nav-link" data-scroll-target="#scree-plot"><span class="header-section-number">9.2.4</span> Scree Plot</a></li>
   <li><a href="#loading-plot" id="toc-loading-plot" class="nav-link" data-scroll-target="#loading-plot"><span class="header-section-number">9.2.5</span> Loading Plot</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">9.2.6</span> </a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">9.3</span> Conclusion</a></li>
   </ul>
@@ -917,11 +934,11 @@ Cumulative Proportion   0.7404 1.0000</code></pre>
 <p>As result, every time we add new PC, it will be orthogonal to all other PCs.</p>
 <p>Now, let’s perform PCA using all values in the data frame.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vital_pcr <span class="ot">&lt;-</span> vitals <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>vital_pca <span class="ot">&lt;-</span> vitals <span class="sc">%&gt;%</span> </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Patient_ID, <span class="sc">-</span>Diabetes_Status) <span class="sc">%&gt;%</span> <span class="co">#We perform PCA on numbers, not letters or ID (not clinic data)</span></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(vital_pcr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(vital_pca)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Importance of components:
                            PC1     PC2     PC3    PC4     PC5     PC6     PC7
@@ -934,39 +951,194 @@ Proportion of Variance 0.00018 0.00000 0.00000
 Cumulative Proportion  1.00000 1.00000 1.00000</code></pre>
 </div>
 </div>
+<section id="plotting-2d-pca" class="level4" data-number="9.2.3.1">
+<h4 data-number="9.2.3.1" class="anchored" data-anchor-id="plotting-2d-pca"><span class="header-section-number">9.2.3.1</span> Plotting 2D PCA</h4>
+<p>Last, let’s talk about how to plot points with reduced dimensions. Z scores for each PCs are stored in x column.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vital_pca<span class="sc">$</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            PC1        PC2          PC3        PC4        PC5         PC6
+[1,]   7.680040  13.182807  36.06060015 -2.7640197 -4.5683122 -0.06101698
+[2,]  15.014510 -14.278248  -0.05929277 14.7516176  0.6474765  2.87538978
+[3,]   5.202963 -18.693712   7.47594873  0.6466925  4.3063043 -2.59255931
+[4,]  19.057358  -3.374582  -8.05748756  1.6456300  5.7452675  1.39754810
+[5,] -18.757175  22.649940 -11.54579468  1.6559351 -4.0264108  0.04739488
+[6,]  -6.402557  30.037255  11.36392555  1.2340598 -2.5564387 -0.35401437
+            PC7        PC8          PC9         PC10
+[1,] -0.5266657 -0.7169341  0.014095817  0.018519763
+[2,] -2.7254001 -0.4772649  0.004905018 -0.002998570
+[3,] -0.0875641  0.3913365  0.025264285 -0.004508711
+[4,]  0.6150918 -0.8627118  0.035596341  0.002846064
+[5,]  2.5076141  0.1974710 -0.028075802 -0.011948684
+[6,]  0.3904225 -0.1838667 -0.020965832  0.002077527</code></pre>
+</div>
+</div>
+<p>Do you see how each data point (first point [,1], second point [,2]) have PC scores calculated all PCs? How can we plot them? If you thought ggplot, nice approach. But if you try to plot using ggplot() directly, you will run into error. Try to draw 2D PCA using first two PCs by yourself:</p>
+<pre><code>ggplot(vital_pca, aes(x = PC1, y = PC2))</code></pre>
+<p>Do you see the error saying object something? This is because how ggplot() works. In ggplot(), you assign the data frame you want to plot, and columns from that data frame you want to use as axis. Now, let’s look at how pca result is structured.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(vital_pca)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 5
+ $ sdev    : num [1:10] 19.56 19.02 14.09 8.93 3 ...
+ $ rotation: num [1:10, 1:10] -0.323686 -0.000336 0.467087 0.463065 0.517248 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:10] "Age" "Temp_C" "Heart_Rate" "Pulse_Machine_BPM" ...
+  .. ..$ : chr [1:10] "PC1" "PC2" "PC3" "PC4" ...
+ $ center  : Named num [1:10] 52.9 37 78.6 78.7 119.7 ...
+  ..- attr(*, "names")= chr [1:10] "Age" "Temp_C" "Heart_Rate" "Pulse_Machine_BPM" ...
+ $ scale   : logi FALSE
+ $ x       : num [1:100, 1:10] 7.68 15.01 5.2 19.06 -18.76 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : NULL
+  .. ..$ : chr [1:10] "PC1" "PC2" "PC3" "PC4" ...
+ - attr(*, "class")= chr "prcomp"</code></pre>
+</div>
+</div>
+<p>We told ggplot() to look at vital_pcr. However, there is no PC1 or PC2 - it’s buried in vital_pcr<span class="math inline">\(x. Because axis we want to plot is in the column within the data frame, ggplot() says "Oh, there is no PC1 or PC2 in the vital_pcr." So when you use ggplot(), you need to feed single dimension df. If you have multi dimensional df like this case, you must seperate the values first. And this is also reason why you cannot use aes(x=vital_pcr\)</span>x[, 1], y = …), even tho that is direct location where PC1 values are stored.</p>
+<p>So, you must tell ggplot() to look at vital_pca$x.</p>
+<p>Note: If your df’s column is not data frame, you will run into error again. Remember, ggplot(), which is part of tidyverse, is for visualizing tidy data. On the other hand, data frame can contain multiple different data type - each column can be list, vector, etc. Hence, if the multi-dimensional data within the df isn’t data frame, you must separate those values and create new data frame. We will revisit this point soon.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vital_pca<span class="sc">$</span>x, <span class="fu">aes</span>(PC1, PC2)) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-3d-pca" class="level4" data-number="9.2.3.2">
+<h4 data-number="9.2.3.2" class="anchored" data-anchor-id="plotting-3d-pca"><span class="header-section-number">9.2.3.2</span> Plotting 3D PCA</h4>
+<p>We just visualized 2D PCA. But sometimes we want to visualize 3D PCA because you need 3PCs. In this case, we move to other packages that helps us with 3D plots because ggplot() is specifically for 2D.</p>
+<ol type="1">
+<li>plotly package (Interactive 3D plot)</li>
+</ol>
+<p>First, let’s install the package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+다음의 패키지를 부착합니다: 'plotly'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    last_plot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    filter</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:graphics':
+
+    layout</code></pre>
+</div>
+</div>
+<p>Structure of plotly is almost same as ggplot(): You define target data frame, type of plot, and assign axis.</p>
+<pre><code>plot_ly(vital_pca$x[, 1:3], #target df
+        x = ~PC1, y = ~PC2, z = ~PC3, #assigning axis
+        # color = ~Category, 
+        # colors = c('#BF382A', '#0C4B8E'), # Optional custom colors if you want
+        type = 'scatter3d', #type of plot
+        mode = 'markers',
+        marker = list(size = 5)) %&gt;%
+  layout(title = "3D PCA Plot",
+         scene = list(xaxis = list(title = 'PC1'),
+                      yaxis = list(title = 'PC2'),
+                      zaxis = list(title = 'PC3')))</code></pre>
+<p>However, when you run that code, you will run into error. It’s because of the point we made earlier: Data we are trying to plot should be rigid data frame. Wait, what? vital_pca$x worked earlier for ggplot()!</p>
+<p>Technically, ggplot() still requires data frame for plotting. However, it has safety packages like ggfortify we used earlier. When data in ggplot() is not a data frame, ggfortify takes over and check “can I reframe this data into data frame?” If it can, ggplot runs as intented. If not, it will flag error.</p>
+<p>So, to use plotly, we must create sepereate df for 3D plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>plotly_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(vital_pca<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="co">#First three PCs</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(plotly_df, <span class="co">#target df</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>PC1, <span class="at">y =</span> <span class="sc">~</span>PC2, <span class="at">z =</span> <span class="sc">~</span>PC3, <span class="co">#assigning axis</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># color = ~Category, </span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># colors = c('#BF382A', '#0C4B8E'), # Optional custom colors if you want</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">'scatter3d'</span>, <span class="co">#type of plot</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">mode =</span> <span class="st">'markers'</span>,</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">"3D PCA Plot"</span>,</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">scene =</span> <span class="fu">list</span>(<span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'PC1'</span>),</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'PC2'</span>),</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">'PC3'</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ae54b0239b98978264b1" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-ae54b0239b98978264b1">{"x":{"visdat":{"126c6a7c80":["function () ","plotlyVisDat"]},"cur_data":"126c6a7c80","attrs":{"126c6a7c80":{"x":{},"y":{},"z":{},"mode":"markers","marker":{"size":5},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"3D PCA Plot","scene":{"xaxis":{"title":"PC1"},"yaxis":{"title":"PC2"},"zaxis":{"title":"PC3"}},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[7.6800402072406646,15.014510115530836,5.2029630802873736,19.057358019525445,-18.757175323884962,-6.4025565517193455,1.7306101426753286,-5.4940432691508807,13.077865067889398,-21.934507596102939,-8.6598762215406513,-10.78928505225905,19.2974881433578,-15.819951288431319,-22.258835820440407,13.040146653312501,70.211754726416743,-14.379202196650448,-30.128427422222654,-15.823818439005532,50.30445855173172,-15.906466162073135,34.236879469587535,-27.18261339506957,2.5997729040166142,-9.3786924486705256,-14.36759299089762,11.067271323428324,0.76677646096579943,37.351627151664502,5.8595822417399308,-0.27049335336427738,-20.378943197542263,-18.741541813625197,-11.503561145714036,14.986772606802438,-10.966767597398309,-5.7849958941106445,25.308242609192316,1.219295100825228,2.8150948132369384,-1.3117767220224494,-0.27060957409199732,18.778738459959762,-18.975926543864094,25.231714257897757,26.664512794864031,-15.116492606767995,19.50610020835715,12.282094943535705,7.7671041214490772,-4.1806331081730832,-7.3844013974364637,28.935870976966179,-24.297142607738692,-17.780675166915369,-13.492285847578795,3.889017214849452,4.0849687134404338,-30.477519303823183,-24.213720304115636,35.718911521812693,17.611360361070673,-8.2258940171694093,31.049206350988054,8.1198998028083693,-40.728129913250022,33.503331683489321,6.3260849314380003,14.70964775282259,10.801298202237138,-18.280154061050197,-1.8223132108168023,-7.6644075676152958,18.897881933693551,10.407259832832951,-29.789932241799541,-7.0130174365381919,-8.4645034179799854,-28.951809357126994,-6.7394908222555614,-24.344833443964966,-10.288183999451361,-3.6566269302786321,10.730247119599316,-5.3761907273760539,-37.774293775973405,-18.782709001551765,-6.5816875481473911,0.61747908035720167,13.239409703223494,-16.058276049910894,7.974746481141934,24.199318384039771,26.532660476901128,0.5832038135404457,-12.653274862878071,-2.4322836477081027,-14.619541446065707,3.6875053285661501],"y":[13.182807337225498,-14.278248387327475,-18.693711923877672,-3.3745824964902855,22.64993984756574,30.037254773155325,14.978430361884927,12.554332998529084,2.430681540437956,-45.028006733232395,2.1594698909211396,15.04668978854901,21.646871947942017,-9.4388202769194773,-5.9657675670954013,5.0130206597202118,-10.83358086609592,-18.757876116681626,-2.1008183781699548,17.986203042822492,5.6607261307400778,-10.956324595666667,14.979656661798067,-3.2901447987499925,16.14981468674727,-12.238125914894985,24.643203971500853,33.550377307036648,-19.757807014822244,28.431970259369869,32.126557572366721,5.1265275015906964,2.1881892429438579,25.732619628084691,18.116485524280687,9.562935407303609,17.182919766436008,-27.666023977885786,27.317043409631392,8.0120928656493895,-24.343806666702896,-31.777456185023656,-3.3056105292079265,21.808150976659622,8.8047337941574035,30.497845586060301,-15.144253753126153,26.698111440801942,-10.615088731753728,-20.640888181473372,16.801778674829524,-16.621499278126997,16.007295053910898,0.42274117934345662,2.2649874828384386,11.719202329917778,-26.837882819081255,-31.153282173404527,-23.070244431526032,-2.0116623215387155,18.502768340436262,13.660365291180387,10.989779020160052,-26.327441207184201,11.262784071400302,-23.991075660457504,-19.444809753754843,-3.5172019906465826,-28.159722271361204,-17.259878072839317,18.019876034420513,-14.229719365816464,-8.3463915353261271,-5.9677695327967104,-2.8111764807996513,-24.055177436740102,11.556221305471107,4.4010148675729175,15.94564158649608,9.9457213809684077,30.46174943420904,16.929961851484084,-18.168869118814087,-22.386962800167161,21.692817538042078,14.435188478941992,12.565918429663988,13.385118033879362,-32.611526614446262,-13.990607543299488,-16.570905033076404,13.903808930665521,-24.435534970339319,-22.523956677100813,-24.189857713801004,-34.742366293965887,-4.8787891748067169,-28.2738702177652,10.42821413489189,15.206506211543857],"z":[36.060600153191707,-0.059292768258117357,7.4759487255335833,-8.0574875574225224,-11.545794679644795,11.363925549659113,-19.522909379743382,11.733413970990847,-23.304456502036132,2.0194387100900291,-14.280153785666329,-25.544888611106149,-16.827971439921118,3.9599168254684725,13.250107465902126,10.323022033610684,12.840168149890109,-18.42317087479341,11.380523012236806,9.2138954556349209,12.249157102614053,10.698201498066853,10.442539747183742,6.4407323206499045,16.060952888966192,-7.2224993016026984,-10.100747320728789,-16.88393813870265,2.1970264290811432,7.0921350213081897,24.394390764439972,-15.045412303179074,23.549474010822166,27.063064543548467,-11.232402089819598,-3.45804461268721,-10.710745500997866,28.99918585069311,13.891351686885892,4.5055887608679237,8.1903524751424257,-0.20256238848654712,2.8593816519109665,-22.004473586670986,2.8053532106012646,3.3795795795740515,1.6176646960025847,1.9500971109075416,-1.7603883724084817,6.3840435021731512,10.247122360611165,-13.855312781029937,-3.4309013672825559,-5.8003469589357524,0.22025459976524317,-17.486683667989219,16.924865324418924,9.334551133817353,26.629836900706977,-13.33337404344566,-6.6727169809685503,-5.3159969006542189,-31.880635514289068,-6.0338364614746185,-18.610127195181743,-22.396089631604376,-7.9094325079760139,-10.530235861155063,-13.477764658463386,16.231186845303839,-5.8675477038655082,-15.163650278700192,3.3333043663081794,-5.9082621316501065,-5.586869805544799,-4.2616262054607557,1.4542575376704598,6.2857446526038521,-4.2254957156195161,9.0935027947203153,27.089775516014765,-2.1568532815357511,0.70956689742195567,-25.431824005532228,-2.2963573489445332,10.045011992759559,-16.442789365523367,-1.6416413027415848,-14.27543667736631,23.99906488636006,12.972733075347042,6.1466587047258594,21.346681389750152,-32.31435272300974,6.2196989758970043,-3.8169593538752897,12.952155031550364,-1.2274421497357109,-6.3159198911974848,-5.7733842047721406],"mode":"markers","marker":{"color":"rgba(31,119,180,1)","size":5,"line":{"color":"rgba(31,119,180,1)"}},"type":"scatter3d","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Beautiful 3D plot!</p>
+<p>There is another way to plot 3D PCA, and this is static plot that fits better for reports.</p>
+<ol start="2" type="1">
+<li>Static 3D</li>
+</ol>
+<p>For this method, we use package called “scatterplot3d”</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scatterplot3d)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic 3D scatter plot</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>s3d <span class="ot">&lt;-</span> <span class="fu">scatterplot3d</span>(plotly_df, </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">pch =</span> <span class="dv">16</span>, <span class="co">#pch is plotting character, like a shape of points</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>                     <span class="co"># color = as.numeric(as.factor(column, declare column like color = in ggplot())),</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">main =</span> <span class="st">"3D PCA"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: Add a legend for color if you want</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co"># legend(s3d$xyz.convert(8, 3, 4), legend = levels(as.factor(column)), col = 1:length(levels(as.factor(column))), pch = 16)</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># s3d$xyz.convert(8, 3, 4) is a (x,y,z) location of legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="plotting-4d-and-beyond" class="level4" data-number="9.2.3.3">
+<h4 data-number="9.2.3.3" class="anchored" data-anchor-id="plotting-4d-and-beyond"><span class="header-section-number">9.2.3.3</span> Plotting 4D and beyond</h4>
+<p>From here, we cannot add physical visualiable 4th, 5th axis that are orthogonal. So, we can do this in two ways.</p>
+<p>For 4D: We can add colors to 3D plot to add 4th dimension. Or, we could start utilizing facets here. For 5D and beyond: facets…or could mix colors to display sub dimensions too.</p>
+</section>
 </section>
 <section id="scree-plot" class="level3" data-number="9.2.4">
 <h3 data-number="9.2.4" class="anchored" data-anchor-id="scree-plot"><span class="header-section-number">9.2.4</span> Scree Plot</h3>
 <p>Now, we have 10 PCs because we have 10 features! When we perform further data analysis, should we use all 10PCs? No, the purpose of PCA was to reduce dimension to resolve 3 issues we discussed earlier. Then how many PCs should we use? Threshold percent of cumulative explained variance, we talked about it during the meeting.</p>
 <p>Here, let’s talk about another method of determining how many PCs we should use: Elbow method through scree plot. Scree plot is a figure where you plot proportion of variance per PC (x axis - PCs, y axis - explained variance). To draw a plot, we use screeplot().</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screeplot</span>(vital_pcr, <span class="at">type =</span> <span class="st">"lines"</span>, <span class="at">main =</span> <span class="st">"Scree Plot"</span>) <span class="co">#If you leave type empty, default is bar graph</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screeplot</span>(vital_pca, <span class="at">type =</span> <span class="st">"lines"</span>, <span class="at">main =</span> <span class="st">"Scree Plot"</span>) <span class="co">#If you leave type empty, default is bar graph</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Or, we can save percent variances manually and use ggplot().</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Square std to find variance, turning it into percent variance</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>var_prop <span class="ot">&lt;-</span> vital_pcr<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(vital_pcr<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Create var_prop data frame for ggplot()</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>scree_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(var_prop), <span class="at">Explained_Variance =</span> var_prop)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(scree_data, <span class="fu">aes</span>(PC, Explained_Variance)) <span class="sc">+</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">length</span>(scree_data<span class="sc">$</span>PC)) <span class="sc">+</span> </span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Principal Component"</span>, <span class="at">y =</span> <span class="st">"Proportion of Variance Explained"</span>) <span class="sc">+</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Square std to find variance, turning it into percent variance</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>var_prop <span class="ot">&lt;-</span> vital_pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(vital_pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Create var_prop data frame for ggplot()</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>scree_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(var_prop), <span class="at">Explained_Variance =</span> var_prop)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(scree_data, <span class="fu">aes</span>(PC, Explained_Variance)) <span class="sc">+</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">length</span>(scree_data<span class="sc">$</span>PC)) <span class="sc">+</span> </span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Principal Component"</span>, <span class="at">y =</span> <span class="st">"Proportion of Variance Explained"</span>) <span class="sc">+</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -991,7 +1163,7 @@ fa.parallel(our actual data frame, mode, number of random entries we need, main 
 <pre><code>library(psych)
 
 #fa = "PC" tells code that we're doing parallel analysis for PCA
-#we need to feed raw data set that we run pcr, not the pcr result. Don't but vital_pcr!
+#we need to feed raw data set that we run pca, not the pca result. Don't but vital_pca!
 
 vital_data &lt;- vitals %&gt;% 
   select(-Patient_ID, -Diabetes_Status)
@@ -1003,7 +1175,7 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 <p>Heywood case means two or more features have 100% or higher multicollinearity. This make sense! If you revisit features, we have derived features like MAP, which are basically same thing as regular SBP/DBP since the source of features are identical. So, code is telling us “your data set is not processed well enough for PCA!”</p>
 <p>So, let’s remove those overlapping features and try again.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 다음의 패키지를 부착합니다: 'psych'</code></pre>
@@ -1013,12 +1185,12 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 
     %+%, alpha</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>clean_vitals <span class="ot">&lt;-</span> vitals[, <span class="fu">c</span>(<span class="st">"Age"</span>, <span class="st">"Temp_C"</span>, <span class="st">"Heart_Rate"</span>, <span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>, <span class="st">"Resp_Rate"</span>, <span class="st">"SpO2"</span>)]</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pa_result <span class="ot">&lt;-</span> <span class="fu">fa.parallel</span>(clean_vitals, <span class="at">fa =</span> <span class="st">"pc"</span>, <span class="at">main =</span> <span class="st">"Parallel Analysis of Raw Vitals"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>clean_vitals <span class="ot">&lt;-</span> vitals[, <span class="fu">c</span>(<span class="st">"Age"</span>, <span class="st">"Temp_C"</span>, <span class="st">"Heart_Rate"</span>, <span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>, <span class="st">"Resp_Rate"</span>, <span class="st">"SpO2"</span>)]</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>pa_result <span class="ot">&lt;-</span> <span class="fu">fa.parallel</span>(clean_vitals, <span class="at">fa =</span> <span class="st">"pc"</span>, <span class="at">main =</span> <span class="st">"Parallel Analysis of Raw Vitals"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1048,16 +1220,16 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 </ol>
 <p>Let’s look at how it’s performed using missMDA package, which helps us with resampling testings.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Install package that helps us dividing data sets and running cross validation (resampling)</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("missMDA")</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(missMDA)</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Run the Cross-Validation Stress Test</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ncp.max = 6: Tells the computer to test models using anywhere from 0 to 6 components</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co"># method.cv = "Kfold": Tells the computer to use the "hide 20% of the patients" method</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>cv_result <span class="ot">&lt;-</span> <span class="fu">estim_ncpPCA</span>(clean_vitals, <span class="at">ncp.max =</span> <span class="dv">6</span>, <span class="at">method.cv =</span> <span class="st">"Kfold"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Install package that helps us dividing data sets and running cross validation (resampling)</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("missMDA")</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(missMDA)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Run the Cross-Validation Stress Test</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ncp.max = 6: Tells the computer to test models using anywhere from 0 to 6 components</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="co"># method.cv = "Kfold": Tells the computer to use the "hide 20% of the patients" method</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>cv_result <span class="ot">&lt;-</span> <span class="fu">estim_ncpPCA</span>(clean_vitals, <span class="at">ncp.max =</span> <span class="dv">6</span>, <span class="at">method.cv =</span> <span class="st">"Kfold"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   |                                                                            
@@ -1261,30 +1433,30 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
   |                                                                            
   |======================================================================| 100%</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cv_result<span class="sc">$</span>ncp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>cv_result<span class="sc">$</span>ncp</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code>[1] 2</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the correct X-axis numbers (starting at 0)</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># length(cv_result$criterion) is 7, so this makes a sequence: 0 ~ 6</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>x_values <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(cv_result<span class="sc">$</span>criterion) <span class="sc">-</span>  <span class="dv">1</span>)</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw the plot with the explicitly defined X and Y axes</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> x_values, </span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> cv_result<span class="sc">$</span>criterion, </span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"b"</span>,          </span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>,            </span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"blue"</span>,        </span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">2</span>,             </span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"True Number of Principal Components"</span>, </span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Prediction Error (MSEP)"</span>, </span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Cross-Validation: Finding the Optimal Cutoff"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the correct X-axis numbers (starting at 0)</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="co"># length(cv_result$criterion) is 7, so this makes a sequence: 0 ~ 6</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>x_values <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">length</span>(cv_result<span class="sc">$</span>criterion) <span class="sc">-</span>  <span class="dv">1</span>)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Draw the plot with the explicitly defined X and Y axes</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> x_values, </span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> cv_result<span class="sc">$</span>criterion, </span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"b"</span>,          </span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>,            </span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"blue"</span>,        </span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">2</span>,             </span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"True Number of Principal Components"</span>, </span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Prediction Error (MSEP)"</span>, </span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Cross-Validation: Finding the Optimal Cutoff"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1300,11 +1472,11 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 <li>First is a long ggplot() way, by extracting and plotting like we did in chapter8 (try it yourself)</li>
 </ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Let's seperate loading values. </span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>loading <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vital_pcr<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">%&gt;%</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">"variable"</span>)                 </span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>loading</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1. Let's seperate loading values. </span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>loading <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(vital_pca<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames_to_column</span>(<span class="at">var=</span><span class="st">"variable"</span>)                 </span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>loading</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            variable           PC1           PC2          PC3          PC4
 1                Age -0.3236863010  0.9361901311 -0.084249562 -0.105983485
@@ -1331,48 +1503,48 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Let's plot them. Here, we only did up to PC3, but remember that we actually had 6 features. You need to repeat 6 ggplot() for full visualization.</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Install and load patchwork (the best plot-stitching tool in R)</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Build three individual plots using your original wide columns</span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(loading, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> PC1)) <span class="sc">+</span> </span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PC1"</span>)</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(loading, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> PC2)) <span class="sc">+</span> </span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PC2"</span>)</span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(loading, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> PC3)) <span class="sc">+</span> </span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PC3"</span>)</span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co">#2. Let's plot them. Here, we only did up to PC3, but remember that we actually had 6 features. You need to repeat 6 ggplot() for full visualization.</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Install and load patchwork (the best plot-stitching tool in R)</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Build three individual plots using your original wide columns</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(loading, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> PC1)) <span class="sc">+</span> </span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PC1"</span>)</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(loading, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> PC2)) <span class="sc">+</span> </span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PC2"</span>)</span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(loading, <span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> PC3)) <span class="sc">+</span> </span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PC3"</span>)</span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-24-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>p3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>p3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-24-3.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1381,22 +1553,22 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 <pre><code>pivot_longer()</code></pre>
 <p>This function tells ggplot to combine data across different column so that you can assign multiple column for one axis. Then, we could use facet_wrap() because each column becomes subtype you can seperate!</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>loading <span class="sc">%&gt;%</span> <span class="co">#Pass loading data pivot_loner()</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(PC1, PC2, PC3), </span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"component"</span>, </span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"loading_score"</span>) <span class="sc">%&gt;%</span> <span class="co">#Pass combined data to ggplot() without variable statement</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> loading_score)) <span class="sc">+</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> component) <span class="sc">+</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Principal Component Loadings"</span>,</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Clinical Variable"</span>,</span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Loading Score"</span>) <span class="sc">+</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>loading <span class="sc">%&gt;%</span> <span class="co">#Pass loading data pivot_loner()</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(PC1, PC2, PC3), </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"component"</span>, </span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"loading_score"</span>) <span class="sc">%&gt;%</span> <span class="co">#Pass combined data to ggplot() without variable statement</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> variable, <span class="at">y =</span> loading_score)) <span class="sc">+</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> component) <span class="sc">+</span></span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Principal Component Loadings"</span>,</span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Clinical Variable"</span>,</span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Loading Score"</span>) <span class="sc">+</span></span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1408,24 +1580,21 @@ pa_result &lt;- fa.parallel(vital_data, fa = "PC", main = "Parallel Analysis")</
 <li>First way is ggplot(). There is a separate package called ggfortify, which allow us to build ggplot() for PCA result. We use autoplot() to visualize the result, and change what varaible we want to plot by using the arguments. Google for plotting different features!</li>
 </ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify) </span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(vital_pcr, <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify) </span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(vital_pca, <span class="at">loadings =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label =</span> <span class="cn">TRUE</span>, <span class="at">loadings.label.size =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Dimension-Reduction_9_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loadings = true (plot loading on PCA plot)</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># loadings.label = true (label which arrow is which feature)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loadings = true (plot loading on PCA plot)</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="co"># loadings.label = true (label which arrow is which feature)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now, instead of reading multiple loading plots separately and say “higher age pushes points to the left side of PC1, and upper side of PC2,” we can look at PCA plot and recognize how each features change point’s location on PCA directly.</p>
 </section>
-</section>
-<section id="section" class="level3" data-number="9.2.6">
-<h3 data-number="9.2.6" class="anchored" data-anchor-id="section"><span class="header-section-number">9.2.6</span> </h3>
 </section>
 </section>
 <section id="conclusion" class="level2" data-number="9.3">

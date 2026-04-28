@@ -29,6 +29,9 @@ pca_vitals <- vitals[, c("Age", "Temp_C", "Heart_Rate", "Systolic_BP", "Diastoli
   prcomp()
 
 summary(pca_vitals)
+
+ggplot(pca_vitals, aes(pca_vitals$x[,1])) + 
+  geom_point()
 ```
 
 d

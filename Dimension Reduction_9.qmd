@@ -300,12 +300,123 @@ As result, every time we add new PC, it will be orthogonal to all other PCs.
 Now, let's perform PCA using all values in the data frame.
 
 ```{r}
-vital_pcr <- vitals %>% 
+vital_pca <- vitals %>% 
   select(-Patient_ID, -Diabetes_Status) %>% #We perform PCA on numbers, not letters or ID (not clinic data)
   prcomp()
 
-summary(vital_pcr)
+summary(vital_pca)
 ```
+#### Plotting 2D PCA
+
+Last, let's talk about how to plot points with reduced dimensions. Z scores for each PCs are stored in x column.
+
+```{r}
+head(vital_pca$x)
+```
+
+Do you see how each data point (first point [,1], second point [,2]) have PC scores calculated all PCs? How can we plot them? If you thought ggplot, nice approach. But if you try to plot using ggplot() directly, you will run into error. Try to draw 2D PCA using first two PCs by yourself:
+
+```{}
+ggplot(vital_pca, aes(x = PC1, y = PC2))
+```
+
+Do you see the error saying object something? This is because how ggplot() works. In ggplot(), you assign the data frame you want to plot, and columns from that data frame you want to use as axis. Now, let's look at how pca result is structured. 
+
+```{r}
+str(vital_pca)
+```
+
+We told ggplot() to look at vital_pcr. However, there is no PC1 or PC2 - it's buried in vital_pcr$x. Because axis we want to plot is in the column within the data frame, ggplot() says "Oh, there is no PC1 or PC2 in the vital_pcr." So when you use ggplot(), you need to feed single dimension df. If you have multi dimensional df like this case, you must seperate the values first. And this is also reason why you cannot use aes(x=vital_pcr$x[, 1], y = ...), even tho that is direct location where PC1 values are stored. 
+
+So, you must tell ggplot() to look at vital_pca$x.
+
+Note: If your df's column is not data frame, you will run into error again. Remember, ggplot(), which is part of tidyverse, is for visualizing tidy data. On the other hand, data frame can contain multiple different data type - each column can be list, vector, etc. Hence, if the multi-dimensional data within the df isn't data frame, you must separate those values and create new data frame. We will revisit this point soon.
+
+```{r}
+ggplot(vital_pca$x, aes(PC1, PC2)) +
+  geom_point()
+```
+
+#### Plotting 3D PCA
+
+We just visualized 2D PCA. But sometimes we want to visualize 3D PCA because you need 3PCs. In this case, we move to other packages that helps us with 3D plots because ggplot() is specifically for 2D.
+
+1) plotly package (Interactive 3D plot)
+
+First, let's install the package.
+
+```{r}
+library(plotly)
+```
+
+Structure of plotly is almost same as ggplot(): You define target data frame, type of plot, and assign axis.
+
+```{}
+plot_ly(vital_pca$x[, 1:3], #target df
+        x = ~PC1, y = ~PC2, z = ~PC3, #assigning axis
+        # color = ~Category, 
+        # colors = c('#BF382A', '#0C4B8E'), # Optional custom colors if you want
+        type = 'scatter3d', #type of plot
+        mode = 'markers',
+        marker = list(size = 5)) %>%
+  layout(title = "3D PCA Plot",
+         scene = list(xaxis = list(title = 'PC1'),
+                      yaxis = list(title = 'PC2'),
+                      zaxis = list(title = 'PC3')))
+```
+
+However, when you run that code, you will run into error. It's because of the point we made earlier: Data we are trying to plot should be rigid data frame. Wait, what? vital_pca$x worked earlier for ggplot()!
+
+Technically, ggplot() still requires data frame for plotting. However, it has safety packages like ggfortify we used earlier. When data in ggplot() is not a data frame, ggfortify takes over and check "can I reframe this data into data frame?" If it can, ggplot runs as intented. If not, it will flag error. 
+
+So, to use plotly, we must create sepereate df for 3D plot. 
+
+```{r}
+plotly_df <- as.data.frame(vital_pca$x[, 1:3]) #First three PCs
+
+
+plot_ly(plotly_df, #target df
+        x = ~PC1, y = ~PC2, z = ~PC3, #assigning axis
+        # color = ~Category, 
+        # colors = c('#BF382A', '#0C4B8E'), # Optional custom colors if you want
+        type = 'scatter3d', #type of plot
+        mode = 'markers',
+        marker = list(size = 5)) %>%
+  layout(title = "3D PCA Plot",
+         scene = list(xaxis = list(title = 'PC1'),
+                      yaxis = list(title = 'PC2'),
+                      zaxis = list(title = 'PC3')))
+```
+
+Beautiful 3D plot! 
+
+There is another way to plot 3D PCA, and this is static plot that fits better for reports.
+
+2) Static 3D
+
+For this method, we use package called "scatterplot3d"
+
+```{r}
+library(scatterplot3d)
+
+# Basic 3D scatter plot
+s3d <- scatterplot3d(plotly_df, 
+                     pch = 16, #pch is plotting character, like a shape of points
+                     # color = as.numeric(as.factor(column, declare column like color = in ggplot())),
+                     main = "3D PCA")
+
+# Optional: Add a legend for color if you want
+# legend(s3d$xyz.convert(8, 3, 4), legend = levels(as.factor(column)), col = 1:length(levels(as.factor(column))), pch = 16)
+
+# s3d$xyz.convert(8, 3, 4) is a (x,y,z) location of legend
+```
+
+#### Plotting 4D and beyond
+
+From here, we cannot add physical visualiable 4th, 5th axis that are orthogonal. So, we can do this in two ways.
+
+For 4D: We can add colors to 3D plot to add 4th dimension. Or, we could start utilizing facets here.
+For 5D and beyond: facets...or could mix colors to display sub dimensions too.
 
 ### Scree Plot
 
@@ -314,14 +425,14 @@ Now, we have 10 PCs because we have 10 features! When we perform further data an
 Here, let's talk about another method of determining how many PCs we should use: Elbow method through scree plot. Scree plot is a figure where you plot proportion of variance per PC (x axis - PCs, y axis - explained variance). To draw a plot, we use screeplot().
 
 ```{r}
-screeplot(vital_pcr, type = "lines", main = "Scree Plot") #If you leave type empty, default is bar graph
+screeplot(vital_pca, type = "lines", main = "Scree Plot") #If you leave type empty, default is bar graph
 ```
 
 Or, we can save percent variances manually and use ggplot().
 
 ```{r}
 #1. Square std to find variance, turning it into percent variance
-var_prop <- vital_pcr$sdev^2 / sum(vital_pcr$sdev^2)
+var_prop <- vital_pca$sdev^2 / sum(vital_pca$sdev^2)
 
 #2. Create var_prop data frame for ggplot()
 scree_data <- data.frame(PC = 1:length(var_prop), Explained_Variance = var_prop)
@@ -366,7 +477,7 @@ Before we run the code, don't forget to load the package!
 library(psych)
 
 #fa = "PC" tells code that we're doing parallel analysis for PCA
-#we need to feed raw data set that we run pcr, not the pcr result. Don't but vital_pcr!
+#we need to feed raw data set that we run pca, not the pca result. Don't but vital_pca!
 
 vital_data <- vitals %>% 
   select(-Patient_ID, -Diabetes_Status)
@@ -468,7 +579,7 @@ There are few ways to do this.
 ```{r}
 #1. Let's seperate loading values. 
 
-loading <- data.frame(vital_pcr$rotation[,1:6]) %>%
+loading <- data.frame(vital_pca$rotation[,1:6]) %>%
             rownames_to_column(var="variable")                 
 loading
 ```
@@ -532,15 +643,13 @@ While checking loadings per PC helps us with understanding how each feature infl
 ```{r}
 library(ggfortify) 
 
-autoplot(vital_pcr, loadings = TRUE, loadings.label = TRUE, loadings.label.size = 4)
+autoplot(vital_pca, loadings = TRUE, loadings.label = TRUE, loadings.label.size = 4)
 
 # loadings = true (plot loading on PCA plot)
 # loadings.label = true (label which arrow is which feature)
 ```
 
 Now, instead of reading multiple loading plots separately and say "higher age pushes points to the left side of PC1, and upper side of PC2," we can look at PCA plot and recognize how each features change point's location on PCA directly.
-
-### 
 
 ## Conclusion
 
