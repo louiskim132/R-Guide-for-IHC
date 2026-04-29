@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>6&nbsp; Data Frame – R Guide</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,15 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./List_5.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -160,9 +162,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R Guide</a> 
     </div>
@@ -232,6 +232,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="./Dimension Reduction_9.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dimension Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Unsupervised Learning_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
     </ul>
@@ -665,21 +671,19 @@ C 92</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "_quarto.yml"                   "cover.png"                    
  [3] "DataFrame_6.qmd"               "DataFrame_6.rmarkdown"        
- [5] "Dimension-Reduction_9_files"   "Dimension Reduction_9.html"   
- [7] "Dimension Reduction_9.qmd"     "Dimension Reduction_9_files"  
- [9] "docs"                          "Editing Data Frame_7.qmd"     
-[11] "ggplot()_8.qmd"                "images"                       
-[13] "index.html"                    "index.qmd"                    
-[15] "List_5.html"                   "List_5.qmd"                   
-[17] "Matrix_4.html"                 "Matrix_4.qmd"                 
-[19] "R Guide.Rproj"                 "references.bib"               
-[21] "Revised_CSV"                   "Revised_CSV2"                 
-[23] "site_libs"                     "Structure_of_R_Studio_1.html" 
-[25] "Structure_of_R_Studio_1.qmd"   "Test_excel.csv"               
-[27] "Test_txt.txt"                  "Unsupervised Learning_10.qmd" 
-[29] "Variables_Calculations_2.html" "Variables_Calculations_2.qmd" 
-[31] "Vectors_3.html"                "Vectors_3.qmd"                
-[33] "Vitals.csv"                   </code></pre>
+ [5] "Dimension Reduction_9.qmd"     "docs"                         
+ [7] "Editing Data Frame_7.qmd"      "ggplot()_8.qmd"               
+ [9] "images"                        "index.html"                   
+[11] "index.qmd"                     "List_5.html"                  
+[13] "List_5.qmd"                    "Matrix_4.html"                
+[15] "Matrix_4.qmd"                  "R Guide.Rproj"                
+[17] "references.bib"                "Revised_CSV"                  
+[19] "Revised_CSV2"                  "site_libs"                    
+[21] "Structure_of_R_Studio_1.html"  "Structure_of_R_Studio_1.qmd"  
+[23] "Test_excel.csv"                "Test_txt.txt"                 
+[25] "Unsupervised Learning_10.qmd"  "Variables_Calculations_2.html"
+[27] "Variables_Calculations_2.qmd"  "Vectors_3.html"               
+[29] "Vectors_3.qmd"                 "Vitals.csv"                   </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="at">pattern =</span> <span class="st">"txt"</span>) <span class="co">#list files with contains "txt" in the name only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">

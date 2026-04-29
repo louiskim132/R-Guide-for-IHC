@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; Unsupervised Learning – R Guide</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Dimension Reduction_9.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Unsupervised Learning_10.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Guide</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to “Introduction to R”</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Structure_of_R_Studio_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Structure of R Studio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Variables_Calculations_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Types and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Vectors_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Vectors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Matrix_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Matrix</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./List_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">List</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DataFrame_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Frame</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Editing Data Frame_7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Editing Data Frame</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot()_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Vizualizing Data with ggplot2</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Dimension Reduction_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dimension Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Unsupervised Learning_10.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#clustering" id="toc-clustering" class="nav-link active" data-scroll-target="#clustering"><span class="header-section-number">10.1</span> Clustering</a>
+  <ul class="collapse">
+  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="header-section-number">10.1.1</span> K-means Clustering</a></li>
+  </ul></li>
+  <li><a href="#association-rule-learning" id="toc-association-rule-learning" class="nav-link" data-scroll-target="#association-rule-learning"><span class="header-section-number">10.2</span> Association Rule Learning</a>
+  <ul class="collapse">
+  <li><a href="#concept-of-assocication-rule-learning" id="toc-concept-of-assocication-rule-learning" class="nav-link" data-scroll-target="#concept-of-assocication-rule-learning"><span class="header-section-number">10.2.1</span> Concept of assocication rule learning</a></li>
+  <li><a href="#running-assocation-rule-learning" id="toc-running-assocation-rule-learning" class="nav-link" data-scroll-target="#running-assocation-rule-learning"><span class="header-section-number">10.2.2</span> Running Assocation Rule Learning</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this chapter, let’s see how we can label data points when we don’t have clear answer for model to test out their performance. As we discussed during the meeting, unsupervised learning group similar points by “how close/similar they are” on the space. If we have points like (1,1), (1,2), and (1, 100), and two types of data, we can say first two points are probably same type of data points while last one is different kind, since first two are way more closer than where third point is. Since we reviewed what clustering is, and how each models work during the meeting, we will only focus on how to code it. Please let me know if you would like more background/conceptual explanation to be uploaded.</p>
+<p>First, let’s read vitals csv to work with!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+다음의 패키지를 부착합니다: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ forcats   1.0.1     ✔ readr     2.2.0
+✔ ggplot2   4.0.3     ✔ stringr   1.6.0
+✔ lubridate 1.9.5     ✔ tibble    3.3.1
+✔ purrr     1.2.2     ✔ tidyr     1.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>vitals <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Vitals.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vitals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Patient_ID Age Diabetes_Status Temp_C Heart_Rate Pulse_Machine_BPM
+1          1  60             Yes   37.6        101               104
+2          2  33             Yes   37.5         81                85
+3          3  33              No   36.5         82                80
+4          4  44             Yes   37.9         84                82
+5          5  81              No   36.7         70                68
+6          6  82              No   37.1         87                88
+  Systolic_BP Diastolic_BP   MAP Resp_Rate SpO2 Shock_Index
+1         109           67  81.0        10   96        0.93
+2         117           90  99.0        17   94        0.69
+3         117           74  88.3        20   98        0.70
+4         132           86 101.3        22   94        0.64
+5         116           81  92.7        12   96        0.60
+6         112           77  88.7        13   96        0.78</code></pre>
+</div>
+</div>
+<section id="clustering" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="clustering"><span class="header-section-number">10.1</span> Clustering</h2>
+<section id="k-means-clustering" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">10.1.1</span> K-means Clustering</h3>
+<section id="concept-of-k-means" class="level4" data-number="10.1.1.1">
+<h4 data-number="10.1.1.1" class="anchored" data-anchor-id="concept-of-k-means"><span class="header-section-number">10.1.1.1</span> Concept of K-means</h4>
+<p>While explanation is available in the slide, let’s go over quickly. Again, core idea of K-means starts from the idea that “similar types of data will have similar feature values, so they will appear closer.” However, calculating each points raises concern about “how do we know if two points are closer than others” due to lack of reference point. As solution, K-means compares the distance of point to randomly selected centroid (center point).</p>
+<p>First, K number of centroids are randomly placed on the space.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-891607745.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="246"></p>
+</figure>
+</div>
+<p>Second, distance between each point to centroids are calculated. Each points are grouped with centroids closer to them.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-3786120522.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="246"></p>
+</figure>
+</div>
+<p>Third, Centroids are moved to the center of the points with same group. For example, in the image above, centroid blue X will move to (average x coordinate of blue points, average y coordinate of blue points). This way, average distance between individual point and centroid decreases.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1705379341.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="246"></p>
+</figure>
+</div>
+<p>Forth, Step 2 and 3 are repeated. As cycle goes on, average distance decreases further.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-4092216113.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="246"></p>
+</figure>
+</div>
+<p>Last, cycle stops when centroid ends up with same location two cycles in a row. This is when average centroid-points distance is minimized, which means that centroid is in the middle of cluster.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1343048737.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="245"></p>
+</figure>
+</div>
+</section>
+<section id="running-k-means" class="level4" data-number="10.1.1.2">
+<h4 data-number="10.1.1.2" class="anchored" data-anchor-id="running-k-means"><span class="header-section-number">10.1.1.2</span> Running K-means</h4>
+<p>First, let’s perform 2D PCA so that we can visualize clustering result in a way we can visually understand.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting Numeric values only -&gt; Standardizing it -&gt; run PCA</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pca_vitals <span class="ot">&lt;-</span> vitals[, <span class="fu">c</span>(<span class="st">"Age"</span>, <span class="st">"Temp_C"</span>, <span class="st">"Heart_Rate"</span>, <span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>, <span class="st">"Resp_Rate"</span>, <span class="st">"SpO2"</span>)] <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), as.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca_vitals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                         PC1    PC2    PC3    PC4    PC5     PC6     PC7
+Standard deviation     1.307 1.1170 1.0219 0.9835 0.9407 0.79997 0.71293
+Proportion of Variance 0.244 0.1782 0.1492 0.1382 0.1264 0.09142 0.07261
+Cumulative Proportion  0.244 0.4222 0.5714 0.7096 0.8360 0.92739 1.00000</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_vitals<span class="sc">$</span>x, <span class="fu">aes</span>(PC1, PC2)) <span class="sc">+</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Typically, R calculates distance between points using dist() function.</p>
+<pre><code>dist(data range, method)
+
+Default method is Euclidean distance, but there are many other methods such as Manhattan, Maximum, etc. Check slides for more methods!</code></pre>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dist</span>(vitals<span class="sc">$</span>Age[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   1  2  3  4  5
+2 27            
+3 27  0         
+4 16 11 11      
+5 21 48 48 37   
+6 22 49 49 38  1</code></pre>
+</div>
+</div>
+<p>Using dist(), we just calculated distance among first six Age values. However, calculating every single point pairs manually would be tiring. So, we have function that execute K-means clustering for us, using kmean() function within stat package. K-means goes in following steps (code wise). We will review each part of the code below.</p>
+<pre><code>#1 Set seeds
+set.seed(123) # Set random points around the data. you throw "seeds" like farmer
+
+#2 Run the Elbow Method test
+fviz_nbclust(target data, kmeans, method = "wss") +
+  labs(title = "Elbow Method for Determining Optimal K") +
+  theme_minimal()
+  
+#3 Set seeds again
+set.seed(123)
+
+#4 Run the K-means clustering and save the result
+km_result &lt;- kmeans(target data, 
+                    centers = 3,      
+                    nstart = 25)
+                    
+#5 Visualize the result
+# Draw the final cluster map
+fviz_cluster(km_result, 
+             data = target data,
+             palette = c("blue", "red", "green"),
+             geom = "point",
+             ellipse.type = "convex", 
+             ggtheme = theme_minimal(),
+             main = "K-Means Patient Segmentation (K=3)")</code></pre>
+</section>
+<section id="step-1-setting-the-seed" class="level4" data-number="10.1.1.3">
+<h4 data-number="10.1.1.3" class="anchored" data-anchor-id="step-1-setting-the-seed"><span class="header-section-number">10.1.1.3</span> Step 1: Setting the Seed</h4>
+<p>Setting a seed is assigning potential starting points for Kmeans’ initial centroid locations. This might sound counter intuitive because first step of Kmeans is to drop centroid randomly. So, why do we limit initial location since it’s not truly random anymore?</p>
+<p>Technically, you can run K-means without setting seeds. But, there are important issues with this no-restraint approach.</p>
+<ol type="1">
+<li>Reproducibility</li>
+</ol>
+<p>One most important thing in data analysis is reproducibility. If first run groups 11 points in cluster 1, but 17points in cluster 2…, and never be able to repeat consistent result, we run into credibility issue. If result is different every time, how do we confirm that the analysis is precise/accurate? No one can replicate the analysis done so that there is no way to confirm the analysis is trustworthy. Now, your fascinating finding goes into trash can.</p>
+<p>Figure below is few runs of K-means on the random data set.</p>
+<p><img src="images/clipboard-3186978433.png" class="img-fluid"></p>
+<p>While first two looks identical, third one shows complete different clustering. Like that, initial positions of centroid might influence clustering result. To ensure reproducibility, we need to set initial points where centroid can start. But we still want them to be somewhat random, so we set lots of seed (123 in the code we use). This way, we are still allowing ranodmness start without telling the code “you must start on this exact same location every time.”</p>
+<ol start="2" type="1">
+<li>Local vs.&nbsp;Global blindness</li>
+</ol>
+<p>Let’s look at third run from the figure above more in detail. It looks like two centroids are dividing one one group of points instead of each centroid centering in each groups. This is because K-means is blind. K-means’ goal is straight forward: “centeroid’s average distance to points must be smaller than previous iretation.” It only cares about reducing distances further, without caring where those centroids are actually located. why does this matter?</p>
+<p>Let’s say initial centroid drops like this, by rare chance: One in between two clusters (where centroid of yellow cluster is), two within one cluster (centroids for green/purple clusters).</p>
+<p>Will centroids within the cluster ever move to another cluster? No.&nbsp;Because Kmeans focus on reducing ‘distance from current state,’ it will move closer to center of the points within the same label. But look at the third figure. If centroid moves to another group of points, distance with current group increases.</p>
+<p><img src="images/clipboard-2594263982.png" class="img-fluid"></p>
+<p>That said, two centroids in same cluster will never move outside of that cluster, but will try to split single cluster into two parts (and that’s what happened in the third plot). So even each centeroid taking each cluster is best way to group them, model only focuses on local (current state) that they are blind to ‘truly best scenario.’</p>
+<p>To prevent this localization, we limit number of potential starting point using set.seed(123). Now, because 123 points are way lesser than infinite possible coordinates, there is lower chance of having localization issue.</p>
+<p>As result, first step of Kmeans is to set seeds.</p>
+</section>
+<section id="step-2-defining-k" class="level4" data-number="10.1.1.4">
+<h4 data-number="10.1.1.4" class="anchored" data-anchor-id="step-2-defining-k"><span class="header-section-number">10.1.1.4</span> Step 2: Defining k</h4>
+<p>Defining number of centers for clustering is important.</p>
+<p><img src="images/clipboard-1544318008.png" class="img-fluid"></p>
+<p>If we have too less centers (left picture), one group of points will belong to two different clusters. On the other hand, if we have way too many, we will see clustering within the group (right picture). So, how to we determine how many centers are optimal? It might sound counter intuitive, but we determine k by running kmeans with multiple different number of k. What does it mean to run kmeans before determining k?</p>
+<p>After k means, we evaluate quality of clusters through WCSS (within cluster sum of square), which is sum of square of distance among points within same cluster.</p>
+<p>If there are lower number of centroids than actual clusters, WCSS will be high since distance of points in different groups will be included. On the other hand, as number of centroid increases, cluster points are closer to each other and WCSS will decrease.</p>
+<p>Let’s plot WCSS and interpret together. When you run the code below, pay attention to the target data. pca_vitals, if you recall, is a pca result to full vital signs data frame, meaning Kmeans is trying to cluster int 3D+ diemsnion space. However, in the beginning of this chapter, we said we are trying to cluster in 2D space. This scope difference means we need to state that we will use only first two PCs throughout clustering.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome to factoextra!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Want to learn more? See two factoextra-related books at https://www.datanovia.com/en/product/practical-guide-to-principal-component-methods-in-r/</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1 Set seeds</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># Set random points around the data. you throw "seeds" like farmer</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#2 Run the Elbow Method test</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># second argument, kmeans, states that we are clustering using kmeans method</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># thurd argument, method =, states that we are evaluating compactness of cluster using wcss method</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(pca_vitals<span class="sc">$</span>x[, <span class="fu">c</span>(<span class="st">"PC1"</span>, <span class="st">"PC2"</span>)], kmeans, <span class="at">method =</span> <span class="st">"wss"</span>) <span class="sc">+</span> </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Elbow Method for Determining Optimal K"</span>) <span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>How to read this plot is similar to scree plot we saw in the PCA chapter. If wss is high (y axis), it means points are far away - indicating that points from different groups might be labeled as same cluster. As number of kluster increase, you see huge decrease in wss (k = 2~3). This means that k = 1 clustered points in different group, and that having extra centers was correct move to cluster.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1376861324.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="431"></p>
+</figure>
+</div>
+<p>As k goes high (right end of the plot), you start to see wss decreasing much smaller than the beginning of the plot. This is because of overfitting, splitting clusters within-group as we saw earlier. Because there isn’t much distance between nearby clusters, wss barely changes.</p>
+<p>So,</p>
+<p>huge decrease - addition of new clustering center does make appropriate partitions<br>
+small decrease - addition of new clustering center caused overfitting</p>
+<p>That said, we k value just like how we decide number of PC plot: we look for elbow, where adding clustering center start to have no significant meaning.</p>
+<p>However, this can be highly subjective depends on how everyone sees the ‘elbow’ is. This issue becomes more trickly as we work with higher dimension data, as more random-looking spread will create smooth curve rather than elbow shape we just saw. Run wcss using full data set, and see if you can understand this difference.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(pca_vitals<span class="sc">$</span>x, kmeans, <span class="at">method =</span> <span class="st">"wss"</span>) <span class="sc">+</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Elbow Method for Determining Optimal K"</span>) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compare k = 1~4 region. Doesn’t it look like smoother curve? If unclear elbow appears, we move onto next step: silhouette method.</p>
+<p>While WCSS method only measures “how tight the cluster is,” which caused overfitting issue as it’s blind to “how far clusters are,” Silhouette method measures both intra-cluster cohesion and inter-cluster separation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-4248894386.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="283"></p>
+</figure>
+</div>
+<p><span class="math display">\[S(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}\]</span> b(i) (Seperation) - The average distance between point <span class="math inline">\(i\)</span> and all points in the nearest neighboring cluster. We want this to be as large as possible.</p>
+<p>a(i) (cohesion) - The average distance between point <span class="math inline">\(i\)</span> and all other points in its own cluster. We want this to be as small as possible.</p>
+<p>That said, score S(i) can be interpreted as follow:</p>
+<p>Near +1: Perfect. The point is sitting right in the middle of a tight cluster, far away from any other clusters.</p>
+<p>Near 0: Danger. The point is sitting exactly on the boundary edge between two different clusters.</p>
+<p>Near -1: Misclassified. The point is actually closer to a neighboring cluster than it is to its own!</p>
+<p>If this scoring system is not clear, try to imagine/draw scenario where scores are 1, 0, and -1.</p>
+<p>To run this code, you don’t need any other new package. factoextra already has it! Since Silhouette scoring is another method to score the clusters, we just need to switch the method argument. Everything else stays same as WCSS calculation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(pca_vitals<span class="sc">$</span>x[, <span class="fu">c</span>(<span class="st">"PC1"</span>, <span class="st">"PC2"</span>)], kmeans, <span class="at">method =</span> <span class="st">"silhouette"</span>) <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Elbow Method for Determining Optimal K"</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When you execute this method, plot draws a verticle dotted line to indicate which number of k had highest score, meaning that would be k value you want to use. Compare it to the WCSS and see if you can agree or not.</p>
+</section>
+<section id="step-3-running-k-means" class="level4" data-number="10.1.1.5">
+<h4 data-number="10.1.1.5" class="anchored" data-anchor-id="step-3-running-k-means"><span class="header-section-number">10.1.1.5</span> Step 3: Running K-means</h4>
+<p>Now we know optimal number of clusters, we just need to run and save kmeans() result!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#3 Set seeds again</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#4 Run the K-means clustering and save the result</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>km_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(pca_vitals<span class="sc">$</span>x[, <span class="fu">c</span>(<span class="st">"PC1"</span>, <span class="st">"PC2"</span>)], </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">centers =</span> <span class="dv">3</span>,      </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>km_result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>K-means clustering with 3 clusters of sizes 32, 30, 38
+
+Cluster means:
+         PC1         PC2
+1 -0.5627817 -1.11069539
+2  1.6390384  0.06247788
+3 -0.8200563  0.88599779
+
+Clustering vector:
+  [1] 1 2 3 2 1 1 2 1 2 3 3 1 2 3 3 3 2 1 3 1 2 3 2 3 1 3 1 2 3 2 1 2 1 1 1 2 1
+ [38] 3 2 3 3 1 2 2 3 2 2 1 2 3 1 3 3 2 1 3 3 3 3 1 1 2 2 3 2 2 3 2 3 1 2 3 3 1
+ [75] 2 2 1 1 1 1 1 3 3 3 2 3 1 1 3 3 3 1 3 2 2 3 1 3 1 3
+
+Within cluster sum of squares by cluster:
+[1] 27.00178 39.43322 40.43580
+ (between_SS / total_SS =  63.5 %)
+
+Available components:
+
+[1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+[6] "betweenss"    "size"         "iter"         "ifault"      </code></pre>
+</div>
+</div>
+<p>Before we look into each components in the result data frame, two points to pay attention.</p>
+<p>1: Did you notice how we’re initiating set.seed() everytime we run clustering? There is a huge secret behind set.seed().</p>
+<p>In addition to explanation from earlier, there is one more secret to set.seed(). How do computer knows what is exactly random? Since it’s a compilation of code and logic, how can random be truly random? That’s right. Even it looks like ‘random’ to human eye, random generator still have its ‘algorithm’ to generate randomness - so, it’s not 100% random. So, everything you use set.seed(123), you will get exact same 123 coordinates. If you use set.seed(84)? Every single time you use set.seed(84) will give us same coordinates. So, assigning set.seed() preserve identical ‘possible starting centroid position’ every single time - Again, reproducibility maaters.</p>
+<p>2: Besides target data and k value, you see ‘nstart = i’ argument. That argument means ‘no matter how good result is, repeat centroid movement at least ’i’ times” This is to make sure that we don’t fall into ‘global vs.&nbsp;local’ issue we discussed earlier. By forcing algorithm to repeat process certain times, we force out localized result to review potential better options.</p>
+</section>
+<section id="step-4-understanding-result" class="level4" data-number="10.1.1.6">
+<h4 data-number="10.1.1.6" class="anchored" data-anchor-id="step-4-understanding-result"><span class="header-section-number">10.1.1.6</span> Step 4: Understanding Result</h4>
+<p>Now, let’s look at each components of result.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(km_result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 9
+ $ cluster     : int [1:100] 1 2 3 2 1 1 2 1 2 3 ...
+ $ centers     : num [1:3, 1:2] -0.5628 1.639 -0.8201 -1.1107 0.0625 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:3] "1" "2" "3"
+  .. ..$ : chr [1:2] "PC1" "PC2"
+ $ totss       : num 293
+ $ withinss    : num [1:3] 27 39.4 40.4
+ $ tot.withinss: num 107
+ $ betweenss   : num 186
+ $ size        : int [1:3] 32 30 38
+ $ iter        : int 3
+ $ ifault      : int 0
+ - attr(*, "class")= chr "kmeans"</code></pre>
+</div>
+</div>
+<p>It says result is made out of 9 lists, meaning there are 9 things we should understand!</p>
+<ol type="1">
+<li>clusters</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>cluster </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 1 2 3 2 1 1 2 1 2 3 3 1 2 3 3 3 2 1 3 1 2 3 2 3 1 3 1 2 3 2 1 2 1 1 1 2 1
+ [38] 3 2 3 3 1 2 2 3 2 2 1 2 3 1 3 3 2 1 3 3 3 3 1 1 2 2 3 2 2 3 2 3 1 2 3 3 1
+ [75] 2 2 1 1 1 1 1 3 3 3 2 3 1 1 3 3 3 1 3 2 2 3 1 3 1 3</code></pre>
+</div>
+</div>
+<p>Cluster is where you see label of kmeans() result. It indicates which data point falls into which cluster. For example, 1st point is in cluster1, 2nd point is in cluster2, etc.,</p>
+<ol start="2" type="1">
+<li>centers</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>centers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         PC1         PC2
+1 -0.5627817 -1.11069539
+2  1.6390384  0.06247788
+3 -0.8200563  0.88599779</code></pre>
+</div>
+</div>
+<p>Centers shows the coordinate of centroids. For example, center of cluster 1 is at (PC1, PC2) = (-0.56…, -1.11…)</p>
+<ol start="3" type="1">
+<li>totss</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>totss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 292.5775</code></pre>
+</div>
+</div>
+<p>TOTal Sum of Squares, is sum of distance square. This means, it’s a sum of (distance between all data point pairs)^2, which is sum of all variance!</p>
+<ol start="4" type="1">
+<li>withinss</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>withinss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 27.00178 39.43322 40.43580</code></pre>
+</div>
+</div>
+<p>This is Within-cluster Sum of Squares. Yes, it’s wss/wcss score we saw earlier, but per cluster! Here, wcss of cluster 1 is 27, while cluster 3 is 40. From those numbers, we can tell cluster 3 is much wider than cluster 1.</p>
+<ol start="5" type="1">
+<li>tot.withniss</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>tot.withinss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 106.8708</code></pre>
+</div>
+</div>
+<p>This is sum of withniss across all clusters. This is the score we saw in elbow method.</p>
+<ol start="6" type="1">
+<li>betweenss</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>betweenss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 185.7067</code></pre>
+</div>
+</div>
+<p>Between-cluster Sum of Squares. Now we know what Sum of square is. So between-cluster ss means, variance among clusters! Since good clustering shows clusters seperated far away, you want this number to be highest.</p>
+<ol start="7" type="1">
+<li>size</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>size</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32 30 38</code></pre>
+</div>
+</div>
+<p>Size is just count of how many points are there within cluster. There are 32 points in cluster 1.</p>
+<ol start="8" type="1">
+<li>iter</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>iter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+</div>
+<p>Iteration means how many times centroid moved before algorithm stops. So, 3 means algorithm reached to result on the 3th re-location of centroids.</p>
+<ol start="9" type="1">
+<li>ifault</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>km_result<span class="sc">$</span>ifault</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>This indicates whether algorithm faced mathmatical limitation or unexpected error. 0 for complete completion, 1 for error happened.</p>
+</section>
+<section id="step-5-visualizing-result" class="level4" data-number="10.1.1.7">
+<h4 data-number="10.1.1.7" class="anchored" data-anchor-id="step-5-visualizing-result"><span class="header-section-number">10.1.1.7</span> Step 5: Visualizing result</h4>
+<section id="d-pca" class="level5" data-number="10.1.1.7.1">
+<h5 data-number="10.1.1.7.1" class="anchored" data-anchor-id="d-pca"><span class="header-section-number">10.1.1.7.1</span> ~4D PCA</h5>
+<p>After saving result, what we want to gain from kmeans is to find if we can find characteristic per cluster as clustering itself doesn’t tell us who they are. While we can do detailed analysis by extracting result into sepereate data frame with further statistical analysis, there is easier way for general inspection: we can just plot them.</p>
+<p>Simplest way is to use our factoextra package. It actually has auto plotting function for PCA and kmeans! Or, we could manually use ggplot() way too. Review the code below and see if you can explain what each argument is doing.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. factoextra</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co"># geom = "point" within fviz_cluster() hides index of each point. If you plot without it, it shows index of each points on the plot.</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(km_result, <span class="at">data =</span> pca_vitals<span class="sc">$</span>x[, <span class="fu">c</span>(<span class="st">"PC1"</span>, <span class="st">"PC2"</span>)], <span class="at">geom =</span> <span class="st">"point"</span>) <span class="sc">+</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(km_result, <span class="at">data =</span> pca_vitals<span class="sc">$</span>x[, <span class="fu">c</span>(<span class="st">"PC1"</span>, <span class="st">"PC2"</span>)]) <span class="sc">+</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-18-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#2. ggplot</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_vitals<span class="sc">$</span>x[, <span class="fu">c</span>(<span class="st">"PC1"</span>, <span class="st">"PC2"</span>)], <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2)) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(km_result<span class="sc">$</span>cluster)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> km_result<span class="sc">$</span>centers, <span class="at">shape =</span> <span class="dv">8</span>, <span class="at">size =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stroke =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"K-Means Clustering"</span>, <span class="at">color =</span> <span class="st">"Cluster"</span>) <span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Quick coding question: In ggplot way, why do we need as.factor() for color argument?</p>
+<p>Now with colored clusters on the PCA plot, and knowing loadings for each PCs, we can kind of tell what’s happening within each clusters. What are some characteristics of each of them? Are they old patients, high blood pressure, or do you notice anything else?</p>
+</section>
+<section id="higher-dimension" class="level5" data-number="10.1.1.7.2">
+<h5 data-number="10.1.1.7.2" class="anchored" data-anchor-id="higher-dimension"><span class="header-section-number">10.1.1.7.2</span> Higher Dimension</h5>
+<p>But we can always perform clustering on the raw dataset. What if we want to visualize kmeans() result with 10, 20, even more features? Then, instead of plotting into PCA space, we can compare center coordinates of each features. Which is, cluster 1 will have average/center values for feature 1~x, cluster 2 will also have center values for feature 1~x, and so on. Each cluster can be drawn into line graph.</p>
+<p>For that, we need to use another gg family, GGally. Just like ggplot() we stack layers besides few differences in argument structure. Let’s visualize it after performing kmeans() to raw data set.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("GGally")</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Prepare your raw data and run the model (Your code is perfect here!)</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> vitals[, <span class="fu">c</span>(<span class="st">"Age"</span>, <span class="st">"Temp_C"</span>, <span class="st">"Heart_Rate"</span>, <span class="st">"Systolic_BP"</span>, <span class="st">"Diastolic_BP"</span>, <span class="st">"Resp_Rate"</span>, <span class="st">"SpO2"</span>)]</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: It is highly recommended to scale() your raw data before running K-means, </span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># otherwise features with large numbers (like Systolic_BP) dominate the math!</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>km_raw <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(raw, <span class="at">centers =</span> <span class="dv">4</span>, <span class="at">nstart =</span> <span class="dv">25</span>) <span class="co">#Randomly picked 4 for centers. No reason</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Convert the matrix to a data frame AND add a Cluster ID column at the front</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>centers_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cluster =</span> <span class="fu">as.factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(km_raw<span class="sc">$</span>centers)), <span class="co"># Creates a categorical label (1, 2, 3)</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>  km_raw<span class="sc">$</span>centers                               <span class="co"># Attaches the 7 vitals columns</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Plot!</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggparcoord</span>(centers_df, </span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">columns =</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(centers_df), <span class="co"># Automatically grabs columns 2 through 8</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">groupColumn =</span> <span class="dv">1</span>,              <span class="co"># Uses our new 'Cluster' column for color</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">showPoints =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Cluster Profiles (Raw K-Means Centers)"</span>) <span class="sc">+</span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Unsupervised-Learning_10_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This way, even thought we cannot plot kmeans() result into visual plots that ‘we imagine’ (like 2D, 3D scatter plot), we can still see how each clusters differ. For example, in here, we see that cluster 3 is characterized by high resp_rate and HR.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="association-rule-learning" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="association-rule-learning"><span class="header-section-number">10.2</span> Association Rule Learning</h2>
+<section id="concept-of-assocication-rule-learning" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="concept-of-assocication-rule-learning"><span class="header-section-number">10.2.1</span> Concept of assocication rule learning</h3>
+<p>In short, Apriori algorithm, an example of association rule learning, is an algorithm that discovers “If this, then that.”</p>
+<p>In PCA or kmeans, we looked at how similar or different each points are. In association rule learning, we are looking at how two are related by counting ‘co-occurance,’ ignoring the geometry we’ve been using. It scans for countless of events that happened together, and creates a rule in ‘antecendent -&gt; consequence’ format.</p>
+<p>Let’s walk through how it works with clinical example. Typically, we say</p>
+<pre><code>If patient have high blood pressure -&gt; Beta blocker is prescirbed
+
+A - Having high blood pressure
+B - Getting beta blocker </code></pre>
+<p>Is this true? Let’s figure it out.</p>
+<p>Association rule learning basis on three mathmatical pillars.</p>
+<section id="support" class="level4" data-number="10.2.1.1">
+<h4 data-number="10.2.1.1" class="anchored" data-anchor-id="support"><span class="header-section-number">10.2.1.1</span> Support</h4>
+<p>Support asks, “How popular is the rule?”</p>
+<p>For example, support(A) is frequency of A in entire population.</p>
+<p>In our case, support(A and B) means, how many people have high bp and prescribed beta blocker out of total clinic population.</p>
+<p><span class="math display">\[Support = \frac{\text{Patients with A and B}}{\text{Total Clinic Patients}}\]</span> If support is high (&gt; 20%), it means combination is extremely common. It’s a good signal that the relationship might be potential public general trend, worthy exploring further.</p>
+<p>If support is low (&lt; 5%), the relationship might be random noise. However, it also could be rare case that no one really discovered. Typically, we filter out low-support rules unless we are intentionally looking for rare patterns.</p>
+</section>
+<section id="confidence" class="level4" data-number="10.2.1.2">
+<h4 data-number="10.2.1.2" class="anchored" data-anchor-id="confidence"><span class="header-section-number">10.2.1.2</span> Confidence</h4>
+<p>Confidence asks, “How reliable is the rule?”</p>
+<p>Here, we look for how frequent both event happens when context (A) happens. In our example, it would be ‘From hypertensive patients, how many of them are both hypertensive and received beta blocker?’</p>
+<p>(Compared to support, the scope is different. Support asks A and B from total population, confidence asks A and B from population with A).</p>
+<p><span class="math display">\[Confidence = \frac{\text{Patients with A and B}}{\text{Total Patients with A}}\]</span></p>
+<p>Confidence is like a predictive power. Since it answers “if condition A is met, how much can I trust/predict that B happens,’</p>
+<p>high confidence (&gt; 80%) means that the rule is highly reliable (if A happens, almost certainly B happens).</p>
+<p>low confidence (&lt; 50%) means that the rule is coin flip or worse. As result, it was a coincident observation but not a rule.</p>
+</section>
+<section id="lift" class="level4" data-number="10.2.1.3">
+<h4 data-number="10.2.1.3" class="anchored" data-anchor-id="lift"><span class="header-section-number">10.2.1.3</span> Lift</h4>
+<p>Lift connects support and confidence. In support, we looked at ‘how often something happens from total population,’ which servces as a baseline. In confidence, we looked at ‘If context happen, how likely result happen.’</p>
+<p>So, if we compare ‘how often result happens’ to ‘how often result happens becuase of context happen,’ we can determine if two are related.</p>
+<p>It’s little confusing to read through text, let’s go through in case of our example.</p>
+<p><span class="math display">\[Lift = \frac{Confidence}{Support(B)}\]</span></p>
+<p>Confidence - how likely “hypertensive” patient receive beta blocker</p>
+<p>Support(B) - how likely “anyone in the clinic” patient receive beta blocker (for whatever reason)</p>
+<p>So, if lift &gt; 1 or &lt; 1, it means existance of hypertension did change chance of getting beta blocker, proving the association between two factors (hypertension and beta blocker prescription in this case).</p>
+<p>However, if lift is 1, it means patient’s hypertension status did not change chance of getting beta blocker at all, rejecting association between two.</p>
+<p>Typically, we say abs(lift) &gt; 3 indicates strong correlation, and strong enough that context event dictates/aggressively drives consequence event. This is certainly something we want to report.</p>
+<p>If abs(lift) is 1.5 - 3.0, this is still solid assocation between two, indicating there is a relationship between two events.</p>
+<p>If abs(lift) is 1.0 - 1.2, we consider this as coincidence. Here, even though context event might created influence in consequence event, we say the association is not strong enough to be recognized.</p>
+<p>In summary, we look at the three values to evaluate association between two events:</p>
+<ol type="1">
+<li><p>High support + High confidence + High lift: This is very common and reliable rule that indicates strong pattern. We highlight these in the report.</p></li>
+<li><p>High support + High confidence + Lift = 1: This is trap. Even though two events happens together often, it’s because both are just incredibly common, not because they are associated. We ignore these.</p></li>
+<li><p>Low support + High confidence + High lift: You sniped rare pattern. This is strong, reliable pattern that applies to specific subset of your population. This becomes useful when you’re trying to look for targeted initivatives, such as specialized care or rare disease tracking.</p></li>
+<li><p>High support + Low confidence: This is dead end. Regardless of lift value, low confidence means two events might be common, but context event is not predictor of consequence event. We also ignore this.</p></li>
+</ol>
+</section>
+</section>
+<section id="running-assocation-rule-learning" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="running-assocation-rule-learning"><span class="header-section-number">10.2.2</span> Running Assocation Rule Learning</h3>
+<p>You could calculate each parameter manually, but we have package called “arules” (for running the algorithm) and “arulesViz” (for visualizing result).</p>
+<p>But before we use the package, there is one pre-processing we must do. Association rule learning is finding relationship “A happens, B happens.” But let’s go back to example we looked at. What is systolic blood pressures are considered high? 130? 131? 90? We must feed the model ‘labels,’ such as high/mid/low bp, not a raw numbers, like 130 or 140.</p>
+<p>Important: For this model to work, you must put values into categorial buckets.</p>
+<p>In this section, we will use only age, BP, and temperature for sake of code length and walkthrough time.</p>
+<section id="pre-processing-data" class="level4" data-number="10.2.2.1">
+<h4 data-number="10.2.2.1" class="anchored" data-anchor-id="pre-processing-data"><span class="header-section-number">10.2.2.1</span> Pre-processing data</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Don't forget to install packages!</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("arules")</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("arulesViz")</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arules)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>필요한 패키지를 로딩중입니다: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+다음의 패키지를 부착합니다: 'Matrix'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:tidyr':
+
+    expand, pack, unpack</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+다음의 패키지를 부착합니다: 'arules'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    recode</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    abbreviate, write</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arulesViz)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert continuous clinical data into categorical "buckets"</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>rule_ready_vitals <span class="ot">&lt;-</span> vitals <span class="sc">%&gt;%</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert age into distinct demographic buckets</span></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age_Group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>      Age <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"Young_Adult"</span>,</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>      Age <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">&amp;</span> Age <span class="sc">&lt;=</span> <span class="dv">60</span> <span class="sc">~</span> <span class="st">"Adult"</span>,</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>      Age <span class="sc">&gt;</span> <span class="dv">60</span> <span class="sc">~</span> <span class="st">"Senior"</span></span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert BP into clinical risk categories</span></span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">BP_Status =</span> <span class="fu">ifelse</span>(Systolic_BP <span class="sc">&gt;</span> <span class="dv">130</span>, <span class="st">"High_BP"</span>, <span class="st">"Normal_BP"</span>),</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert Temp into fever status</span></span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Temp_Status =</span> <span class="fu">ifelse</span>(Temp_C <span class="sc">&gt;</span> <span class="fl">38.0</span>, <span class="st">"Fever"</span>, <span class="st">"Normal_Temp"</span>)</span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Drop the original numeric columns, keeping ONLY our new text categories</span></span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Age_Group, BP_Status, Temp_Status) <span class="sc">%&gt;%</span></span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apriori strictly requires all columns to be formatted as 'factors' (because of reason we discussed)</span></span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.factor))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Once we change everything into categories, there is one more thing to do.</p>
+<p>Data frame, is a rigid grid where cell with column (feature) and row (observation) contains specific value. However, in this model, we want to look at how features are related to other features So, instead of “patient 1 has feature A in one cell, feature B in another cell,…,” we want to have data structure that “patient 1 has feature A,B,…” in single cell.</p>
+<p>This way of containing multiple values in one cell, like a shopping basket, is called transaction.</p>
+<p>Data frame:</p>
+<p><img src="images/clipboard-571838180.png" class="img-fluid" width="365"></p>
+<p>Transaction:</p>
+<p><img src="images/clipboard-2599031069.png" class="img-fluid" width="352"></p>
+<p>So, let’s change our rule_ready_vitals into transaction.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Convert the factor dataframe into a "transactions" format</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>clinical_transactions <span class="ot">&lt;-</span> <span class="fu">as</span>(rule_ready_vitals, <span class="st">"transactions"</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's take a quick peek at what the first 5 patient transactions look like</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(clinical_transactions[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    items                     transactionID
+[1] {Age_Group=Adult,                      
+     BP_Status=Normal_BP,                  
+     Temp_Status=Normal_Temp}             1
+[2] {Age_Group=Adult,                      
+     BP_Status=Normal_BP,                  
+     Temp_Status=Normal_Temp}             2
+[3] {Age_Group=Adult,                      
+     BP_Status=Normal_BP,                  
+     Temp_Status=Normal_Temp}             3
+[4] {Age_Group=Adult,                      
+     BP_Status=High_BP,                    
+     Temp_Status=Normal_Temp}             4
+[5] {Age_Group=Senior,                     
+     BP_Status=Normal_BP,                  
+     Temp_Status=Normal_Temp}             5</code></pre>
+</div>
+</div>
+<p>Now, we are ready to run the model!</p>
+</section>
+<section id="running-apriori" class="level4" data-number="10.2.2.2">
+<h4 data-number="10.2.2.2" class="anchored" data-anchor-id="running-apriori"><span class="header-section-number">10.2.2.2</span> Running Apriori</h4>
+<p>While Apriori() runs the association rule learning algorithm, there are some arguments used.</p>
+<pre><code>apriori(target data, parameter = list(supp = x, conf = y, maxlen = z))</code></pre>
+<p>Do you recall that we want to have minimum support and confidence levels to disregard random noise? All those filter settings goes into ‘parameter =’ argument in list format. maxlen, is the maximum number of tags that can be put in single rule.</p>
+<p>Here is how the counting works in practice using your clinical data:</p>
+<p>Length 2: {High_BP} =&gt; {Fever} (1 tag on the left + 1 on the right)</p>
+<p>Length 3: {Senior, High_BP} =&gt; {Fever} (2 tags on the left + 1 on the right)</p>
+<p>Length 4: {Senior, High_BP, Male} =&gt; {Fever, Prescribed_Antibiotic} (3 tags on the left + 2 on the right)</p>
+<p>By setting maxlen = 4, you are telling R to completely ignore any pattern that requires 5 or more tags to be true. This is because combinations to explore increase exponentially as you consider more tags at once, decreasing calculation efficiency or even eventually overwhelming/breaking R.</p>
+<p>Then, let’s run the algorithm.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Run the Apriori algorithm</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's cast a wide, standard clinical net: Minimum 5% support, Minimum 60% confidence</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="co"># maxlen = 4 prevents the rules from getting too long and complicated to read</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>clinical_rules <span class="ot">&lt;-</span> <span class="fu">apriori</span>(clinical_transactions, </span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">parameter =</span> <span class="fu">list</span>(<span class="at">supp =</span> <span class="fl">0.05</span>, <span class="at">conf =</span> <span class="fl">0.60</span>, <span class="at">maxlen =</span> <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Apriori
+
+Parameter specification:
+ confidence minval smax arem  aval originalSupport maxtime support minlen
+        0.6    0.1    1 none FALSE            TRUE       5    0.05      1
+ maxlen target  ext
+      4  rules TRUE
+
+Algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+Absolute minimum support count: 5 
+
+set item appearances ...[0 item(s)] done [0.00s].
+set transactions ...[7 item(s), 100 transaction(s)] done [0.00s].
+sorting and recoding items ... [6 item(s)] done [0.00s].
+creating transaction tree ... done [0.00s].
+checking subsets of size 1 2 3 done [0.00s].
+writing ... [19 rule(s)] done [0.00s].
+creating S4 object  ... done [0.00s].</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check how many rules the algorithm successfully found</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>clinical_rules</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>set of 19 rules </code></pre>
+</div>
+</div>
+</section>
+<section id="understanding-the-result" class="level4" data-number="10.2.2.3">
+<h4 data-number="10.2.2.3" class="anchored" data-anchor-id="understanding-the-result"><span class="header-section-number">10.2.2.3</span> Understanding the result</h4>
+<p>So there are multi lines of results. This is like receipt of the algorithm. Let’s look at it line by line.</p>
+<p>First is parameter specification. This is where it shows the settings you used. For example, you see the 60% confidence and 5% support filter you set.</p>
+<p>Second is Algorithmic control. This is how computer handled the calculations. We can skip this as it doesn’t explain our rules found, but you can Google them any time.</p>
+<p>Third is Absolute minimum support count. This is the number of minimum count you need to be considered as potential rule based on the total population. This makes sense since 5% of 100 entires (we have in raw data) is 5.</p>
+<p>Then, the last is log of what happened. At the end, it says algorithm found 19 rules!</p>
+<p>Let’s look at the top rules (from highest to lowest lift) it found.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the rules we found</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>((<span class="fu">sort</span>(clinical_rules, <span class="at">by =</span> <span class="st">"lift"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     lhs                          rhs                       support confidence coverage      lift count
+[1]  {Age_Group=Young_Adult}   =&gt; {BP_Status=Normal_BP}        0.14  0.8235294     0.17 1.0835913    14
+[2]  {Age_Group=Young_Adult,                                                                           
+      Temp_Status=Normal_Temp} =&gt; {BP_Status=Normal_BP}        0.14  0.8235294     0.17 1.0835913    14
+[3]  {Age_Group=Senior}        =&gt; {BP_Status=Normal_BP}        0.31  0.7948718     0.39 1.0458839    31
+[4]  {Age_Group=Senior,                                                                                
+      Temp_Status=Normal_Temp} =&gt; {BP_Status=Normal_BP}        0.31  0.7948718     0.39 1.0458839    31
+[5]  {Age_Group=Young_Adult}   =&gt; {Temp_Status=Normal_Temp}    0.17  1.0000000     0.17 1.0101010    17
+[6]  {BP_Status=High_BP}       =&gt; {Temp_Status=Normal_Temp}    0.24  1.0000000     0.24 1.0101010    24
+[7]  {Age_Group=Senior}        =&gt; {Temp_Status=Normal_Temp}    0.39  1.0000000     0.39 1.0101010    39
+[8]  {Age_Group=Young_Adult,                                                                           
+      BP_Status=Normal_BP}     =&gt; {Temp_Status=Normal_Temp}    0.14  1.0000000     0.14 1.0101010    14
+[9]  {Age_Group=Senior,                                                                                
+      BP_Status=High_BP}       =&gt; {Temp_Status=Normal_Temp}    0.08  1.0000000     0.08 1.0101010     8
+[10] {Age_Group=Adult,                                                                                 
+      BP_Status=High_BP}       =&gt; {Temp_Status=Normal_Temp}    0.13  1.0000000     0.13 1.0101010    13
+[11] {Age_Group=Senior,                                                                                
+      BP_Status=Normal_BP}     =&gt; {Temp_Status=Normal_Temp}    0.31  1.0000000     0.31 1.0101010    31
+[12] {}                        =&gt; {BP_Status=Normal_BP}        0.76  0.7600000     1.00 1.0000000    76
+[13] {}                        =&gt; {Temp_Status=Normal_Temp}    0.99  0.9900000     1.00 1.0000000    99
+[14] {BP_Status=Normal_BP}     =&gt; {Temp_Status=Normal_Temp}    0.75  0.9868421     0.76 0.9968102    75
+[15] {Temp_Status=Normal_Temp} =&gt; {BP_Status=Normal_BP}        0.75  0.7575758     0.99 0.9968102    75
+[16] {Age_Group=Adult}         =&gt; {Temp_Status=Normal_Temp}    0.43  0.9772727     0.44 0.9871442    43
+[17] {Age_Group=Adult,                                                                                 
+      BP_Status=Normal_BP}     =&gt; {Temp_Status=Normal_Temp}    0.30  0.9677419     0.31 0.9775171    30
+[18] {Age_Group=Adult}         =&gt; {BP_Status=Normal_BP}        0.31  0.7045455     0.44 0.9270335    31
+[19] {Age_Group=Adult,                                                                                 
+      Temp_Status=Normal_Temp} =&gt; {BP_Status=Normal_BP}        0.30  0.6976744     0.43 0.9179927    30</code></pre>
+</div>
+</div>
+<p>Well it looks like all rules it found results in “normal + something,” which is clinically not so meaningful. Why does this happen, why do rules ends up patient is normal?</p>
+<p>This is a good example of class imbalance. If we look at the raw data set, there are patients with high blood pressure or temperature.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rule_ready_vitals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Age_Group      BP_Status       Temp_Status
+ Adult      :44   High_BP  :24   Fever      : 1  
+ Senior     :39   Normal_BP:76   Normal_Temp:99  
+ Young_Adult:17                                  </code></pre>
+</div>
+</div>
+<p>But, because those ‘sick’ patients are much smaller than normal people, algorithm thinks “it’s by chance” and disregard them.</p>
+</section>
+<section id="shaping-the-result" class="level4" data-number="10.2.2.4">
+<h4 data-number="10.2.2.4" class="anchored" data-anchor-id="shaping-the-result"><span class="header-section-number">10.2.2.4</span> Shaping the result</h4>
+<p>So, in rule association learning, we can force algorithm to look for association around specific results we want to see (so that we can find meaningful association). we do this by using argument called ‘appearance=’</p>
+<pre><code>appearance = list(default = "lhs", rhs = c("BP_Status=High_BP", "Temp_Status=Fever")))</code></pre>
+<p>the flow is ‘lhs -&gt; rhs’ By setting sick conditions as result, we are forcing model to find rules behind sick patients. ‘default =’ means we are using everything in the fed data set. In this case, lhs (context) can use all tags in the data set.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We lower the confidence slightly to catch harder-to-find clinical patterns,</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and strictly force the Right Hand Side (rhs) to only show us the risks.</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>targeted_rules <span class="ot">&lt;-</span> <span class="fu">apriori</span>(clinical_transactions, </span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">parameter =</span> <span class="fu">list</span>(<span class="at">supp =</span> <span class="fl">0.01</span>, <span class="at">conf =</span> <span class="fl">0.40</span>, <span class="at">maxlen =</span> <span class="dv">4</span>),</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">appearance =</span> <span class="fu">list</span>(<span class="at">default =</span> <span class="st">"lhs"</span>, </span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">rhs =</span> <span class="fu">c</span>(<span class="st">"BP_Status=High_BP"</span>, <span class="st">"Temp_Status=Fever"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Apriori
+
+Parameter specification:
+ confidence minval smax arem  aval originalSupport maxtime support minlen
+        0.4    0.1    1 none FALSE            TRUE       5    0.01      1
+ maxlen target  ext
+      4  rules TRUE
+
+Algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+Absolute minimum support count: 1 
+
+set item appearances ...[2 item(s)] done [0.00s].
+set transactions ...[7 item(s), 100 transaction(s)] done [0.00s].
+sorting and recoding items ... [7 item(s)] done [0.00s].
+creating transaction tree ... done [0.00s].
+checking subsets of size 1 2 3 done [0.00s].
+writing ... [0 rule(s)] done [0.00s].
+creating S4 object  ... done [0.00s].</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort and inspect the new targeted rules</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(<span class="fu">head</span>(<span class="fu">sort</span>(targeted_rules, <span class="at">by =</span> <span class="st">"lift"</span>), <span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now, it still says “writing … [0 rule(s)] done” There are some reasons that can explain this. One, is that age is not a good predictor for BP status (In real world, it can be. Remember, data set we are working right now is randomly generated, so it does not reflect real world trends). Second, is that we have only one fever patient, meaning it is too small to establish meaningful rule. When this happen, you want to increase maxlen, review how data are put into basket, or conclude, “there is no meaningful association.”</p>
+<p>Now, try it using our 2025 patient directory!</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Dimension Reduction_9.html" class="pagination-link" aria-label="Dimension Reduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dimension Reduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
